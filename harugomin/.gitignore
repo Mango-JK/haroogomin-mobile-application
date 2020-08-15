@@ -2,7 +2,7 @@
 HELP.md
 .gradle
 .idea
-./src/mainresources/application.yml
+resources/application.yml
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
@@ -37,3 +37,4 @@ out/
 .vscode/
 src/main/resources/static/
 src/main/resources/templates/
+src/main/resources/application.yml
