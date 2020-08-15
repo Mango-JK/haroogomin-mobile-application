@@ -1,4 +1,4 @@
-package com8.harugomin;
+package com.mango.harugomin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

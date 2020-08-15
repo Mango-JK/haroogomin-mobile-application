@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://3.34.118.18:3306/hago?serverTimezone=UTC&characterEncoding=UTF-8
+    username: hago
+    password: dlakdrn2@2

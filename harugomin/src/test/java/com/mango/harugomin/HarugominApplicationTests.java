@@ -1,4 +1,4 @@
-package com8.harugomin;
+package com.mango.harugomin;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
