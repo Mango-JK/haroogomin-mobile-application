@@ -1,2 +1,3 @@
-# haroogomin-mobile-application
-The mobile app haroogomin (iOS and Android).
+# harugomin-mobile-application
+The mobile app harugomin (iOS and Android).
+

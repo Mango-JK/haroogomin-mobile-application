@@ -12,14 +12,26 @@
 
 - 설치 이후 계정 설정, 권한부여 후 workbench로 접속해보기
 
-  
+  <br/>
 
-[HarooGomin-Database]: 
+[HaruGomin-Database]: MySQL
 
+<br/>
 
+<br/>
 
+<center><image src="./images/spring_initializr.PNG"></image></center>
 
+<br/>
 
+<center><image src="./images/project_settings.PNG"></image></center>
 
+<br/>
+
+<center><image src="./images/project_dependencies.PNG"></image></center>
+
+<br/>
+
+<br/>
 
 <hr/>
