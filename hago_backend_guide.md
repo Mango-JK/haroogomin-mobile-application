@@ -134,8 +134,13 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 
 
 
+### Start GitKraken & Update Git-flow
 
+<center><image src="./images/start_gitkraken.PNG"></image></center>
 
 
 
 <hr/>
+
+
+

@@ -1,6 +1,6 @@
 package com.mango.harugomin.domain.repository;
 
-import javassist.compiler.ast.Member;
+import com.mango.harugomin.domain.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
