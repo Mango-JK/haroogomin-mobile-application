@@ -1,5 +1,6 @@
 package com.mango.harugomin.domain.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,12 +9,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "member")
-public class Member {
+@Table(name = "user")
+public class User extends BaseTimeEntity {
 
     @Id
-    @Column(name = "member_id")
-    private Long memberId;
+    @Column(name = "user_id")
+    private Long userId;
 
     private String nickname;
 
@@ -21,4 +22,14 @@ public class Member {
     private String profileImage;
 
     private int point;
+
+    private int cash;
+
+    @Builder
+    public User(String nickname, String profileImage, int point, int cash) {
+        this.nickname = nickname;
+        this.profileImage = profileImage;
+        this.point = point;
+        this.cash = cash;
+    }
 }
