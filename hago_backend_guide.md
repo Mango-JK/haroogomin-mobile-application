@@ -96,7 +96,6 @@
 - Member 는 member, postHistory는 post_history로 사용
 
 <hr/>
-
 ## Git-flow 전략 간단하게 살펴보기
 
 Git-flow를 사용했을 때 작업을 어떻게 하는지 살펴보기 전에 먼저 Git-flow에 대해서 간단히 살펴보겠습니다.
@@ -112,7 +111,6 @@ Git-flow에는 5가지 종류의 브랜치가 존재합니다. 항상 유지되�
 Git-flow를 설명하는 그림 중 이만한 그림은 없는 것 같습니다.
 
 <center><image src="./images/git_flow.PNG"></image></center>
-
 <br/>
 
 git flow가 사용하는 branch는 크게 두가지로 나뉜다.
@@ -144,3 +142,18 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 
 
 
+
+
+# Data Modeling
+
+
+
+
+
+
+
+
+
+
+
+<hr/>
