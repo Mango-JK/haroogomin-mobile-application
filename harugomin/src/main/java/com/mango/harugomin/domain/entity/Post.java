@@ -1,7 +1,5 @@
 package com.mango.harugomin.domain.entity;
 
-
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,7 +23,7 @@ public class Post {
     private String title;
 
     @Lob
-    private String content;
+    private String contents;
 
     @Column(name = "voting_day")
     private LocalDateTime votingDay;

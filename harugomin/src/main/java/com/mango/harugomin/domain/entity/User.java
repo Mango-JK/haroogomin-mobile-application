@@ -26,7 +26,7 @@ public class User extends BaseTimeEntity {
     private int cash;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.MEMBER;
 
     @Builder
     public User(String nickname, String profileImage, int point, int cash) {
