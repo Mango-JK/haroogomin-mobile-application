@@ -4,32 +4,31 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "post")
-public class Post extends BaseTimeEntity {
+@Table(name = "comment")
+public class Comment extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "post_id")
-    private Long postId;
+    @Column(name = "comment_id")
+    private Long commentId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String title;
+    @Column(name = "nickname")
+    private String nickname;
 
     @Lob
+    @Column(nullable = false)
     private String contents;
-
-    @Column(name = "voting_day")
-    private LocalDateTime votingDay;
-
-    @Column(name = "reply")
-    private int reply;
 
     @Column(name = "like")
     private int like;
