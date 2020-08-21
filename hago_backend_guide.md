@@ -135,15 +135,12 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 ### Start GitKraken & Update Git-flow
 
 <center><image src="./images/start_gitkraken.PNG"></image></center>
-
 <hr/>
-
 # Entity Modeling
 
 
 
 <center><image src="./images/entity_modeling.PNG"></image></center>
-
 <br/>
 
 
@@ -174,7 +171,6 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 ## feat.01 Kakao Login
 
 <center><image src="./images/login_step.PNG"></image></center>
-
 카카오 로그인 진행 과정
 
 <br/>

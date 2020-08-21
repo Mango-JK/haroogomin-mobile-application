@@ -28,12 +28,6 @@ public class UserController {
         return "index";
     }
 
-    @GetMapping(value = "/login")
-    public String login() {
-        System.out.println("???????????");
-        return "index";
-    }
-
     @GetMapping(value = "/user/login")
     public String kakaoLogin(@RequestParam("code") String code) {
         System.out.println("request access code : " + code);
