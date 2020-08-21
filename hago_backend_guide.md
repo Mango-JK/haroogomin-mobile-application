@@ -137,23 +137,47 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 <center><image src="./images/start_gitkraken.PNG"></image></center>
 
 
-
 <hr/>
 
 
+# Entity Modeling
 
 
 
-# Data Modeling
+<center><image src="./images/entity_modeling.PNG"></image></center>
 
 
 
+```java
+// Entity Modeling
 
+1. User (사용자 계정)
+    
+    
+2. Post (고민글)
+    
+    
+3. Comment (댓글)
+    
+    
+    
+    
+* Role (관리자/일반사용자)
+* BaseTimeEntity (생성날짜/수정날짜)
 
-
-
-
+```
 
 
 
 <hr/>
+
+# 4. 개발
+
+## feat.01 Kakao Login
+
+
+
+
+
+
+
