@@ -136,9 +136,7 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 
 <center><image src="./images/start_gitkraken.PNG"></image></center>
 
-
 <hr/>
-
 
 # Entity Modeling
 
@@ -146,6 +144,7 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 
 <center><image src="./images/entity_modeling.PNG"></image></center>
 
+<br/>
 
 
 ```java
@@ -170,14 +169,30 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 
 
 <hr/>
-
 # 4. 개발
 
 ## feat.01 Kakao Login
 
+<center><image src="./images/login_step.PNG"></image></center>
 
+카카오 로그인 진행 과정
 
+<br/>
 
+사용자 토큰은 매번 인증을 거치지 않고도 일정 기간 카카오 API를 사용할 수 있도록 하는 권한 증명입니다. Kakao SDK는 사용자 토큰 관리 기능을 갖고 있습니다. REST API 사용 시에는 필요에 따라 토큰 정보 확인이나 갱신을 위한 요청을 해야 합니다.
+
+사용자 토큰은 두 가지입니다. 보안상의 이유로 권한 증명 역할을 하는 **액세스 토큰(Access Token)**은 비교적 짧은 유효기간을 가지며, 일정 기간 동안 인증을 거치지 않고 액세스 토큰을 갱신할 수 있게 해주는 역할을 하는 **리프레시 토큰(Refresh Token)**은 보다 긴 유효기간을 가집니다.
+
+사용자 토큰 유효기간은 플랫폼마다 다릅니다. 사용자 토큰의 역할과 유효기간을 표로 정리하면 다음과 같습니다.
+
+<br/>
+
+| Token Type    | Role                                                         | Valid                                                     |
+| :------------ | :----------------------------------------------------------- | :-------------------------------------------------------- |
+| Access Token  | 사용자를 인증합니다.                                         | Android, iOS : 12시간 JavaScript: 2 시간 REST API : 6시간 |
+| Refresh Token | 일정 기간 동안 다시 인증 절차를 거치지 않고도 액세스 토큰 발급을 받을 수 있게 해 줍니다. | 2달 유효기간 1달 남은 시점부터 갱신 가능                  |
+
+<br/>
 
 
 
