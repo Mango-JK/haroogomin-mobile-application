@@ -147,14 +147,15 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 ```java
 // Entity Modeling
 
-1. User (사용자 계정)
+1. User (사용자)
     
+2. Board (게시판)    
     
-2. Post (고민글)
+3. Post (고민글)
     
-    
-3. Comment (댓글)
-    
+4. Comment (댓글)
+
+5. HashTag (해시태그)
     
     
     
@@ -171,7 +172,7 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 ## feat.01 Kakao Login
 
 <center><image src="./images/login_step.PNG"></image></center>
-카카오 로그인 진행 과정
+### 카카오 로그인 진행 과정
 
 <br/>
 
@@ -190,5 +191,41 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 
 <br/>
 
+### JWT(Json Web Token)
 
+
+
+<center><image src="./images/jwt_exam.PNG"></image></center>
+
+<br/>
+
+#### when should you use
+
+
+
+<center><image src="./images/jwt_use.PNG"></image></center>
+
+
+
+• 하나의 End Point가 아닌 Mobile/Web 등의 multiple endpoint 환경이라면 통합적인 인증/인가 환경을 제공하기위해선 반드시 JWT를 사용합니다.
+
+• 보편적인 예로, React로 client를 구성하고 REST API 서버를 따로 두는 경우에는 JWT를 사용합니다.
+
+• 3rd party에게 public 하게 open 한 REST Endpoint가 존재할 경우 해당 3rd party의 인증/인가를 관리하기 위해 JWT를 사용합니다.
+
+<br/>
+
+<center><image src="./images/jwt.PNG"></image></center>
+
+
+
+> #### 이때 각각의 part는 다음과 같은 정보를 가집니다.
+
+• **Header** : token의 type과 JWT를 digitally sign할때 사용한 algorithm을 정의합니다.
+
+• **Payload** : JWT에 담아서 전달할 data를 정의합니다.
+
+• **Signature** : 위의 Header와 Payload 값을 base64로 encode한 값을 JWT secret key 값으로 encrypt한 값을 명시합니다.
+
+<br/>
 
