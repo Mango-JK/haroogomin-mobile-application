@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
@@ -25,14 +26,20 @@ public class User extends BaseTimeEntity {
 
     private int cash;
 
-    @Enumerated(EnumType.STRING)
-    private Role role = Role.MEMBER;
+
 
     @Builder
-    public User(String nickname, String profileImage, int point, int cash) {
+    public User(long userId, String nickname, String profileImage, int point, int cash) {
+        this.userId = userId;
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.point = point;
         this.cash = cash;
+    }
+
+    public void update(String nickname, String profileImage) {
+        this.nickname = nickname;
+        this.profileImage = profileImage;
+        this.setModifiedDate(LocalDateTime.now());
     }
 }

@@ -1,5 +1,9 @@
 package com.mango.harugomin.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mango.harugomin.domain.entity.User;
+import com.mango.harugomin.dto.UserResponseDto;
 import com.mango.harugomin.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +14,13 @@ import org.springframework.stereotype.Service;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.URL;
-import java.net.http.HttpResponse;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -92,51 +102,64 @@ public class KakaoAPIService {
         return new ResponseEntity<String>(buffer.toString(), HttpStatus.OK);
     }
 
-//    public JsonNode getKaKaoUserInfo(String access_Token) {
-//        log.info("KakaoAPIService : getKaKaoUserInfo");
-//        final HttpClient client = HttpClientBuilder.create().build();
-//        final HttpPost post = new HttpPost(requestURL);
-//
-//        post.addHeader("Authorization", "Bearer " + access_Token);
-//        JsonNode returnNode = null;
-//
-//        HttpResponse response;
-//        try {
-//            response = client.execute(post);
-//            ObjectMapper mapper = new ObjectMapper();
-//            returnNode = mapper.readTree(response.getEntity().getContent());
-//        } catch (ClientProtocolException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return returnNode;
-//    }
-//
-//    @Transactional
-//    public String redirectToken(JsonNode json) {
-//        log.info("KakaoAPIService : redirectToken");
-//
-//        long num = json.get("id").asLong();
-//        String nickname = json.get("kakao_account").get("profile").get("nickname").toString();
-//        nickname = nickname.substring(1, nickname.length() - 1);
-//        String picture = null;
-//        if (json.get("kakao_account").get("profile").has("thumbnail_image_url")) {
-//            picture = json.get("kakao_account").get("profile").get("thumbnail_image_url").toString();
-//            picture = picture.substring(1, picture.length() - 1);
-//            String temp = picture.substring(0, 4);
-//            String temp2 = picture.substring(4, picture.length());
-//            picture = temp + "s" + temp2; // https 작업
-//        }
-//
-//        User user = userService.findByNum(num);
-//        user.update(nickname, picture);
-//
-//        UserResponseDto userResponseDto = new UserResponseDto(user);
-//
-//        String jwt = jwtService.create("user", userResponseDto, "user");
-//
-//        return jwt;
-//    }
+    public JsonNode getKaKaoUserInfo(String access_Token) {
+        log.info("KakaoAPIService : getKaKaoUserInfo");
+        final HttpClient client = HttpClientBuilder.create().build();
+        final HttpPost post = new HttpPost(requestURL);
+
+        post.addHeader("Authorization", "Bearer " + access_Token);
+        JsonNode returnNode = null;
+
+        HttpResponse response;
+        try {
+            response = client.execute(post);
+            ObjectMapper mapper = new ObjectMapper();
+            returnNode = mapper.readTree(response.getEntity().getContent());
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        log.info(returnNode.toString());
+        return returnNode;
+    }
+
+    @Transactional
+    public String redirectToken(JsonNode json) {
+        log.info("KakaoAPIService : redirectToken");
+
+        long id = json.get("id").asLong();
+        System.out.println("--> ID = " + id);
+        String nickname = json.get("kakao_account").get("profile").get("nickname").toString();
+        nickname = nickname.substring(1, nickname.length() - 1);
+        String picture = null;
+        if (json.get("kakao_account").get("profile").has("thumbnail_image_url")) {
+            picture = json.get("kakao_account").get("profile").get("thumbnail_image_url").toString();
+            picture = picture.substring(1, picture.length() - 1);
+            String temp = picture.substring(0, 4);
+            String temp2 = picture.substring(4, picture.length());
+            picture = temp + "s" + temp2; // https 작업
+        }
+
+        log.info("User 찾기 !");
+        User user = userService.findById(id);
+
+        if(user == null) {
+            log.info("###### USER 가 NULL이어서 DB에 새로 등록합니다. #####");
+            User newUser = User.builder()
+                    .userId(id)
+                    .cash(0)
+                    .point(0)
+                    .build();
+            user = userService.saveUser(newUser);
+        }
+
+        user.update(nickname, picture);
+
+        UserResponseDto userResponseDto = new UserResponseDto(user);
+        String jwt = jwtService.create("user", userResponseDto, "user");
+
+        return jwt;
+    }
 }

@@ -4,8 +4,7 @@ import com.mango.harugomin.domain.entity.User;
 import com.mango.harugomin.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -13,8 +12,13 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public Optional<User> findById(long id) {
-        Optional<User> user = userRepository.findById(id);
+    @Transactional
+    public User saveUser(User user){
+        return userRepository.save(user);
+    }
+
+    public User findById(long id) {
+        User user = userRepository.findByUserId(id);
         return user;
     }
 }
