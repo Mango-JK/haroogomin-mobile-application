@@ -37,11 +37,17 @@ public class UserController {
         return "index";
     }
 
+    /**
+     * @param id
+     * @return UserInfo
+     */
     @GetMapping(value = "/user/{id}")
     public ResponseEntity<User> findOne(@PathVariable("id") long id) {
         return new ResponseEntity<User>(userService.findById(id), HttpStatus.OK);
     }
 
+    //
+    //
     @GetMapping(value = "/user/login/kakao")
     @ApiOperation("카카오 코드 발급받기")
     public String getKakaoCode(@RequestParam("code") String code) {
@@ -52,22 +58,17 @@ public class UserController {
         log.info("My AccessToken : " + AccessToken);
         return "index";
     }
-
     //
     //
-    //
-
-
 
     /**
      * @param accessToken
-     * @return User JWT Token
+     * @return UserJWTToken
      */
     @PostMapping("/user/login/kakao")
     @ApiOperation("카카오 로그인")
     public String kakaoLogin(@RequestParam String accessToken) {
-        log.info("POST : /user/login/kakao");
-        log.info("AccessToken : " + accessToken);
+        log.info("POST :: /user/login/kakao");
 
         JsonNode json = kakaoAPIService.getKaKaoUserInfo(accessToken);
 
@@ -78,11 +79,13 @@ public class UserController {
             log.error(e + "");
         }
 
-        log.info("RESULT ? : "+ result);
-
         return result;
     }
 
+    /**
+     * @param jwtToken
+     * @return UserInfo
+     */
     @PostMapping("/user/check")
     @ApiOperation("토큰 검증")
     public Object checkToken(@RequestParam String jwtToken) {

@@ -38,8 +38,8 @@ public class KakaoAPIService {
 
         final String tokenRequestUrl = AUTH_HOST + "/oauth/token";
 
-        String CLIENT_ID = "7a888c52e90c278c82e7da483c93375f"; // 해당 앱의 REST API KEY 정보. 개발자 웹사이트의 대쉬보드에서 확인 가능
-        String REDIRECT_URI = "http://localhost:8080/api/user/login/kakao"; // 해당 앱의 설정된 uri. 개발자 웹사이트의 대쉬보드에서 확인 및 설정 가능
+        String CLIENT_ID = "7a888c52e90c278c82e7da483c93375f";
+        String REDIRECT_URI = "http://localhost:8080/api/user/login/kakao";
 
         HttpsURLConnection conn = null;
         OutputStreamWriter writer = null;
@@ -62,9 +62,8 @@ public class KakaoAPIService {
             writer.flush();
 
             final int responseCode = conn.getResponseCode();
-            System.out.println("\nSending 'POST' request to URL : " + tokenRequestUrl);
-            System.out.println("Post parameters : " + params);
-            System.out.println("Response Code : " + responseCode);
+            log.info("\nSending 'POST' request to URL : " + tokenRequestUrl);
+            log.info("Response Code : " + responseCode);
 
             isr = new InputStreamReader(conn.getInputStream());
             reader = new BufferedReader(isr);
@@ -73,13 +72,9 @@ public class KakaoAPIService {
             while ((line = reader.readLine()) != null) {
                 buffer.append(line);
             }
-
-            System.out.println(buffer.toString());
-
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            // clear resources
             if (writer != null) {
                 try {
                     writer.close();
@@ -103,7 +98,8 @@ public class KakaoAPIService {
     }
 
     public JsonNode getKaKaoUserInfo(String access_Token) {
-        log.info("KakaoAPIService : getKaKaoUserInfo");
+        log.info("KakaoAPIService :: getKaKaoUserInfo");
+
         final HttpClient client = HttpClientBuilder.create().build();
         final HttpPost post = new HttpPost(requestURL);
 
@@ -127,10 +123,9 @@ public class KakaoAPIService {
 
     @Transactional
     public String redirectToken(JsonNode json) {
-        log.info("KakaoAPIService : redirectToken");
+        log.info("KakaoAPIService :: redirectToken");
 
         long id = json.get("id").asLong();
-        System.out.println("--> ID = " + id);
         String nickname = json.get("kakao_account").get("profile").get("nickname").toString();
         nickname = nickname.substring(1, nickname.length() - 1);
         String picture = null;
@@ -139,19 +134,18 @@ public class KakaoAPIService {
             picture = picture.substring(1, picture.length() - 1);
             String temp = picture.substring(0, 4);
             String temp2 = picture.substring(4, picture.length());
-            picture = temp + "s" + temp2; // https 작업
+            picture = temp + "s" + temp2;
         }
 
-        log.info("User 찾기 !");
         User user = userService.findById(id);
 
-        if(user == null) {
-            log.info("###### USER 가 NULL이어서 DB에 새로 등록합니다. #####");
+        if (user == null) {
             User newUser = User.builder()
                     .userId(id)
                     .cash(0)
                     .point(0)
                     .build();
+
             user = userService.saveUser(newUser);
         }
 

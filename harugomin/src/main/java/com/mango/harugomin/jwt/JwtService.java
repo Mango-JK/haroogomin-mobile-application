@@ -23,7 +23,7 @@ public class JwtService {
 
     public <T> String create(String key, T data, String subject) {
         Date expireTime = new Date();
-        expireTime.setTime(expireTime.getTime() + 1000 * 60 * 60); // 1시간
+        expireTime.setTime(expireTime.getTime() + 864000000);
 
         String jwt = Jwts.builder().setHeaderParam("typ", "JWT").setHeaderParam("regDate", System.currentTimeMillis())
                 .setSubject(subject).setExpiration(expireTime).claim(key, data)
@@ -31,14 +31,14 @@ public class JwtService {
         return jwt;
     }
 
-    private byte[] generateKey(){
+    private byte[] generateKey() {
         byte[] key = null;
         try {
             key = SALT.getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {
-            if(log.isInfoEnabled()){
+            if (log.isInfoEnabled()) {
                 e.printStackTrace();
-            }else{
+            } else {
                 log.error("Making JWT Key Error ::: {}", e.getMessage());
             }
         }
@@ -69,5 +69,4 @@ public class JwtService {
         Map<String, Object> value = (LinkedHashMap<String, Object>) claims.getBody().get(key);
         return value;
     }
-
 }
