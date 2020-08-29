@@ -184,6 +184,19 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 
 <br/>
 
+```java
+/* 
+ 1. 카카오 로그인 창에서 ID, PWD 입력 하면
+ 2. 카카오 API 서버에서 code를 준다. callback 주소로
+ 3. code가 정상이면, 카카오 API 서버에 token(Access Token) 요청
+ 4. 카카오 API 서버로부터 token(Access Token)을 발급받는다.
+ 5. token으로 카카오 자원 서버에 자원을 요청
+ 6. 카카오 자원 서버로부터 사용자 정보를 받는다.
+*/
+```
+
+<br/>
+
 | Token Type    | Role                                                         | Valid                                                     |
 | :------------ | :----------------------------------------------------------- | :-------------------------------------------------------- |
 | Access Token  | 사용자를 인증합니다.                                         | Android, iOS : 12시간 JavaScript: 2 시간 REST API : 6시간 |
@@ -196,7 +209,6 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 
 
 <center><image src="./images/jwt_exam.PNG"></image></center>
-
 <br/>
 
 #### when should you use
@@ -204,7 +216,6 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 
 
 <center><image src="./images/jwt_use.PNG"></image></center>
-
 
 
 • 하나의 End Point가 아닌 Mobile/Web 등의 multiple endpoint 환경이라면 통합적인 인증/인가 환경을 제공하기위해선 반드시 JWT를 사용합니다.
@@ -216,7 +227,6 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 <br/>
 
 <center><image src="./images/jwt.PNG"></image></center>
-
 
 
 > #### 이때 각각의 part는 다음과 같은 정보를 가집니다.
