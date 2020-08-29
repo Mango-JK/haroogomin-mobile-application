@@ -9,15 +9,15 @@ public class UserResponseDto {
     private String nickname;
     private String profileImage;
     private int ageRange;
+    private String hashTag;
     private int point;
-    private int cash;
 
     public UserResponseDto(User entity) {
         this.userId = entity.getUserId();
         this.nickname = entity.getNickname();
         this.profileImage = entity.getProfileImage();
         this.ageRange = entity.getAgeRange();
+        this.hashTag = entity.getHashTag();
         this.point = entity.getPoint();
-        this.cash = entity.getCash();
     }
 }
