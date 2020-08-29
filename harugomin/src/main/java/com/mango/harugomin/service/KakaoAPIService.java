@@ -62,7 +62,7 @@ public class KakaoAPIService {
             writer.write(params);
             writer.flush();
 
-            final int responseCode = conn.getResponseCode();
+            int responseCode = conn.getResponseCode();
             log.info("\nSending 'POST' request to URL : " + tokenRequestUrl);
             log.info("Response Code : " + responseCode);
 
@@ -152,7 +152,6 @@ public class KakaoAPIService {
             User newUser = User.builder()
                     .userId(id)
                     .ageRange(ageRange)
-                    .cash(0)
                     .point(0)
                     .build();
 

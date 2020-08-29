@@ -1,9 +1,13 @@
 package com.mango.harugomin.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.mango.harugomin.domain.entity.User;
+import com.mango.harugomin.dto.UserResponseDto;
 import com.mango.harugomin.jwt.JwtService;
 import com.mango.harugomin.service.KakaoAPIService;
+import com.mango.harugomin.service.NaverAPIService;
 import com.mango.harugomin.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,6 +19,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 @Slf4j
 @Api(tags = "1. User")
 @RequiredArgsConstructor
@@ -24,6 +33,7 @@ public class UserController {
 
     private final UserService userService;
     private final KakaoAPIService kakaoAPIService;
+    private final NaverAPIService naverAPIService;
     private final JwtService jwtService;
 
     @ApiOperation(value = "index", notes = "연습용 메인 페이지")
@@ -58,6 +68,20 @@ public class UserController {
         log.info("My AccessToken : " + AccessToken);
         return "index";
     }
+
+    @GetMapping(value = "/user/login/naver")
+    @ApiOperation("네이버 코드 발급받기")
+    public String getNaverCode(@RequestParam(value = "code") String code,
+                               @RequestParam(value = "state") String state) {
+        log.info("User Naver Code : " + code);
+        log.info("State Code : " + state);
+
+        ResponseEntity<String> AccessToken = naverAPIService.getAccessToken(code, state);
+
+        log.info("Naver AccessToken : " + AccessToken);
+        return "index";
+    }
+
     //
     //
 
