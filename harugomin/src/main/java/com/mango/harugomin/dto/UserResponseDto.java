@@ -8,6 +8,7 @@ public class UserResponseDto {
     private long userId;
     private String nickname;
     private String profileImage;
+    private int ageRange;
     private int point;
     private int cash;
 
@@ -15,6 +16,7 @@ public class UserResponseDto {
         this.userId = entity.getUserId();
         this.nickname = entity.getNickname();
         this.profileImage = entity.getProfileImage();
+        this.ageRange = entity.getAgeRange();
         this.point = entity.getPoint();
         this.cash = entity.getCash();
     }

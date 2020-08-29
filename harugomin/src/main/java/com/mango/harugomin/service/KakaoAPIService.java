@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.URL;
+import java.util.StringTokenizer;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -128,6 +129,14 @@ public class KakaoAPIService {
         long id = json.get("id").asLong();
         String nickname = json.get("kakao_account").get("profile").get("nickname").toString();
         nickname = nickname.substring(1, nickname.length() - 1);
+        String profile_needs_agreement = json.get("kakao_account").get("profile_needs_agreement").toString();
+        String ageRange = "1";
+
+        if(profile_needs_agreement.equals("true")) {
+            StringTokenizer stringTokenizer = new StringTokenizer(json.get("kakao_account").get("age_range").toString(), "~");
+            ageRange = stringTokenizer.nextToken().substring(1, stringTokenizer.nextToken().length());
+        }
+
         String picture = null;
         if (json.get("kakao_account").get("profile").has("thumbnail_image_url")) {
             picture = json.get("kakao_account").get("profile").get("thumbnail_image_url").toString();
@@ -142,6 +151,7 @@ public class KakaoAPIService {
         if (user == null) {
             User newUser = User.builder()
                     .userId(id)
+                    .ageRange(ageRange)
                     .cash(0)
                     .point(0)
                     .build();

@@ -22,6 +22,9 @@ public class User extends BaseTimeEntity {
     @Column(name = "profile_image")
     private String profileImage;
 
+    @Column(name = "age_range")
+    private int ageRange;
+
     private int point;
 
     private int cash;
@@ -29,10 +32,11 @@ public class User extends BaseTimeEntity {
 
 
     @Builder
-    public User(long userId, String nickname, String profileImage, int point, int cash) {
+    public User(long userId, String nickname, String profileImage, String ageRange, int point, int cash) {
         this.userId = userId;
         this.nickname = nickname;
         this.profileImage = profileImage;
+        this.ageRange = Integer.parseInt(ageRange);
         this.point = point;
         this.cash = cash;
     }
