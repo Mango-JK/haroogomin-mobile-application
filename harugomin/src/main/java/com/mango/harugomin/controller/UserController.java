@@ -1,10 +1,7 @@
 package com.mango.harugomin.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.mango.harugomin.domain.entity.User;
-import com.mango.harugomin.dto.UserResponseDto;
 import com.mango.harugomin.jwt.JwtService;
 import com.mango.harugomin.service.KakaoAPIService;
 import com.mango.harugomin.service.NaverAPIService;
@@ -18,11 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 @Slf4j
 @Api(tags = "1. User")
@@ -56,7 +48,7 @@ public class UserController {
         return new ResponseEntity<User>(userService.findById(id), HttpStatus.OK);
     }
 
-    //
+    //  테스트용
     //
     @GetMapping(value = "/user/login/kakao")
     @ApiOperation("카카오 코드 발급받기")
@@ -83,7 +75,7 @@ public class UserController {
     }
 
     //
-    //
+    //  테스트용
 
     /**
      * @param accessToken
@@ -99,6 +91,28 @@ public class UserController {
         String result = null;
         try {
             result = kakaoAPIService.redirectToken(json); // 토큰 발행
+        } catch (Exception e) {
+            log.error(e + "");
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @param accessToken
+     * @return UserJWTToken
+     */
+    @PostMapping("/user/login/naver")
+    @ApiOperation("네이버 로그인")
+    public String naverLogin(@RequestParam String accessToken) {
+        log.info("POST :: /user/login/naver");
+
+        JsonNode json = naverAPIService.getNaverUserInfo(accessToken);
+
+        String result = null;
+        try {
+            result = naverAPIService.redirectToken(json);
         } catch (Exception e) {
             log.error(e + "");
         }

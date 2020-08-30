@@ -153,6 +153,7 @@ public class KakaoAPIService {
                     .userId(id)
                     .ageRange(ageRange)
                     .point(0)
+                    .enablePosting(1)
                     .build();
 
             user = userService.saveUser(newUser);

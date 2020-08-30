@@ -11,6 +11,7 @@ public class UserResponseDto {
     private int ageRange;
     private String hashTag;
     private int point;
+    private int enablePosting;
 
     public UserResponseDto(User entity) {
         this.userId = entity.getUserId();
@@ -19,5 +20,6 @@ public class UserResponseDto {
         this.ageRange = entity.getAgeRange();
         this.hashTag = entity.getHashTag();
         this.point = entity.getPoint();
+        this.enablePosting = entity.getEnablePosting();
     }
 }
