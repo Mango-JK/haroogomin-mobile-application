@@ -40,7 +40,7 @@ public class KakaoAPIService {
         final String tokenRequestUrl = AUTH_HOST + "/oauth/token";
 
         String CLIENT_ID = "7a888c52e90c278c82e7da483c93375f";
-        String REDIRECT_URI = "http://localhost:8080/api/user/login/kakao";
+        String REDIRECT_URI = "http://localhost:8080/api/v1/users/login/kakao";
 
         HttpsURLConnection conn = null;
         OutputStreamWriter writer = null;

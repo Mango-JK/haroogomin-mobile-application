@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @Api(tags = "1. User")
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 @RestController
 public class UserController {
 
@@ -43,14 +43,14 @@ public class UserController {
      * @param id
      * @return UserInfo
      */
-    @GetMapping(value = "/user/{id}")
+    @GetMapping(value = "/users/{id}")
     public ResponseEntity<User> findOne(@PathVariable("id") long id) {
         return new ResponseEntity<User>(userService.findById(id), HttpStatus.OK);
     }
 
     //  테스트용
     //
-    @GetMapping(value = "/user/login/kakao")
+    @GetMapping(value = "/users/login/kakao")
     @ApiOperation("카카오 코드 발급받기")
     public String getKakaoCode(@RequestParam("code") String code) {
         log.info("User Kakao Code : " + code);
@@ -61,7 +61,7 @@ public class UserController {
         return "index";
     }
 
-    @GetMapping(value = "/user/login/naver")
+    @GetMapping(value = "/users/login/naver")
     @ApiOperation("네이버 코드 발급받기")
     public String getNaverCode(@RequestParam(value = "code") String code,
                                @RequestParam(value = "state") String state) {
@@ -81,7 +81,7 @@ public class UserController {
      * @param accessToken
      * @return UserJWTToken
      */
-    @PostMapping("/user/login/kakao")
+    @PostMapping("/users/login/kakao")
     @ApiOperation("카카오 로그인")
     public String kakaoLogin(@RequestParam String accessToken) {
         log.info("POST :: /user/login/kakao");
@@ -103,7 +103,7 @@ public class UserController {
      * @param accessToken
      * @return UserJWTToken
      */
-    @PostMapping("/user/login/naver")
+    @PostMapping("/users/login/naver")
     @ApiOperation("네이버 로그인")
     public String naverLogin(@RequestParam String accessToken) {
         log.info("POST :: /user/login/naver");
@@ -124,7 +124,7 @@ public class UserController {
      * @param jwtToken
      * @return UserInfo
      */
-    @PostMapping("/user/check")
+    @PostMapping("/users/check")
     @ApiOperation("토큰 검증")
     public Object checkToken(@RequestParam String jwtToken) {
         log.info("UserController : checkToken");

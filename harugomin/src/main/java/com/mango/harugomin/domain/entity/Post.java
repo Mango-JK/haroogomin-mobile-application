@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,25 +35,33 @@ public class Post extends BaseTimeEntity {
     @Column(name = "post_hashtag")
     private String postHashtag;
 
-    // private List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "post")
+     private List<Comment> comments = new ArrayList<>();
 
     @Column(name = "hits")
     private int hits;
 
-    @Column(name = "likes")
-    private int likes;
+    @Column(name = "post_likes")
+    private int postLikes;
 
     @Column(name = "expired")
     private int expired;
 
     @Builder
-    public Post(User user, String title, String content, String postHashtag, int hits, int likes, int expired) {
+    public Post(User user, String title, String content, String postHashtag, int hits, int postLikes, int expired) {
         this.user = user;
         this.title = title;
         this.content = content;
         this.postHashtag = postHashtag;
         this.hits = hits;
-        this.likes = likes;
+        this.postLikes = postLikes;
         this.expired = expired;
+    }
+
+    public void update(String title, String content, String postHashtag) {
+        this.title = title;
+        this.content = content;
+        this.postHashtag = postHashtag;
+        this.setModifiedDate(LocalDateTime.now());
     }
 }
