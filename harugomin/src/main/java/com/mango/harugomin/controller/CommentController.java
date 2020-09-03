@@ -20,14 +20,4 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @ApiOperation(value = "index", notes = "연습용 메인 페이지")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "200 OK !!"),
-            @ApiResponse(code = 500, message = "Internal Server Error !!"),
-            @ApiResponse(code = 404, message = "404 Not Found !!")
-    })
-    @GetMapping(value = "/")
-    public String hello(){
-        return "hello";
-    }
 }

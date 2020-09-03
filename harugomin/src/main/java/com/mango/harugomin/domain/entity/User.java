@@ -31,7 +31,6 @@ public class User extends BaseTimeEntity {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "tag_id")
-    @Column(name = "user_hashtag")
     private Hashtag userHashtag;
 
     @Column(name = "point")

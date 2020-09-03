@@ -35,7 +35,6 @@ public class Post extends BaseTimeEntity {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "tag_id")
-    @Column(name = "post_hashtag")
     private Hashtag postHashtag;
 
     @OneToMany(mappedBy = "post")
