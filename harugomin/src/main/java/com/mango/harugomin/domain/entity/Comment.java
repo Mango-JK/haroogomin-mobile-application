@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 import static javax.persistence.FetchType.*;
+import static javax.persistence.GenerationType.*;
 
 
 @Getter
@@ -17,7 +18,7 @@ import static javax.persistence.FetchType.*;
 @Table(name = "comment")
 public class Comment extends BaseTimeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "comment_id")
     private Long commentId;
 

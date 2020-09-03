@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.FetchType.*;
+import static javax.persistence.GenerationType.*;
 
 @NoArgsConstructor
 @Getter
@@ -18,7 +19,7 @@ import static javax.persistence.FetchType.*;
 @Table(name = "post")
 public class Post extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = IDENTITY)
     private Long postId;
 
     @ManyToOne(fetch = LAZY)
@@ -32,8 +33,10 @@ public class Post extends BaseTimeEntity {
     @Lob
     private String content;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "tag_id")
     @Column(name = "post_hashtag")
-    private String postHashtag;
+    private Hashtag postHashtag;
 
     @OneToMany(mappedBy = "post")
      private List<Comment> comments = new ArrayList<>();
@@ -48,7 +51,7 @@ public class Post extends BaseTimeEntity {
     private int expired;
 
     @Builder
-    public Post(User user, String title, String content, String postHashtag, int hits, int postLikes, int expired) {
+    public Post(User user, String title, String content, Hashtag postHashtag, int hits, int postLikes, int expired) {
         this.user = user;
         this.title = title;
         this.content = content;
@@ -58,7 +61,7 @@ public class Post extends BaseTimeEntity {
         this.expired = expired;
     }
 
-    public void update(String title, String content, String postHashtag) {
+    public void update(String title, String content, Hashtag postHashtag) {
         this.title = title;
         this.content = content;
         this.postHashtag = postHashtag;

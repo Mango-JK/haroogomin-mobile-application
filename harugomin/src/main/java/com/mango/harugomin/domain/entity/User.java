@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static javax.persistence.FetchType.*;
+
 @NoArgsConstructor
 @Getter
 @Entity
@@ -26,8 +28,11 @@ public class User extends BaseTimeEntity {
     @Column(name = "age_range")
     private int ageRange;
 
-    @Column(name = "hash_tag")
-    private String hashTag;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "tag_id")
+    @Column(name = "user_hashtag")
+    private Hashtag userHashtag;
 
     @Column(name = "point")
     private int point;
@@ -36,12 +41,12 @@ public class User extends BaseTimeEntity {
     private int enablePosting;
 
     @Builder
-    public User(long userId, String nickname, String profileImage, String ageRange, String hashTag, int point, int enablePosting) {
+    public User(long userId, String nickname, String profileImage, String ageRange, Hashtag userHashtag, int point, int enablePosting) {
         this.userId = userId;
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.ageRange = Integer.parseInt(ageRange);
-        this.hashTag = hashTag;
+        this.userHashtag = userHashtag;
         this.point = point;
         this.enablePosting = enablePosting;
     }
