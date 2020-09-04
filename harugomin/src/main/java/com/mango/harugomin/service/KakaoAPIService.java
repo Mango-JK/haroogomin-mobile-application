@@ -40,7 +40,7 @@ public class KakaoAPIService {
         final String tokenRequestUrl = AUTH_HOST + "/oauth/token";
 
         String CLIENT_ID = "7a888c52e90c278c82e7da483c93375f";
-        String REDIRECT_URI = "http://localhost:8080/api/user/login/kakao";
+        String REDIRECT_URI = "http://localhost:8080/api/v1/users/login/kakao";
 
         HttpsURLConnection conn = null;
         OutputStreamWriter writer = null;
@@ -130,7 +130,7 @@ public class KakaoAPIService {
         String nickname = json.get("kakao_account").get("profile").get("nickname").toString();
         nickname = nickname.substring(1, nickname.length() - 1);
         String profile_needs_agreement = json.get("kakao_account").get("profile_needs_agreement").toString();
-        String ageRange = "1";
+        String ageRange = "0";
 
         if(profile_needs_agreement.equals("true")) {
             StringTokenizer stringTokenizer = new StringTokenizer(json.get("kakao_account").get("age_range").toString(), "~");
