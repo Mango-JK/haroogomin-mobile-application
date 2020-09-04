@@ -20,6 +20,7 @@ import static javax.persistence.GenerationType.*;
 public class Post extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "post_id")
     private Long postId;
 
     @ManyToOne(fetch = LAZY)
