@@ -3,6 +3,7 @@ package com.mango.harugomin.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mango.harugomin.domain.entity.User;
 import com.mango.harugomin.jwt.JwtService;
+import com.mango.harugomin.service.HashtagService;
 import com.mango.harugomin.service.KakaoAPIService;
 import com.mango.harugomin.service.NaverAPIService;
 import com.mango.harugomin.service.UserService;
@@ -16,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @Slf4j
 @Api(tags = "1. User")
 @RequiredArgsConstructor
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final HashtagService hashtagService;
     private final KakaoAPIService kakaoAPIService;
     private final NaverAPIService naverAPIService;
     private final JwtService jwtService;
@@ -39,19 +43,30 @@ public class UserController {
         return "index";
     }
 
-    /**
-     * @param id
-     * @return UserInfo
-     */
-    @GetMapping(value = "/users/{id}")
-    public ResponseEntity<User> findOne(@PathVariable("id") long id) {
-        return new ResponseEntity<User>(userService.findById(id), HttpStatus.OK);
+
+
+
+
+
+
+
+
+
+
+
+    @ApiOperation("유저 해시태그 업데이트")
+    @PostMapping(value = "/users/hashtag/{userId}")
+    public ResponseEntity<Long> updateUserHashtag(@PathVariable("userId") Long userId, @RequestParam("hashtag") String hashtag) {
+        if(userService.updateUserHashtag(userId, hashtag) > 0 ) {
+            User user = userService.findById(userId);
+            hashtagService.countUp(user.getUserHashtag().getTagId());
+            return new ResponseEntity<Long>(userId, HttpStatus.OK);
+        }
+        return new ResponseEntity<Long>(-1L, HttpStatus.BAD_REQUEST);
     }
 
-    //  테스트용
-    //
-    @GetMapping(value = "/users/login/kakao")
     @ApiOperation("카카오 코드 발급받기")
+    @GetMapping(value = "/users/login/kakao")
     public String getKakaoCode(@RequestParam("code") String code) {
         log.info("User Kakao Code : " + code);
 
@@ -61,8 +76,9 @@ public class UserController {
         return "index";
     }
 
-    @GetMapping(value = "/users/login/naver")
+
     @ApiOperation("네이버 코드 발급받기")
+    @GetMapping(value = "/users/login/naver")
     public String getNaverCode(@RequestParam(value = "code") String code,
                                @RequestParam(value = "state") String state) {
         log.info("User Naver Code : " + code);
@@ -74,15 +90,12 @@ public class UserController {
         return "index";
     }
 
-    //
-    //  테스트용
-
     /**
      * @param accessToken
      * @return UserJWTToken
      */
-    @PostMapping("/users/login/kakao")
     @ApiOperation("카카오 로그인")
+    @PostMapping("/users/login/kakao")
     public String kakaoLogin(@RequestParam String accessToken) {
         log.info("POST :: /user/login/kakao");
 
@@ -103,8 +116,8 @@ public class UserController {
      * @param accessToken
      * @return UserJWTToken
      */
-    @PostMapping("/users/login/naver")
     @ApiOperation("네이버 로그인")
+    @PostMapping("/users/login/naver")
     public String naverLogin(@RequestParam String accessToken) {
         log.info("POST :: /user/login/naver");
 
@@ -124,8 +137,8 @@ public class UserController {
      * @param jwtToken
      * @return UserInfo
      */
-    @PostMapping("/users/check")
     @ApiOperation("토큰 검증")
+    @PostMapping("/users/check")
     public Object checkToken(@RequestParam String jwtToken) {
         log.info("UserController : checkToken");
 
