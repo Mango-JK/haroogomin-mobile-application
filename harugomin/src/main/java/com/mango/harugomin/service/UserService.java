@@ -29,7 +29,17 @@ public class UserService {
 
     @Transactional
     public int updateUserHashtag(Long userId, String hashtag) {
-        long tagId = hashtagService.findByHashTag(hashtag);
+        long tagId = hashtagService.findByTagname(hashtag).getTagId();
         return userRepository.updateUserHashTag(userId, tagId);
+    }
+
+    @Transactional
+    public int upOnePoint(Long userId) {
+        return userRepository.upOnePoint(userId);
+    }
+
+    @Transactional
+    public int useThreePoint(Long userId) {
+        return userRepository.useThreePoint(userId);
     }
 }

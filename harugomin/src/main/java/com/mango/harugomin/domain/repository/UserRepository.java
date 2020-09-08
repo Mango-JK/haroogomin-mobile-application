@@ -11,7 +11,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByUserId(Long id);
 
     @Modifying(clearAutomatically = true)
-    @Query(nativeQuery = true, value = "update user set tag_id = ?2 where user_id = ?1 ")
+    @Query(value = "update user set tag_id = ?2 where user_id = ?1 ", nativeQuery = true)
     int updateUserHashTag(long userId, long tagId);
 
+    @Modifying(clearAutomatically = true)
+    @Query(value = "update user set point = point + 1 where user_id = ?1 ", nativeQuery = true)
+    int upOnePoint(long userId);
+
+    @Modifying(clearAutomatically = true)
+    @Query(value = "update user set point = point - 3 where user_id = ?1 ", nativeQuery = true)
+    int useThreePoint(Long userId);
 }

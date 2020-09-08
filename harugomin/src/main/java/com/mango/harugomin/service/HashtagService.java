@@ -13,11 +13,11 @@ public class HashtagService {
     private final HashtagRepository hashtagRepository;
 
     @Transactional
-    public long addUserHashtag(Hashtag hashtag){
-        return hashtagRepository.save(hashtag).getTagId();
+    public Hashtag saveHashtag(Hashtag hashtag){
+        return hashtagRepository.save(hashtag);
     }
 
-    public long findByHashTag(String hashtag) {
+    public Hashtag findByTagname(String hashtag) {
         return hashtagRepository.findByTagName(hashtag);
     }
 
