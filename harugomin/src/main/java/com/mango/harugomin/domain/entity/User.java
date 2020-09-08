@@ -28,7 +28,6 @@ public class User extends BaseTimeEntity {
     @Column(name = "age_range")
     private int ageRange;
 
-
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "tag_id")
     private Hashtag userHashtag;

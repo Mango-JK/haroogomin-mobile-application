@@ -3,7 +3,7 @@ package com.mango.harugomin.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mango.harugomin.domain.entity.User;
-import com.mango.harugomin.dto.UserResponseDto;
+import com.mango.harugomin.dto.UserRequestDto;
 import com.mango.harugomin.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -161,8 +161,8 @@ public class KakaoAPIService {
 
         user.update(nickname, picture);
 
-        UserResponseDto userResponseDto = new UserResponseDto(user);
-        String jwt = jwtService.create("user", userResponseDto, "user");
+        UserRequestDto userRequestDto = new UserRequestDto(user);
+        String jwt = jwtService.create("user", userRequestDto, "user");
 
         return jwt;
     }
