@@ -291,11 +291,143 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 
 <hr/>
 
+# AWS S3_ 정적 파일 업로더
+
+> SpringBoot로 서비스를 구축하다보면 꼭 만들어야할 것이 **정적 파일 업로더**입니다.
+> 이미지나 HTML과 같은 정적 파일을 S3에 제공해서 이를 원하는 곳에서 URL만으로 호출할 수 있게 하는걸 말합니다.
+
+<br/>
+
+### 로컬 환경 구성
+
+### build.gradle
+
+```groovy
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.spring.io/libs-milestone'}
+}
+
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.cloud:spring-cloud-starter-aws')
+
+    // handlebars
+    compile 'pl.allegro.tech.boot:handlebars-spring-boot-starter:0.3.0'
+
+    compileOnly('org.projectlombok:lombok')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-aws:2.0.0.RC2'
+    }
+}
+```
+
+>  Spring Cloud AWS가 현재 (2018.06.03) 2.0.0.RC2가 최신이라 `maven { url 'https://repo.spring.io/libs-milestone'}`가 필요합니다.
+
+<br/>
+
+### S3Uploader.java
+
+다음으로 S3에 정적 파일을 올리는 기능을 하는 `S3Uploader.java` 파일을 생성합니다.
+
+> 여기선 Lombok을 사용한 코드가 있으니 참고하세요.
+
+```java
+@Slf4j
+@RequiredArgsConstructor
+@Component
+public class S3Uploader {
+
+    private final AmazonS3Client amazonS3Client;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
+    public String upload(MultipartFile multipartFile, String dirName) throws IOException {
+        File uploadFile = convert(multipartFile)
+                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
+
+        return upload(uploadFile, dirName);
+    }
+
+    private String upload(File uploadFile, String dirName) {
+        String fileName = dirName + "/" + uploadFile.getName();
+        String uploadImageUrl = putS3(uploadFile, fileName);
+        removeNewFile(uploadFile);
+        return uploadImageUrl;
+    }
+
+    private String putS3(File uploadFile, String fileName) {
+        amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
+        return amazonS3Client.getUrl(bucket, fileName).toString();
+    }
+
+    private void removeNewFile(File targetFile) {
+        if (targetFile.delete()) {
+            log.info("파일이 삭제되었습니다.");
+        } else {
+            log.info("파일이 삭제되지 못했습니다.");
+        }
+    }
+
+    private Optional<File> convert(MultipartFile file) throws IOException {
+        File convertFile = new File(file.getOriginalFilename());
+        if(convertFile.createNewFile()) {
+            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
+                fos.write(file.getBytes());
+            }
+            return Optional.of(convertFile);
+        }
+
+        return Optional.empty();
+    }
+}
+```
+
+> 롬복의 `@RequiredArgsConstructor`는 `final` 멤버변수가 있으면 생성자 항목에 포함시킵니다.
+> 여기선 `AmazonS3Client amazonS3Client`만 `final`에 있으니 생성자에 `AmazonS3Client amazonS3Client`만 포함됩니다.
+> 반대로 `String bucket`는 생성자 항목에 포함되지 않습니다.
+> 생성자에 포함된 `amazonS3Client`는 DI를 받게되며, `bucket`는 평범한 멤버변수로 남습니다.
+
+<br/>
+
+코드의 순서는 간단합니다.
+
+1. MultipartFile을 전달 받고
+
+2. S3에 전달할 수 있도록 MultiPartFile을 File로 전환
+
+3. S3에 Multipartfile 타입은 전송이 안됩니다. 전환된 File을 S3에 public 읽기 권한으로 put
+
+   외부에서 정적 파일을 읽을 수 있도록 하기 위함입니다.
+
+4. 로컬에 생성된 File 삭제
+
+   Multipartfile -> File로 전환되면서 로컬에 파일 생성된것을 삭제합니다.
+
+5. 업로드된 파일의 S3 URL 주소를 반환
 
 
 
+여기서 재밌는 것은 별다른 Configuration 코드 없이 `AmazonS3Client` 를 DI 받은것인데요.
+Spring Boot Cloud AWS를 사용하게 되면 **S3 관련 Bean을 자동 생성**해줍니다.
+그래서 아래 3개는 **직접 설정할 필요가 없습니다**.
+
+- AmazonS3
+- AmazonS3Client
+- ResourceLoader
+
+참고로 위의 코드 중, `dirName`은 **S3에 생성된 디렉토리**를 나타냅니다.
 
 
+
+<hr/>
 
 
 
