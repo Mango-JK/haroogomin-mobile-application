@@ -291,7 +291,20 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 
 <hr/>
 
-# AWS S3_ 정적 파일 업로더
+# AWS S3
+
+### AWS S3 서비스 소개
+
+AWS S3는 Storage 서비스로서 아래와 같은 특징들이 있습니다.
+
+- 모든 종류의 데이터를 원하는 형식으로 저장
+- 저장할 수 있는 데이터의 전체 볼륨과 객체 수에는 제한이 없음
+- Amazon S3는 간단한 key 기반의 객체 스토리지이며, 데이터를 저장 및 검색하는데 사용할 수 있는 고유한 객체 키를 할당.
+- Amazon S3는 간편한 표준 기반 REST 웹 서비스 인터페이스를 제공
+- 요금 정책 ([링크](https://aws.amazon.com/ko/s3/pricing/))
+- 안전하다
+
+<br/>
 
 > SpringBoot로 서비스를 구축하다보면 꼭 만들어야할 것이 **정적 파일 업로더**입니다.
 > 이미지나 HTML과 같은 정적 파일을 S3에 제공해서 이를 원하는 곳에서 URL만으로 호출할 수 있게 하는걸 말합니다.
@@ -303,127 +316,162 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 ### build.gradle
 
 ```groovy
-repositories {
-    mavenCentral()
-    maven { url 'https://repo.spring.io/libs-milestone'}
-}
-
-
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-web')
-    compile('org.springframework.cloud:spring-cloud-starter-aws')
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    runtimeOnly 'mysql:mysql-connector-java'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
-    // handlebars
-    compile 'pl.allegro.tech.boot:handlebars-spring-boot-starter:0.3.0'
+	// AWS S3
+	compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.820'
+	compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.820'
+	compile group: 'commons-io', name: 'commons-io', version: '2.6'
 
-    compileOnly('org.projectlombok:lombok')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-}
-
-
-dependencyManagement {
-    imports {
-        mavenBom 'org.springframework.cloud:spring-cloud-aws:2.0.0.RC2'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
 }
-```
 
->  Spring Cloud AWS가 현재 (2018.06.03) 2.0.0.RC2가 최신이라 `maven { url 'https://repo.spring.io/libs-milestone'}`가 필요합니다.
+
+```
 
 <br/>
 
-### S3Uploader.java
+### **application.yml**
 
-다음으로 S3에 정적 파일을 올리는 기능을 하는 `S3Uploader.java` 파일을 생성합니다.
-
-> 여기선 Lombok을 사용한 코드가 있으니 참고하세요.
+> aws 설정은 applcation.yml 파일에 작성합니다.
 
 ```java
-@Slf4j
-@RequiredArgsConstructor
-@Component
-public class S3Uploader {
+cloud:
+  aws:
+    credentials:
+      accessKey: YOUR_ACCESS_KEY
+      secretKey: YOUR_SECRET_KEY
+    s3:
+      bucket: YOUR_BUCKET_NAME
+    region:
+      static: YOUR_REGION
+    stack:
+      auto: false
+```
 
-    private final AmazonS3Client amazonS3Client;
+- accessKey, secretKey
+
+- - AWS 계정에 부여된 key 값을 입력합니다. ( IAM 계정 사용 권장 )
+
+- s3.bucket
+
+- - S3 서비스에서 생성한 버킷 이름을 작성합니다.
+
+- region.static
+
+- - S3를 서비스할 region 명을 작성합니다. ( [참고](https://docs.aws.amazon.com/ko_kr/general/latest/gr/rande.html) )
+  - 서울은 **ap-northeast-2**를 작성하면 됩니다.
+
+- stack.auto
+
+- - Spring Cloud 실행 시, 서버 구성을 자동화하는 CloudFormation이 자동으로 실행되는데 이를 사용하지 않겠다는 설정입니다.
+  - 해당 설정을 안해주면 에러가 발생합니다.
+
+<br/>
+
+### UserController
+
+```java
+// 회원 정보 수정 시 프로필 사진 업로드
+
+```
+
+
+
+<br/>
+
+### S3Service
+
+```java
+@NoArgsConstructor
+@Service
+public class S3Service {
+    private AmazonS3 s3Client;
+
+    @Value("${cloud.aws.credentials.accessKey}")
+    private String accessKey;
+
+    @Value("${cloud.aws.credentials.secretKey}")
+    private String secretKey;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String upload(MultipartFile multipartFile, String dirName) throws IOException {
-        File uploadFile = convert(multipartFile)
-                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
+    @Value("${cloud.aws.region.static}")
+    private String region;
 
-        return upload(uploadFile, dirName);
+    @PostConstruct
+    public void setS3Client() {
+        AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
+
+        s3Client = AmazonS3ClientBuilder.standard()
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .withRegion(this.region)
+                .build();
     }
 
-    private String upload(File uploadFile, String dirName) {
-        String fileName = dirName + "/" + uploadFile.getName();
-        String uploadImageUrl = putS3(uploadFile, fileName);
-        removeNewFile(uploadFile);
-        return uploadImageUrl;
-    }
+    public String upload(MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
 
-    private String putS3(File uploadFile, String fileName) {
-        amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
-        return amazonS3Client.getUrl(bucket, fileName).toString();
-    }
-
-    private void removeNewFile(File targetFile) {
-        if (targetFile.delete()) {
-            log.info("파일이 삭제되었습니다.");
-        } else {
-            log.info("파일이 삭제되지 못했습니다.");
-        }
-    }
-
-    private Optional<File> convert(MultipartFile file) throws IOException {
-        File convertFile = new File(file.getOriginalFilename());
-        if(convertFile.createNewFile()) {
-            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
-                fos.write(file.getBytes());
-            }
-            return Optional.of(convertFile);
-        }
-
-        return Optional.empty();
+        s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
+        return s3Client.getUrl(bucket, fileName).toString();
     }
 }
 ```
 
-> 롬복의 `@RequiredArgsConstructor`는 `final` 멤버변수가 있으면 생성자 항목에 포함시킵니다.
-> 여기선 `AmazonS3Client amazonS3Client`만 `final`에 있으니 생성자에 `AmazonS3Client amazonS3Client`만 포함됩니다.
-> 반대로 `String bucket`는 생성자 항목에 포함되지 않습니다.
-> 생성자에 포함된 `amazonS3Client`는 DI를 받게되며, `bucket`는 평범한 멤버변수로 남습니다.
-
-<br/>
-
-코드의 순서는 간단합니다.
-
-1. MultipartFile을 전달 받고
-
-2. S3에 전달할 수 있도록 MultiPartFile을 File로 전환
-
-3. S3에 Multipartfile 타입은 전송이 안됩니다. 전환된 File을 S3에 public 읽기 권한으로 put
-
-   외부에서 정적 파일을 읽을 수 있도록 하기 위함입니다.
-
-4. 로컬에 생성된 File 삭제
-
-   Multipartfile -> File로 전환되면서 로컬에 파일 생성된것을 삭제합니다.
-
-5. 업로드된 파일의 S3 URL 주소를 반환
 
 
+- AmazonS3Client가 deprecated됨에 따라, AmazonS3ClientBuilder를 사용했습니다. 
 
-여기서 재밌는 것은 별다른 Configuration 코드 없이 `AmazonS3Client` 를 DI 받은것인데요.
-Spring Boot Cloud AWS를 사용하게 되면 **S3 관련 Bean을 자동 생성**해줍니다.
-그래서 아래 3개는 **직접 설정할 필요가 없습니다**.
+- @Value(**"${cloud.aws.credentials.accessKey}"**)
 
-- AmazonS3
-- AmazonS3Client
-- ResourceLoader
+- - lombok 패키지가 아닌, **org.springframework.beans.factory.annotation** 패키지임에 유의합니다.
+  - 해당 값은 application.yml에서 작성한 cloud.aws.credentials.accessKey 값을 가져옵니다.
 
-참고로 위의 코드 중, `dirName`은 **S3에 생성된 디렉토리**를 나타냅니다.
+- **@PostConstruct**
+
+- - 의존성 주입이 이루어진 후 초기화를 수행하는 메서드이며, bean이 한 번만 초기화 될수 있도록 해줍니다.
+
+  - 이렇게 해주는 목적은 AmazonS3ClientBuilder를 통해 S3 Client를 가져와야 하는데, 자격증명을 해줘야 S3 Client를 가져올 수 있기 때문입니다.
+
+  - - 자격증명이란 accessKey, secretKey를 의미하는데, 의존성 주입 시점에는 @Value 어노테이션의 값이 설정되지 않아서 @PostConstruct를 사용했습니다.
+
+    - **new** BasicAWSCredentials(**this**.**accessKey**, **this**.**secretKey**);
+
+    - - accessKey와 secretKey를 이용하여 자격증명 객체를 얻습니다.
+
+    - withCredentials(**new** AWSStaticCredentialsProvider(credentials))
+
+    - - 자격증명을 통해 S3 Client를 가져옵니다.
+
+    - .withRegion(**this**.**region**)
+
+    - - region을 설정할 수도 있습니다.
+
+      - 예제에서는 application.yml에 있는 값을 설정 했는데, Regions enum을 통해 설정할수도 있습니다.
+
+      - - ex) Regions.valueOf("AP_NORTHEAST_2")
+
+- **s3Client**.putObject(**new** PutObjectRequest(**bucket**, fileName, file.getInputStream(), **null**)
+
+- - 업로드를 하기 위해 사용되는 함수입니다. ( [AWS SDK 참고](https://docs.aws.amazon.com/ko_kr/AmazonS3/latest/dev/UploadObjSingleOpJava.html) )
+
+  - .withCannedAcl(CannedAccessControlList.**PublicRead**));
+
+  - - 외부에 공개할 이미지이므로, 해당 파일에 public read 권한을 추가합니다.
+
+- **s3Client**.getUrl(**bucket**, fileName).toString()
+
+- - 업로드를 한 후, 해당 URL을 DB에 저장할 수 있도록 컨트롤러로 URL을 반환합니다.
 
 
 
