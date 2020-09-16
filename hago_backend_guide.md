@@ -1,12 +1,18 @@
-# 1. DB Server 세팅
+# 1. DB, API Server 세팅
 
-#### 	1-1. AWS EC2 (ubuntu 18.04) 만들기
+기본적인 AWS EC2 설치 방법은 아래 블로그를 참조하였습니다.
+
+>  https://jojoldu.tistory.com/259?category=635883
+
+
+
+### 	1-1. AWS EC2 (ubuntu 18.04) 만들기
 
  - Elastic IP 설정 이후 ppk 제작 후 putty를 사용하여 접속
 
    
 
-   #### 1-2. MySQL 8.0 다운로드
+   #### MySQL 8.0 다운로드
 
 - 참고 : https://www.tecmint.com/install-mysql-8-in-ubuntu/
 
@@ -15,6 +21,62 @@
   <br/>
 
 [HaruGomin-Database]: MySQL
+
+<br/>
+
+### 1-2. AWS EC2 (ubuntu 18.04) 만들기
+
+- EC2 인스턴스 생성 이후 기본적인 설정하기
+
+<br/>
+
+####  Java8 설치
+
+> **sudo apt install openjdk-8-jre-headless**
+
+위 명령어로 ubuntu 환경에서 java 8버전을 다운받을 수 있습니다.
+
+<br/>
+
+#### 타임존 변경
+
+> **sudo ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime**
+
+타임존을 Asia/Seoul로 변경하는 코드입니다.
+
+이후 **date** 명령어를 통해 변경된 타임존을 확인할 수 있습니다.
+
+<br/>
+
+#### ubuntu 18.04 hostname 변경하기
+
+> **/etc/cloud/cloud.cfg**
+
+위 명령어를 사용하여 에디터로 연 다음 preserve_hostname: false 항목을 true로 바꿉니다.
+
+<br/>
+
+> **hostnamectl set-hostname 호스트이름**
+
+위 명령어로 호스트 이름을 변경합니다.
+
+<br/>
+
+이후 **"hostname"** 명령어를 이용해 변경 여부를 확인할 수 있습니다.
+
+호스트 이름을 변경한 경우 한 가지 더 추가 작업을 해주어야 합니다.
+
+<br/>
+
+> **sudo vi /etc/hosts**
+
+위 명령어로 /etc/hosts 파일을 열고
+
+<br/>
+
+>  **127.0.0.1 hago_API**
+
+이후 **curl hostname** 명령어로 제대로 등록이 host 등록이 되었는지 확인합니다.
 
 <br/>
 
