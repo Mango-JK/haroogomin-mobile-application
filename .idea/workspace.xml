@@ -34,17 +34,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0dc6c3b9-2347-4119-844a-83a7481f4166" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/harugomin/src/test/java/com/mango/harugomin/service/HashtagServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/harugomin/src/test/java/com/mango/harugomin/service/UserServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/HashtagController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/HashtagController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/CommentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/CommentRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/HashtagRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/HashtagRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/HashtagService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/HashtagService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hago_backend_guide.md" beforeDir="false" afterPath="$PROJECT_DIR$/hago_backend_guide.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,6 +60,17 @@
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="harugomin" type="f1a62948:ProjectNode" />
               </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="harugomin" type="f1a62948:ProjectNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="harugomin" type="f1a62948:ProjectNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+                <item name="compileClasspath" type="62daadca:ExternalSystemViewDefaultContributor$DependencyScopeExternalSystemNode" />
+              </path>
             </expand>
             <select />
           </tree_state>
@@ -80,8 +82,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JUnit5 Test Class" />
-        <option value="Class" />
         <option value="JUnit3 Test Class" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -97,6 +99,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ExpandSpringBootJavaOptionsPanel" value="true" />
     <property name="RequestMappingsPanelOrder0" value="0" />
     <property name="RequestMappingsPanelOrder1" value="1" />
     <property name="RequestMappingsPanelWidth0" value="75" />
@@ -111,6 +114,9 @@
     <property name="ignore_missing_gitignore" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/harugomin" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
   </component>
   <component name="RecentsManager">
@@ -123,14 +129,16 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.HashtagServiceTest">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+  <component name="RunManager" selected="Spring Boot.HarugominApplication">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -213,6 +221,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="HarugominApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="harugomin.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.mango.harugomin.HarugominApplication" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SHORTEN_COMMAND_LINE" value="MANIFEST" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.HashtagServiceTest" />
@@ -233,7 +250,13 @@
       <updated>1599030633105</updated>
       <workItem from="1599030635105" duration="1017000" />
       <workItem from="1599031669734" duration="484000" />
-      <workItem from="1599528556517" duration="28140000" />
+      <workItem from="1599528556517" duration="28308000" />
+      <workItem from="1599919692382" duration="3898000" />
+      <workItem from="1599971496645" duration="7754000" />
+      <workItem from="1599989015303" duration="7290000" />
+      <workItem from="1600083646695" duration="746000" />
+      <workItem from="1600268165621" duration="2108000" />
+      <workItem from="1600307182887" duration="810000" />
     </task>
     <servers />
   </component>
@@ -253,10 +276,26 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="1116" y="0" width="722" height="1040" key="#&lt;template&gt;_of_Spring_Boot" timestamp="1599988769088">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1116" y="0" width="722" height="1040" key="#&lt;template&gt;_of_Spring_Boot/0.0.2560.1040@0.0.2560.1040" timestamp="1599988769088" />
+    <state x="1116" y="0" width="722" height="1040" key="#HarugominApplication" timestamp="1599989116976">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1116" y="0" width="722" height="1040" key="#HarugominApplication/0.0.2560.1040@0.0.2560.1040" timestamp="1599989116976" />
     <state x="401" y="157" key="#Plugins" timestamp="1599031659677">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="401" y="157" key="#Plugins/0.0.2560.1040@0.0.2560.1040" timestamp="1599031659677" />
+    <state x="1400" y="98" key="#Project_Structure" timestamp="1599921774103">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1400" y="98" key="#Project_Structure/0.0.2560.1040@0.0.2560.1040" timestamp="1599921774103" />
+    <state x="1008" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1599989489145">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1008" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1599989489145" />
     <state x="92" y="92" width="2376" height="856" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog" timestamp="1599553904954">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
@@ -265,38 +304,38 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="478" y="278" key="FileChooserDialogImpl/0.0.2560.1040@0.0.2560.1040" timestamp="1599032156003" />
-    <state width="2517" height="508" key="GridCell.Tab.0.bottom" timestamp="1599563097342">
+    <state width="1478" height="490" key="GridCell.Tab.0.bottom" timestamp="1600274539127">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="508" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1599563097342" />
-    <state width="2517" height="508" key="GridCell.Tab.0.center" timestamp="1599563097342">
+    <state width="1478" height="490" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1600274539127" />
+    <state width="1478" height="490" key="GridCell.Tab.0.center" timestamp="1600274539127">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="508" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1599563097342" />
-    <state width="2517" height="508" key="GridCell.Tab.0.left" timestamp="1599563097341">
+    <state width="1478" height="490" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1600274539127" />
+    <state width="1478" height="490" key="GridCell.Tab.0.left" timestamp="1600274539127">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="508" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1599563097341" />
-    <state width="2517" height="508" key="GridCell.Tab.0.right" timestamp="1599563097342">
+    <state width="1478" height="490" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1600274539127" />
+    <state width="1478" height="490" key="GridCell.Tab.0.right" timestamp="1600274539127">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="508" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1599563097342" />
-    <state width="2517" height="405" key="GridCell.Tab.1.bottom" timestamp="1599553142661">
+    <state width="1478" height="490" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1600274539127" />
+    <state width="1478" height="490" key="GridCell.Tab.1.bottom" timestamp="1600274539127">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="405" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1599553142661" />
-    <state width="2517" height="405" key="GridCell.Tab.1.center" timestamp="1599553142661">
+    <state width="1478" height="490" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1600274539127" />
+    <state width="1478" height="490" key="GridCell.Tab.1.center" timestamp="1600274539127">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="405" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1599553142661" />
-    <state width="2517" height="405" key="GridCell.Tab.1.left" timestamp="1599553142661">
+    <state width="1478" height="490" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1600274539127" />
+    <state width="1478" height="490" key="GridCell.Tab.1.left" timestamp="1600274539127">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="405" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1599553142661" />
-    <state width="2517" height="405" key="GridCell.Tab.1.right" timestamp="1599553142661">
+    <state width="1478" height="490" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1600274539127" />
+    <state width="1478" height="490" key="GridCell.Tab.1.right" timestamp="1600274539127">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="405" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1599553142661" />
+    <state width="1478" height="490" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1600274539127" />
     <state width="1340" height="347" key="GridCell.Tab.2.bottom" timestamp="1599032156881">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
@@ -325,9 +364,9 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="936" y="240" key="run.anything.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1599552736925" />
-    <state x="472" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1599530462378">
+    <state x="472" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1599989450930">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="472" y="235" width="672" height="678" key="search.everywhere.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1599530462378" />
+    <state x="472" y="235" width="672" height="678" key="search.everywhere.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1599989450930" />
   </component>
 </project>

@@ -3,10 +3,7 @@ package com.mango.harugomin.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mango.harugomin.domain.entity.User;
 import com.mango.harugomin.jwt.JwtService;
-import com.mango.harugomin.service.HashtagService;
-import com.mango.harugomin.service.KakaoAPIService;
-import com.mango.harugomin.service.NaverAPIService;
-import com.mango.harugomin.service.UserService;
+import com.mango.harugomin.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -16,8 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Slf4j
 @Api(tags = "1. User")
@@ -31,6 +30,7 @@ public class UserController {
     private final KakaoAPIService kakaoAPIService;
     private final NaverAPIService naverAPIService;
     private final JwtService jwtService;
+    private final S3Service s3Service;
 
     @ApiOperation(value = "index", notes = "연습용 메인 페이지")
     @ApiResponses({
@@ -40,13 +40,23 @@ public class UserController {
     })
     @GetMapping(value = "/")
     public String Hello() {
-        return "index";
+        return "/gallery";
     }
 
 
+    /**
+     * 이미지 업로드
+     */
+    @PostMapping("/uploadImage")
+    public String updateProfile(String filename, MultipartFile file) throws IOException {
+        log.info("API updateProfile ! ");
+        String imgPath = s3Service.upload(file);
 
-
-
+        log.info("image Path : " + imgPath);
+        //user.setImageUrl();
+        //userService.saveUser();
+        return "/";
+    }
 
 
 
