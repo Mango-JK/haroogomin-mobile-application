@@ -6,7 +6,7 @@
 
 
 
-### 	1-1. AWS EC2 (ubuntu 18.04) 만들기
+### 	1-1. AWS EC2 (ubuntu 18.04) DB_SERVER 만들기
 
  - Elastic IP 설정 이후 ppk 제작 후 putty를 사용하여 접속
 
@@ -24,7 +24,7 @@
 
 <br/>
 
-### 1-2. AWS EC2 (ubuntu 18.04) 만들기
+### 1-2. AWS EC2 (ubuntu 18.04) API_SERVER만들기
 
 - EC2 인스턴스 생성 이후 기본적인 설정하기
 
@@ -79,6 +79,20 @@
 이후 **curl hostname** 명령어로 제대로 등록이 host 등록이 되었는지 확인합니다.
 
 <br/>
+
+#### S3 접근 설정
+
+IAM 역할을 만들어 AmazonS3FullAccess 권한을 주고 역할을 만든 뒤 EC2 역할 수정을 통해 설정해준다.
+
+이후 server에서 정상적으로 적용되었는지 awscli 설치 후 확인할 수 있다.
+
+> **sudo apt install awscli**
+
+위 명령어를 통해 awscli를 먼저 설치해준 뒤,
+
+> **aws configure list**
+
+역할 수정이 제대로 되었다면, access_key와 secret_key Type에 iam-role로 바뀌어져 있을 것이다.
 
 <br/>
 
