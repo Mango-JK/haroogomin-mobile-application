@@ -1,12 +1,18 @@
-# 1. DB Server 세팅
+# 1. DB, API Server 세팅
 
-#### 	1-1. AWS EC2 (ubuntu 18.04) 만들기
+기본적인 AWS EC2 설치 방법은 아래 블로그를 참조하였습니다.
+
+>  https://jojoldu.tistory.com/259?category=635883
+
+
+
+### 	1-1. AWS EC2 (ubuntu 18.04) DB_SERVER 만들기
 
  - Elastic IP 설정 이후 ppk 제작 후 putty를 사용하여 접속
 
    
 
-   #### 1-2. MySQL 8.0 다운로드
+   #### MySQL 8.0 다운로드
 
 - 참고 : https://www.tecmint.com/install-mysql-8-in-ubuntu/
 
@@ -17,6 +23,76 @@
 [HaruGomin-Database]: MySQL
 
 <br/>
+
+### 1-2. AWS EC2 (ubuntu 18.04) API_SERVER만들기
+
+- EC2 인스턴스 생성 이후 기본적인 설정하기
+
+<br/>
+
+####  Java8 설치
+
+> **sudo apt install openjdk-8-jre-headless**
+
+위 명령어로 ubuntu 환경에서 java 8버전을 다운받을 수 있습니다.
+
+<br/>
+
+#### 타임존 변경
+
+> **sudo ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime**
+
+타임존을 Asia/Seoul로 변경하는 코드입니다.
+
+이후 **date** 명령어를 통해 변경된 타임존을 확인할 수 있습니다.
+
+<br/>
+
+#### ubuntu 18.04 hostname 변경하기
+
+> **/etc/cloud/cloud.cfg**
+
+위 명령어를 사용하여 에디터로 연 다음 preserve_hostname: false 항목을 true로 바꿉니다.
+
+<br/>
+
+> **hostnamectl set-hostname 호스트이름**
+
+위 명령어로 호스트 이름을 변경합니다.
+
+<br/>
+
+이후 **"hostname"** 명령어를 이용해 변경 여부를 확인할 수 있습니다.
+
+호스트 이름을 변경한 경우 한 가지 더 추가 작업을 해주어야 합니다.
+
+<br/>
+
+> **sudo vi /etc/hosts**
+
+위 명령어로 /etc/hosts 파일을 열고
+
+<br/>
+
+>  **127.0.0.1 hago_API**
+
+이후 **curl hostname** 명령어로 제대로 등록이 host 등록이 되었는지 확인합니다.
+
+<br/>
+
+#### S3 접근 설정
+
+IAM 역할을 만들어 AmazonS3FullAccess 권한을 주고 역할을 만든 뒤 EC2 역할 수정을 통해 설정해준다.
+
+이후 server에서 정상적으로 적용되었는지 awscli 설치 후 확인할 수 있다.
+
+> **sudo apt install awscli**
+
+위 명령어를 통해 awscli를 먼저 설치해준 뒤,
+
+> **aws configure list**
+
+역할 수정이 제대로 되었다면, access_key와 secret_key Type에 iam-role로 바뀌어져 있을 것이다.
 
 <br/>
 
@@ -291,11 +367,191 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 
 <hr/>
 
+# AWS S3
+
+### AWS S3 서비스 소개
+
+AWS S3는 Storage 서비스로서 아래와 같은 특징들이 있습니다.
+
+- 모든 종류의 데이터를 원하는 형식으로 저장
+- 저장할 수 있는 데이터의 전체 볼륨과 객체 수에는 제한이 없음
+- Amazon S3는 간단한 key 기반의 객체 스토리지이며, 데이터를 저장 및 검색하는데 사용할 수 있는 고유한 객체 키를 할당.
+- Amazon S3는 간편한 표준 기반 REST 웹 서비스 인터페이스를 제공
+- 요금 정책 ([링크](https://aws.amazon.com/ko/s3/pricing/))
+- 안전하다
+
+<br/>
+
+> SpringBoot로 서비스를 구축하다보면 꼭 만들어야할 것이 **정적 파일 업로더**입니다.
+> 이미지나 HTML과 같은 정적 파일을 S3에 제공해서 이를 원하는 곳에서 URL만으로 호출할 수 있게 하는걸 말합니다.
+
+<br/>
+
+### 로컬 환경 구성
+
+### build.gradle
+
+```groovy
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    runtimeOnly 'mysql:mysql-connector-java'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+	// AWS S3
+	compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.820'
+	compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.820'
+	compile group: 'commons-io', name: 'commons-io', version: '2.6'
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+
+```
+
+<br/>
+
+### **application.yml**
+
+> aws 설정은 applcation.yml 파일에 작성합니다.
+
+```java
+cloud:
+  aws:
+    credentials:
+      accessKey: YOUR_ACCESS_KEY
+      secretKey: YOUR_SECRET_KEY
+    s3:
+      bucket: YOUR_BUCKET_NAME
+    region:
+      static: YOUR_REGION
+    stack:
+      auto: false
+```
+
+- accessKey, secretKey
+
+- - AWS 계정에 부여된 key 값을 입력합니다. ( IAM 계정 사용 권장 )
+
+- s3.bucket
+
+- - S3 서비스에서 생성한 버킷 이름을 작성합니다.
+
+- region.static
+
+- - S3를 서비스할 region 명을 작성합니다. ( [참고](https://docs.aws.amazon.com/ko_kr/general/latest/gr/rande.html) )
+  - 서울은 **ap-northeast-2**를 작성하면 됩니다.
+
+- stack.auto
+
+- - Spring Cloud 실행 시, 서버 구성을 자동화하는 CloudFormation이 자동으로 실행되는데 이를 사용하지 않겠다는 설정입니다.
+  - 해당 설정을 안해주면 에러가 발생합니다.
+
+<br/>
+
+### UserController
+
+```java
+// 회원 정보 수정 시 프로필 사진 업로드
+
+```
 
 
 
+<br/>
+
+### S3Service
+
+```java
+@NoArgsConstructor
+@Service
+public class S3Service {
+    private AmazonS3 s3Client;
+
+    @Value("${cloud.aws.credentials.accessKey}")
+    private String accessKey;
+
+    @Value("${cloud.aws.credentials.secretKey}")
+    private String secretKey;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
+    @Value("${cloud.aws.region.static}")
+    private String region;
+
+    @PostConstruct
+    public void setS3Client() {
+        AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
+
+        s3Client = AmazonS3ClientBuilder.standard()
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .withRegion(this.region)
+                .build();
+    }
+
+    public String upload(MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
+
+        s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
+        return s3Client.getUrl(bucket, fileName).toString();
+    }
+}
+```
 
 
+
+- AmazonS3Client가 deprecated됨에 따라, AmazonS3ClientBuilder를 사용했습니다. 
+
+- @Value(**"${cloud.aws.credentials.accessKey}"**)
+
+- - lombok 패키지가 아닌, **org.springframework.beans.factory.annotation** 패키지임에 유의합니다.
+  - 해당 값은 application.yml에서 작성한 cloud.aws.credentials.accessKey 값을 가져옵니다.
+
+- **@PostConstruct**
+
+- - 의존성 주입이 이루어진 후 초기화를 수행하는 메서드이며, bean이 한 번만 초기화 될수 있도록 해줍니다.
+
+  - 이렇게 해주는 목적은 AmazonS3ClientBuilder를 통해 S3 Client를 가져와야 하는데, 자격증명을 해줘야 S3 Client를 가져올 수 있기 때문입니다.
+
+  - - 자격증명이란 accessKey, secretKey를 의미하는데, 의존성 주입 시점에는 @Value 어노테이션의 값이 설정되지 않아서 @PostConstruct를 사용했습니다.
+
+    - **new** BasicAWSCredentials(**this**.**accessKey**, **this**.**secretKey**);
+
+    - - accessKey와 secretKey를 이용하여 자격증명 객체를 얻습니다.
+
+    - withCredentials(**new** AWSStaticCredentialsProvider(credentials))
+
+    - - 자격증명을 통해 S3 Client를 가져옵니다.
+
+    - .withRegion(**this**.**region**)
+
+    - - region을 설정할 수도 있습니다.
+
+      - 예제에서는 application.yml에 있는 값을 설정 했는데, Regions enum을 통해 설정할수도 있습니다.
+
+      - - ex) Regions.valueOf("AP_NORTHEAST_2")
+
+- **s3Client**.putObject(**new** PutObjectRequest(**bucket**, fileName, file.getInputStream(), **null**)
+
+- - 업로드를 하기 위해 사용되는 함수입니다. ( [AWS SDK 참고](https://docs.aws.amazon.com/ko_kr/AmazonS3/latest/dev/UploadObjSingleOpJava.html) )
+
+  - .withCannedAcl(CannedAccessControlList.**PublicRead**));
+
+  - - 외부에 공개할 이미지이므로, 해당 파일에 public read 권한을 추가합니다.
+
+- **s3Client**.getUrl(**bucket**, fileName).toString()
+
+- - 업로드를 한 후, 해당 URL을 DB에 저장할 수 있도록 컨트롤러로 URL을 반환합니다.
+
+
+
+<hr/>
 
 
 

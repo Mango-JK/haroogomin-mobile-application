@@ -18,21 +18,26 @@ repositories {
 	mavenCentral()
 	maven { url 'https://repo.spring.io/milestone' }
 	maven { url 'https://repo.spring.io/snapshot' }
-
+	maven { url 'https://repo.spring.io/libs-milestone'}
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-devtools'
 	implementation 'io.springfox:springfox-swagger2:2.9.2'
 	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
 	implementation 'org.apache.httpcomponents:httpclient:4.5'
-//	implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
 	compileOnly 'org.projectlombok:lombok'
 	compile 'com.google.code.gson:gson'
 	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
-	compile 'org.springframework.boot:spring-boot-starter-mustache'
+
+	// AWS S3
+	compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.820'
+	compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.820'
+	compile group: 'commons-io', name: 'commons-io', version: '2.6'
+
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
 
