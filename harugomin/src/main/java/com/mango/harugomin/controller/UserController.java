@@ -3,6 +3,9 @@ package com.mango.harugomin.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mango.harugomin.domain.entity.User;
 import com.mango.harugomin.dto.UserRequestDto;
+import com.mango.harugomin.dto.UserResponseDto;
+import com.mango.harugomin.dto.UserUpdateRequestDto;
+import com.mango.harugomin.dto.UserUpdateResponseDto;
 import com.mango.harugomin.jwt.JwtService;
 import com.mango.harugomin.service.*;
 import io.swagger.annotations.Api;
@@ -70,17 +73,35 @@ public class UserController {
     }
 
 
-
-
+    /**
+     * 닉네임 중복 검사
+     */
     @ApiOperation("유저 닉네임 중복검사")
-    @GetMapping(value = "/users/check/{id}")
+    @GetMapping(value = "/users/check/{nickname}")
+    @ResponseBody
     public ResponseEntity<Boolean> duplicationCheck(@PathVariable("nickname") String nickname) {
         boolean nicknameDuplicationCheckStatus = userService.duplicationCheck(nickname);
 
-        return new ResponseEntity<>(nicknameDuplicationCheckStatus ,HttpStatus.OK);
+        return new ResponseEntity<>(nicknameDuplicationCheckStatus, HttpStatus.OK);
     }
 
+    /**
+     * 프로필 사진 업데이트
+     */
+    @ApiOperation("유저 프로필 사진 업데이트")
+    @PutMapping(value = "/users/profileImage/{id}")
+    @ResponseBody
+    public ResponseEntity<UserResponseDto> updateUserProfile(@PathVariable(value = "id") Long userId, MultipartFile file) throws IOException {
+        log.info("PUT :: /users/profileImage/{id}");
+        User user = userService.findById(userId);
 
+        String imgPath = s3Service.upload(user.getProfileImage(), file);
+        user.updateProfileImage(S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + imgPath);
+        userService.saveUser(user);
+        log.info("USER profile : " + imgPath);
+
+        return new ResponseEntity<>(new UserResponseDto(user), HttpStatus.OK);
+    }
 
 
     @ApiOperation("카카오 코드 발급받기")
@@ -114,6 +135,7 @@ public class UserController {
      */
     @ApiOperation("카카오 로그인")
     @PostMapping("/users/login/kakao")
+    @ResponseBody
     public String kakaoLogin(@RequestParam String accessToken) {
         log.info("POST :: /user/login/kakao");
 
@@ -130,7 +152,6 @@ public class UserController {
     }
 
     /**
-     *
      * @param accessToken
      * @return UserJWTToken
      */

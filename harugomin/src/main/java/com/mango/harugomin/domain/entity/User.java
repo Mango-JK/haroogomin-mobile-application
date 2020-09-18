@@ -1,5 +1,7 @@
 package com.mango.harugomin.domain.entity;
 
+import com.mango.harugomin.dto.UserUpdateRequestDto;
+import com.mango.harugomin.dto.UserUpdateResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static javax.persistence.FetchType.*;
@@ -30,7 +33,7 @@ public class User extends BaseTimeEntity {
     @Column(name = "age_range")
     private int ageRange;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = EAGER)
     private List<UserHashtag> userHashtags = new ArrayList<>();
 
     @Column(name = "point")
@@ -40,12 +43,11 @@ public class User extends BaseTimeEntity {
     private int enablePosting;
 
     @Builder
-    public User(long userId, String nickname, String profileImage, String ageRange, List<UserHashtag> userHashtag, int point, int enablePosting) {
+    public User(long userId, String nickname, String profileImage, int ageRange, int point, int enablePosting) {
         this.userId = userId;
         this.nickname = nickname;
         this.profileImage = profileImage;
-        this.ageRange = Integer.parseInt(ageRange);
-        this.userHashtags = userHashtag;
+        this.ageRange = ageRange;
         this.point = point;
         this.enablePosting = enablePosting;
     }
@@ -55,4 +57,10 @@ public class User extends BaseTimeEntity {
         this.profileImage = profileImage;
         this.setModifiedDate(LocalDateTime.now());
     }
+
+    public void updateProfileImage(String imagePath) {
+        this.profileImage = imagePath;
+        this.setModifiedDate(LocalDateTime.now());
+    }
+
 }
