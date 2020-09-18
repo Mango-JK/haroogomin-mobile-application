@@ -553,5 +553,38 @@ public class S3Service {
 
 <hr/>
 
+# S3와 CloudFront
+
+참고 : https://victorydntmd.tistory.com/335
+
+>  **AWS CloudFront**는 정적, 동적 컨텐츠를 빠르게 응답하기 위한 캐시 기능을 제공하는 CDN 서비스입니다.
+>
+> 
+>
+> 캐싱을 지원하기 때문에 S3에 저장된 컨텐츠를 직접 접근하지 않아도 되므로 **S3의 비용이 감소하며, 더 빠른 응답을 지원**하므로 꼭 함께 적용해주는 것이 좋습니다.
+>
+> - 애플리케이션과 인프라에 대한 “관문”으로 사용함으로써 중요한 콘텐츠, 데이터, 코드 및 인프라에 대한 주요 공격을 차단
+> - 콘텐츠, API 또는 애플리케이션을 SSL/TLS를 통해 전송 가능
+> - 특정 콘텐츠에 대한 액세스 제한 가능
+> - 가용성 향상 : 캐싱을 통한 Origin의 워크로드를 줄일 수 있음
+> - Amazon S3, Amazon EC2 또는 Elastic Load Balancing과 같은 AWS Origin을 사용하는 경우, 이러한 서비스와 CloudFront 간에 전송된 데이터에 대해서는 요금이 청구되지 않음
+>
+> [Cloud](https://aws.amazon.com/ko/cloudfront/features/)[Front FAQ](https://aws.amazon.com/ko/cloudfront/features/)를 참고한 내용이며, 더 자세한 내용은 공식문서에서 확인할 수 있습니다.
+
+
+
+- **CLOUD_FRONT_DOMAIN_NAME**
+
+- - 이 상수는 CloudFront 도메인명입니다. ( 배포 생성시 할당된 기본 값을 사용 )
+
+- - - 상수 정보를 따로 관리하는 것이 좋을텐데, 예제에서는 간단하게 멤버 변수로 정의했습니다.
+
+  - 따라서 이미지를 조회할 때, S3 URL(s3Client.getUrl())이 아닌 CloudFront URL(**CLOUD_FRONT_DOMAIN_NAME**)을 사용하게 됩니다.
+
+  - - ex) S3 키 값(fileName 변수)이 sample.jpg라 할 때, 이미지는 "dq582wpwqowa9.cloudfront.net/sample.jpg" 에서 가져오게 됩니다.
+
+
+
+
 
 

@@ -2,6 +2,7 @@ package com.mango.harugomin.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mango.harugomin.domain.entity.User;
+import com.mango.harugomin.dto.UserRequestDto;
 import com.mango.harugomin.jwt.JwtService;
 import com.mango.harugomin.service.*;
 import io.swagger.annotations.Api;
@@ -12,17 +13,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
 
 @Slf4j
 @Api(tags = "1. User")
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
-@RestController
+@Controller
 public class UserController {
 
     private final UserService userService;
@@ -40,7 +44,7 @@ public class UserController {
     })
     @GetMapping(value = "/")
     public String Hello() {
-        return "/gallery";
+        return "/index";
     }
 
 
@@ -48,14 +52,22 @@ public class UserController {
      * 이미지 업로드
      */
     @PostMapping("/uploadImage")
-    public String updateProfile(String filename, MultipartFile file) throws IOException {
+    public String updateProfile(UserRequestDto userRequestDto, MultipartFile file) throws IOException {
         log.info("API updateProfile ! ");
-        String imgPath = s3Service.upload(file);
+        String imgPath = s3Service.upload(userRequestDto.getProfileImage(), file);
 
         log.info("image Path : " + imgPath);
         //user.setImageUrl();
         //userService.saveUser();
-        return "/";
+        return "redirect:/";
+    }
+
+    @GetMapping("/uploadImage")
+    public String updateProfileImage(Model model) {
+        ArrayList<String> imgList = new ArrayList<>();
+        imgList.add("https://hago-storage-bucket.s3.ap-northeast-2.amazonaws.com/0829%2B%ED%9A%8C%EC%9D%98%2B%281%29.txt");
+        model.addAttribute("imageList", imgList);
+        return "redirect:/";
     }
 
 
