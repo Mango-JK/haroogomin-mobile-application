@@ -18,7 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -73,19 +72,16 @@ public class UserController {
 
 
 
+    @ApiOperation("유저 닉네임 중복검사")
+    @GetMapping(value = "/users/check/{id}")
+    public ResponseEntity<Boolean> duplicationCheck(@PathVariable("nickname") String nickname) {
+        boolean nicknameDuplicationCheckStatus = userService.duplicationCheck(nickname);
 
-
-
-    @ApiOperation("유저 해시태그 업데이트")
-    @PostMapping(value = "/users/hashtag/{userId}")
-    public ResponseEntity<Long> updateUserHashtag(@PathVariable("userId") Long userId, @RequestParam("hashtag") String hashtag) {
-        if(userService.updateUserHashtag(userId, hashtag) > 0 ) {
-            User user = userService.findById(userId);
-            hashtagService.countUp(user.getUserHashtag().getTagId());
-            return new ResponseEntity<Long>(userId, HttpStatus.OK);
-        }
-        return new ResponseEntity<Long>(-1L, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(nicknameDuplicationCheckStatus ,HttpStatus.OK);
     }
+
+
+
 
     @ApiOperation("카카오 코드 발급받기")
     @GetMapping(value = "/users/login/kakao")

@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 
-
 @Getter
 @NoArgsConstructor
 @Entity

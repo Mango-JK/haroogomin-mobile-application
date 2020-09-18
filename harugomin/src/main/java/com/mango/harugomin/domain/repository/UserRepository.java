@@ -10,9 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUserId(Long id);
 
-    @Modifying(clearAutomatically = true)
-    @Query(value = "update user set tag_id = ?2 where user_id = ?1 ", nativeQuery = true)
-    int updateUserHashTag(long userId, long tagId);
+    Long countByNickname(String nickname);
 
     @Modifying(clearAutomatically = true)
     @Query(value = "update user set point = point + 1 where user_id = ?1 ", nativeQuery = true)
