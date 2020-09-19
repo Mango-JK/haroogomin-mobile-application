@@ -19,6 +19,9 @@ public class Notice {
     @Column(name = "notice_id")
     private Long noticeId;
 
+    @Column(name = "type_id")
+    private int typeId;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User targetUserId;

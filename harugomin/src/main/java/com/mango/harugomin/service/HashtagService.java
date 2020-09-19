@@ -1,6 +1,7 @@
 package com.mango.harugomin.service;
 
 import com.mango.harugomin.domain.entity.Hashtag;
+import com.mango.harugomin.domain.entity.User;
 import com.mango.harugomin.domain.repository.HashtagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,11 @@ public class HashtagService {
         return hashtagRepository.findByTagName(hashtag);
     }
 
-    @Transactional
     public void countUp(long tagId) {
         hashtagRepository.countUp(tagId);
+    }
+
+    public void deleteUserHashtag(Long userId) {
+        hashtagRepository.deleteById(userId);
     }
 }

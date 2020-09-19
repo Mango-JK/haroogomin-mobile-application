@@ -34,9 +34,8 @@ public class Post extends BaseTimeEntity {
     @Lob
     private String content;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "tag_id")
-    private Hashtag postHashtag;
+    @OneToMany(mappedBy = "post")
+    private List<PostHashtag> postHashtags = new ArrayList<>();
 
     @OneToMany(mappedBy = "post")
      private List<Comment> comments = new ArrayList<>();
@@ -51,20 +50,20 @@ public class Post extends BaseTimeEntity {
     private int expired;
 
     @Builder
-    public Post(User user, String title, String content, Hashtag postHashtag, int hits, int postLikes, int expired) {
+    public Post(User user, String title, String content, List<PostHashtag> postHashtag, int hits, int postLikes, int expired) {
         this.user = user;
         this.title = title;
         this.content = content;
-        this.postHashtag = postHashtag;
+        this.postHashtags = postHashtag;
         this.hits = hits;
         this.postLikes = postLikes;
         this.expired = expired;
     }
 
-    public void update(String title, String content, Hashtag postHashtag) {
+    public void update(String title, String content, List<PostHashtag> postHashtag) {
         this.title = title;
         this.content = content;
-        this.postHashtag = postHashtag;
+        this.postHashtags = postHashtag;
         this.setModifiedDate(LocalDateTime.now());
     }
 }

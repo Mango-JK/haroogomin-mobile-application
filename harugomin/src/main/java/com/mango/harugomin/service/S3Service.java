@@ -3,6 +3,8 @@ package com.mango.harugomin.service;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.cloudfront.CloudFrontUrlSigner;
+import com.amazonaws.services.cloudfront.util.SignerUtils;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -14,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @NoArgsConstructor
 @Service
@@ -32,6 +36,8 @@ public class S3Service {
     @Value("${cloud.aws.region.static}")
     private String region;
 
+    public static final String CLOUD_FRONT_DOMAIN_NAME = "d3scsscaxt5rdy.cloudfront.net";
+
     @PostConstruct
     public void setS3Client() {
         AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
@@ -42,11 +48,26 @@ public class S3Service {
                 .build();
     }
 
-    public String upload(MultipartFile file) throws IOException {
-        String fileName = file.getOriginalFilename();
+    public String upload(String currentFilePath ,MultipartFile file) throws IOException {
+        // 고유한 key 값을 갖기 위해 현재 시간을 postfix로 붙여준다.
+        SimpleDateFormat date = new SimpleDateFormat("yyyymmddHHmmss");
+        String fileName = file.getOriginalFilename() + "-" + date.format(new Date());
 
+        // key가 존재하면 기존 파일은 삭제
+        if("".equals(currentFilePath) == false && currentFilePath != null) {
+            boolean isExistObject = s3Client.doesObjectExist(bucket, currentFilePath);
+
+            if(isExistObject == true){
+                s3Client.deleteObject(bucket, currentFilePath);
+            }
+        }
+
+        // 파일 업로드
         s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-        return s3Client.getUrl(bucket, fileName).toString();
+
+        return fileName;
     }
+
+
 }

@@ -17,4 +17,8 @@ public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
     @Modifying(clearAutomatically = true)
     @Query(value = "update hashtag set posting_count = posting_count + 1, total_count = total_count + 1 where tag_id = ?1 ", nativeQuery = true)
     void countUp(long tagId);
+
+    @Modifying(clearAutomatically = true)
+    @Query(value = "delete from user_hashtag where user_id = ?1 ", nativeQuery = true)
+    void deleteById(Long userId);
 }

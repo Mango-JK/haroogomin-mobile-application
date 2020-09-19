@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 
-
 @Getter
 @NoArgsConstructor
 @Entity
@@ -34,22 +33,14 @@ public class Comment extends BaseTimeEntity {
     @Lob
     private String content;
 
-    @Column(name = "parent_id")
-    private int parentId;
-
-    @Column(name = "sequence_num")
-    private int sequenceNum;
-
     @Column(name = "comment_likes")
     private int commentLikes;
 
     @Builder
-    public Comment(Post post, User user, String content, int parentId, int sequenceNum, int commentLikes) {
+    public Comment(Post post, User user, String content, int commentLikes) {
         this.post = post;
         this.user = user;
         this.content = content;
-        this.parentId = parentId;
-        this.sequenceNum = sequenceNum;
         this.commentLikes = commentLikes;
     }
 

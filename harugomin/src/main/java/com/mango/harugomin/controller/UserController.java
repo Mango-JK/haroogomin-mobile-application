@@ -2,6 +2,10 @@ package com.mango.harugomin.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mango.harugomin.domain.entity.User;
+import com.mango.harugomin.dto.UserRequestDto;
+import com.mango.harugomin.dto.UserResponseDto;
+import com.mango.harugomin.dto.UserUpdateRequestDto;
+import com.mango.harugomin.dto.UserUpdateResponseDto;
 import com.mango.harugomin.jwt.JwtService;
 import com.mango.harugomin.service.*;
 import io.swagger.annotations.Api;
@@ -12,11 +16,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
 
 @Slf4j
 @Api(tags = "1. User")
@@ -40,40 +47,63 @@ public class UserController {
     })
     @GetMapping(value = "/")
     public String Hello() {
-        return "/gallery";
+        return "/index";
     }
 
 
     /**
-     * 이미지 업로드
+     * 닉네임 중복 검사
      */
-    @PostMapping("/uploadImage")
-    public String updateProfile(String filename, MultipartFile file) throws IOException {
-        log.info("API updateProfile ! ");
-        String imgPath = s3Service.upload(file);
+    @ApiOperation("유저 닉네임 중복검사")
+    @GetMapping(value = "/users/check/{nickname}")
+    public ResponseEntity<Boolean> duplicationCheck(@PathVariable("nickname") String nickname) {
+        boolean nicknameDuplicationCheckStatus = userService.duplicationCheck(nickname);
 
-        log.info("image Path : " + imgPath);
-        //user.setImageUrl();
-        //userService.saveUser();
-        return "/";
+        return new ResponseEntity<>(nicknameDuplicationCheckStatus, HttpStatus.OK);
     }
 
+    /**
+     * 프로필 사진 업데이트
+     */
+    @Transactional
+    @ApiOperation("유저 프로필 사진 업데이트")
+    @PutMapping(value = "/users/profileImage/{id}")
+    public ResponseEntity<UserResponseDto> updateUserProfile(@PathVariable(value = "id") Long userId, MultipartFile file) throws IOException {
+        log.info("PUT :: /users/profileImage/{id}");
+        User user = userService.findById(userId);
 
+        String imgPath = s3Service.upload(user.getProfileImage(), file);
+        user.updateProfileImage(S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + imgPath);
+        userService.saveUser(user);
+        log.info("USER profile : " + imgPath);
 
+        return new ResponseEntity<>(new UserResponseDto(user), HttpStatus.OK);
+    }
 
-
-
-
+    /**
+     * 해시태그 업데이트
+     */
+    @Transactional
     @ApiOperation("유저 해시태그 업데이트")
-    @PostMapping(value = "/users/hashtag/{userId}")
-    public ResponseEntity<Long> updateUserHashtag(@PathVariable("userId") Long userId, @RequestParam("hashtag") String hashtag) {
-        if(userService.updateUserHashtag(userId, hashtag) > 0 ) {
-            User user = userService.findById(userId);
-            hashtagService.countUp(user.getUserHashtag().getTagId());
-            return new ResponseEntity<Long>(userId, HttpStatus.OK);
-        }
-        return new ResponseEntity<Long>(-1L, HttpStatus.BAD_REQUEST);
+    @PutMapping(value = "/users/hashtag/{id}")
+    public ResponseEntity<UserResponseDto> updateUserHashtag(@PathVariable(value = "id") Long userId, String[] hashtags) {
+
+        User user = userService.updateUserHashtag(userId, hashtags);
+
+        return new ResponseEntity<>(new UserResponseDto(user), HttpStatus.OK);
     }
+
+    /**
+     * 프로필 업데이트
+     */
+    @Transactional
+    @ApiOperation("유저 프로필 업데이트 [사진, 닉네임, 연령대, 해시태그]")
+    @PutMapping(value = "/users")
+    public ResponseEntity<UserResponseDto> updateUserProfile(UserUpdateRequestDto requestDto) {
+        User user = userService.updateUser(requestDto);
+        return new ResponseEntity<>(new UserResponseDto(user), HttpStatus.OK);
+    }
+
 
     @ApiOperation("카카오 코드 발급받기")
     @GetMapping(value = "/users/login/kakao")
@@ -122,7 +152,6 @@ public class UserController {
     }
 
     /**
-     *
      * @param accessToken
      * @return UserJWTToken
      */
