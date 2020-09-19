@@ -2,10 +2,12 @@ package com.mango.harugomin.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mango.harugomin.domain.entity.User;
+import com.mango.harugomin.dto.UserRequestDto;
+import com.mango.harugomin.dto.UserResponseDto;
+import com.mango.harugomin.dto.UserUpdateRequestDto;
+import com.mango.harugomin.dto.UserUpdateResponseDto;
 import com.mango.harugomin.jwt.JwtService;
-import com.mango.harugomin.service.KakaoAPIService;
-import com.mango.harugomin.service.NaverAPIService;
-import com.mango.harugomin.service.UserService;
+import com.mango.harugomin.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -14,7 +16,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 @Slf4j
 @Api(tags = "1. User")
@@ -24,9 +33,11 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final HashtagService hashtagService;
     private final KakaoAPIService kakaoAPIService;
     private final NaverAPIService naverAPIService;
     private final JwtService jwtService;
+    private final S3Service s3Service;
 
     @ApiOperation(value = "index", notes = "연습용 메인 페이지")
     @ApiResponses({
@@ -36,22 +47,66 @@ public class UserController {
     })
     @GetMapping(value = "/")
     public String Hello() {
-        return "index";
+        return "/index";
+    }
+
+
+    /**
+     * 닉네임 중복 검사
+     */
+    @ApiOperation("유저 닉네임 중복검사")
+    @GetMapping(value = "/users/check/{nickname}")
+    public ResponseEntity<Boolean> duplicationCheck(@PathVariable("nickname") String nickname) {
+        boolean nicknameDuplicationCheckStatus = userService.duplicationCheck(nickname);
+
+        return new ResponseEntity<>(nicknameDuplicationCheckStatus, HttpStatus.OK);
     }
 
     /**
-     * @param id
-     * @return UserInfo
+     * 프로필 사진 업데이트
      */
-    @GetMapping(value = "/users/{id}")
-    public ResponseEntity<User> findOne(@PathVariable("id") long id) {
-        return new ResponseEntity<User>(userService.findById(id), HttpStatus.OK);
+    @Transactional
+    @ApiOperation("유저 프로필 사진 업데이트")
+    @PutMapping(value = "/users/profileImage/{id}")
+    public ResponseEntity<UserResponseDto> updateUserProfile(@PathVariable(value = "id") Long userId, MultipartFile file) throws IOException {
+        log.info("PUT :: /users/profileImage/{id}");
+        User user = userService.findById(userId);
+
+        String imgPath = s3Service.upload(user.getProfileImage(), file);
+        user.updateProfileImage(S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + imgPath);
+        userService.saveUser(user);
+        log.info("USER profile : " + imgPath);
+
+        return new ResponseEntity<>(new UserResponseDto(user), HttpStatus.OK);
     }
 
-    //  테스트용
-    //
-    @GetMapping(value = "/users/login/kakao")
+    /**
+     * 해시태그 업데이트
+     */
+    @Transactional
+    @ApiOperation("유저 해시태그 업데이트")
+    @PutMapping(value = "/users/hashtag/{id}")
+    public ResponseEntity<UserResponseDto> updateUserHashtag(@PathVariable(value = "id") Long userId, String[] hashtags) {
+
+        User user = userService.updateUserHashtag(userId, hashtags);
+
+        return new ResponseEntity<>(new UserResponseDto(user), HttpStatus.OK);
+    }
+
+    /**
+     * 프로필 업데이트
+     */
+    @Transactional
+    @ApiOperation("유저 프로필 업데이트 [사진, 닉네임, 연령대, 해시태그]")
+    @PutMapping(value = "/users")
+    public ResponseEntity<UserResponseDto> updateUserProfile(UserUpdateRequestDto requestDto) {
+        User user = userService.updateUser(requestDto);
+        return new ResponseEntity<>(new UserResponseDto(user), HttpStatus.OK);
+    }
+
+
     @ApiOperation("카카오 코드 발급받기")
+    @GetMapping(value = "/users/login/kakao")
     public String getKakaoCode(@RequestParam("code") String code) {
         log.info("User Kakao Code : " + code);
 
@@ -61,8 +116,9 @@ public class UserController {
         return "index";
     }
 
-    @GetMapping(value = "/users/login/naver")
+
     @ApiOperation("네이버 코드 발급받기")
+    @GetMapping(value = "/users/login/naver")
     public String getNaverCode(@RequestParam(value = "code") String code,
                                @RequestParam(value = "state") String state) {
         log.info("User Naver Code : " + code);
@@ -74,15 +130,12 @@ public class UserController {
         return "index";
     }
 
-    //
-    //  테스트용
-
     /**
      * @param accessToken
      * @return UserJWTToken
      */
-    @PostMapping("/users/login/kakao")
     @ApiOperation("카카오 로그인")
+    @PostMapping("/users/login/kakao")
     public String kakaoLogin(@RequestParam String accessToken) {
         log.info("POST :: /user/login/kakao");
 
@@ -99,12 +152,11 @@ public class UserController {
     }
 
     /**
-     *
      * @param accessToken
      * @return UserJWTToken
      */
-    @PostMapping("/users/login/naver")
     @ApiOperation("네이버 로그인")
+    @PostMapping("/users/login/naver")
     public String naverLogin(@RequestParam String accessToken) {
         log.info("POST :: /user/login/naver");
 
@@ -124,8 +176,8 @@ public class UserController {
      * @param jwtToken
      * @return UserInfo
      */
-    @PostMapping("/users/check")
     @ApiOperation("토큰 검증")
+    @PostMapping("/users/check")
     public Object checkToken(@RequestParam String jwtToken) {
         log.info("UserController : checkToken");
 

@@ -2,10 +2,8 @@ package com.mango.harugomin.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.mango.harugomin.domain.entity.User;
-import com.mango.harugomin.dto.UserResponseDto;
+import com.mango.harugomin.dto.UserRequestDto;
 import com.mango.harugomin.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -114,7 +112,7 @@ public class NaverAPIService {
         if (user == null) {
             User newUser = User.builder()
                     .userId(id)
-                    .ageRange(ageRange)
+                    .ageRange(Integer.parseInt(ageRange))
                     .point(0)
                     .enablePosting(1)
                     .build();
@@ -124,7 +122,7 @@ public class NaverAPIService {
 
         user.update(nickname, profileImage);
 
-        UserResponseDto userResponseDto = new UserResponseDto(user);
+        UserRequestDto userResponseDto = new UserRequestDto(user);
         String jwt = jwtService.create("user", userResponseDto, "user");
 
         return jwt;
