@@ -1,5 +1,6 @@
 package com.mango.harugomin.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mango.harugomin.dto.UserUpdateRequestDto;
 import com.mango.harugomin.dto.UserUpdateResponseDto;
 import lombok.Builder;
@@ -33,6 +34,7 @@ public class User extends BaseTimeEntity {
     @Column(name = "age_range")
     private int ageRange;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", fetch = EAGER)
     private List<UserHashtag> userHashtags = new ArrayList<>();
 
@@ -60,6 +62,23 @@ public class User extends BaseTimeEntity {
 
     public void updateProfileImage(String imagePath) {
         this.profileImage = imagePath;
+        this.setModifiedDate(LocalDateTime.now());
+    }
+
+    public void updateProfile(UserUpdateRequestDto updateRequestDto) {
+        this.nickname = updateRequestDto.getNickname();
+        this.profileImage = updateRequestDto.getProfileImage();
+        this.ageRange = updateRequestDto.getAgeRange();
+        this.setModifiedDate(LocalDateTime.now());
+    }
+
+    public void addHashtag(UserHashtag userHashtag) {
+        this.userHashtags.add(userHashtag);
+        this.setModifiedDate(LocalDateTime.now());
+    }
+
+    public void initHashtag(){
+        this.userHashtags = new ArrayList<>();
         this.setModifiedDate(LocalDateTime.now());
     }
 

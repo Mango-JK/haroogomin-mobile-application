@@ -19,4 +19,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying(clearAutomatically = true)
     @Query(value = "update user set point = point - 3 where user_id = ?1 ", nativeQuery = true)
     int useThreePoint(Long userId);
+
 }

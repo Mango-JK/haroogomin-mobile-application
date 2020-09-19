@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 @Api(tags = "1. User")
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
-@Controller
+@RestController
 public class UserController {
 
     private final UserService userService;
@@ -51,34 +52,10 @@ public class UserController {
 
 
     /**
-     * 이미지 업로드
-     */
-    @PostMapping("/uploadImage")
-    public String updateProfile(UserRequestDto userRequestDto, MultipartFile file) throws IOException {
-        log.info("API updateProfile ! ");
-        String imgPath = s3Service.upload(userRequestDto.getProfileImage(), file);
-
-        log.info("image Path : " + imgPath);
-        //user.setImageUrl();
-        //userService.saveUser();
-        return "redirect:/";
-    }
-
-    @GetMapping("/uploadImage")
-    public String updateProfileImage(Model model) {
-        ArrayList<String> imgList = new ArrayList<>();
-        imgList.add("https://hago-storage-bucket.s3.ap-northeast-2.amazonaws.com/0829%2B%ED%9A%8C%EC%9D%98%2B%281%29.txt");
-        model.addAttribute("imageList", imgList);
-        return "redirect:/";
-    }
-
-
-    /**
      * 닉네임 중복 검사
      */
     @ApiOperation("유저 닉네임 중복검사")
     @GetMapping(value = "/users/check/{nickname}")
-    @ResponseBody
     public ResponseEntity<Boolean> duplicationCheck(@PathVariable("nickname") String nickname) {
         boolean nicknameDuplicationCheckStatus = userService.duplicationCheck(nickname);
 
@@ -88,9 +65,9 @@ public class UserController {
     /**
      * 프로필 사진 업데이트
      */
+    @Transactional
     @ApiOperation("유저 프로필 사진 업데이트")
     @PutMapping(value = "/users/profileImage/{id}")
-    @ResponseBody
     public ResponseEntity<UserResponseDto> updateUserProfile(@PathVariable(value = "id") Long userId, MultipartFile file) throws IOException {
         log.info("PUT :: /users/profileImage/{id}");
         User user = userService.findById(userId);
@@ -100,6 +77,30 @@ public class UserController {
         userService.saveUser(user);
         log.info("USER profile : " + imgPath);
 
+        return new ResponseEntity<>(new UserResponseDto(user), HttpStatus.OK);
+    }
+
+    /**
+     * 해시태그 업데이트
+     */
+    @Transactional
+    @ApiOperation("유저 해시태그 업데이트")
+    @PutMapping(value = "/users/hashtag/{id}")
+    public ResponseEntity<UserResponseDto> updateUserHashtag(@PathVariable(value = "id") Long userId, String[] hashtags) {
+
+        User user = userService.updateUserHashtag(userId, hashtags);
+
+        return new ResponseEntity<>(new UserResponseDto(user), HttpStatus.OK);
+    }
+
+    /**
+     * 프로필 업데이트
+     */
+    @Transactional
+    @ApiOperation("유저 프로필 업데이트 [사진, 닉네임, 연령대, 해시태그]")
+    @PutMapping(value = "/users")
+    public ResponseEntity<UserResponseDto> updateUserProfile(UserUpdateRequestDto requestDto) {
+        User user = userService.updateUser(requestDto);
         return new ResponseEntity<>(new UserResponseDto(user), HttpStatus.OK);
     }
 
@@ -135,7 +136,6 @@ public class UserController {
      */
     @ApiOperation("카카오 로그인")
     @PostMapping("/users/login/kakao")
-    @ResponseBody
     public String kakaoLogin(@RequestParam String accessToken) {
         log.info("POST :: /user/login/kakao");
 
