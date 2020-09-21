@@ -43,4 +43,10 @@ dependencies {
 
 	// Test
 	testCompile 'org.springframework.boot:spring-boot-starter-test'
+
+	bootJar {
+		archivesBaseName='-'
+		archiveFileName ='.jar'
+		archiveVersion="0.0.0"
+	}
 }

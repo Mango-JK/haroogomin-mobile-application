@@ -34,18 +34,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0dc6c3b9-2347-4119-844a-83a7481f4166" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/PostController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/UserHashtag.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/UserHashtag.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/HashtagRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/HashtagRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/UserHashtagRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/UserHashtagRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/HashtagService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/HashtagService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/test/java/com/mango/harugomin/service/HashtagServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/test/java/com/mango/harugomin/service/HashtagServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/test/java/com/mango/harugomin/service/UserServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/test/java/com/mango/harugomin/service/UserServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,6 +61,17 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="harugomin" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="harugomin" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="harugomin" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
@@ -125,12 +128,13 @@
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit3" value="junit.framework.TestCase" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
     <property name="ignore_missing_gitignore" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/harugomin" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/Banksalad/StockPriceSearchService_US/spss/build.gradle" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.runner" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
+    <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.RecentsKey">
@@ -145,19 +149,36 @@
       <recent name="com.mango.harugomin.domain.entity" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.UserServiceTest.유저_프로필_업데이트">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+  <component name="RunManager" selected="Gradle.harugomin [bootJar]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
+    </configuration>
+    <configuration name="harugomin [bootJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/harugomin" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="bootJar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
     </configuration>
     <configuration name="HashtagServiceTest.해시태그_카운트올리기" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="harugomin.test" />
@@ -275,19 +296,16 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Spring Boot.HarugominApplication" />
-      <item itemvalue="JUnit." />
       <item itemvalue="JUnit.HashtagServiceTest.해시태그_카운트올리기" />
       <item itemvalue="JUnit.UserServiceTest" />
-      <item itemvalue="JUnit.UserServiceTest.유저_해시태그_업데이트" />
       <item itemvalue="JUnit.UserServiceTest.유저_프로필_업데이트" />
-      <item itemvalue="JUnit.UserServiceTest.유저_해시태그_추가" />
+      <item itemvalue="Spring Boot.HarugominApplication" />
+      <item itemvalue="Gradle.harugomin [bootJar]" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.harugomin [bootJar]" />
         <item itemvalue="JUnit.UserServiceTest.유저_프로필_업데이트" />
-        <item itemvalue="JUnit.UserServiceTest.유저_해시태그_추가" />
-        <item itemvalue="JUnit.UserServiceTest.유저_해시태그_업데이트" />
         <item itemvalue="JUnit.UserServiceTest" />
         <item itemvalue="JUnit.HashtagServiceTest.해시태그_카운트올리기" />
       </list>
@@ -312,6 +330,8 @@
       <workItem from="1600307182887" duration="810000" />
       <workItem from="1600346803931" duration="4689000" />
       <workItem from="1600389214467" duration="4603000" />
+      <workItem from="1600517916104" duration="158000" />
+      <workItem from="1600690596307" duration="1546000" />
     </task>
     <servers />
   </component>
@@ -359,10 +379,10 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="92" y="92" width="2376" height="856" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1599553904954" />
-    <state x="478" y="278" key="FileChooserDialogImpl" timestamp="1599032156003">
+    <state x="478" y="278" key="FileChooserDialogImpl" timestamp="1600518068569">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="478" y="278" key="FileChooserDialogImpl/0.0.2560.1040@0.0.2560.1040" timestamp="1599032156003" />
+    <state x="478" y="278" key="FileChooserDialogImpl/0.0.2560.1040@0.0.2560.1040" timestamp="1600518068569" />
     <state width="2517" height="347" key="GridCell.Tab.0.bottom" timestamp="1600480373502">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
@@ -411,10 +431,10 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state width="2517" height="411" key="GridCell.Tab.2.right/0.0.2560.1040@0.0.2560.1040" timestamp="1600476244875" />
-    <state x="1277" y="163" key="SettingsEditor" timestamp="1600393632961">
+    <state x="429" y="189" key="SettingsEditor" timestamp="1600692876935">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="1277" y="163" key="SettingsEditor/0.0.2560.1040@0.0.2560.1040" timestamp="1600393632961" />
+    <state x="429" y="189" key="SettingsEditor/0.0.2560.1040@0.0.2560.1040" timestamp="1600692876935" />
     <state x="1461" y="267" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1600476492360">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
@@ -423,9 +443,9 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="936" y="240" key="run.anything.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1599552736925" />
-    <state x="472" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1600393655151">
+    <state x="472" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1600692793128">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="472" y="235" width="672" height="678" key="search.everywhere.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1600393655151" />
+    <state x="472" y="235" width="672" height="678" key="search.everywhere.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1600692793128" />
   </component>
 </project>
