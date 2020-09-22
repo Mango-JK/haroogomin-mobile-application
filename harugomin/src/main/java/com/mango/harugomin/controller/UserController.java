@@ -2,10 +2,8 @@ package com.mango.harugomin.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mango.harugomin.domain.entity.User;
-import com.mango.harugomin.dto.UserRequestDto;
 import com.mango.harugomin.dto.UserResponseDto;
 import com.mango.harugomin.dto.UserUpdateRequestDto;
-import com.mango.harugomin.dto.UserUpdateResponseDto;
 import com.mango.harugomin.jwt.JwtService;
 import com.mango.harugomin.service.*;
 import io.swagger.annotations.Api;
@@ -16,14 +14,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 @Slf4j
 @Api(tags = "1. User")
@@ -33,7 +27,6 @@ import java.util.ArrayList;
 public class UserController {
 
     private final UserService userService;
-    private final HashtagService hashtagService;
     private final KakaoAPIService kakaoAPIService;
     private final NaverAPIService naverAPIService;
     private final JwtService jwtService;
@@ -65,7 +58,6 @@ public class UserController {
     /**
      * 프로필 사진 업데이트
      */
-    @Transactional
     @ApiOperation("유저 프로필 사진 업데이트")
     @PutMapping(value = "/users/profileImage/{id}")
     public ResponseEntity<UserResponseDto> updateUserProfile(@PathVariable(value = "id") Long userId, MultipartFile file) throws IOException {
@@ -83,7 +75,6 @@ public class UserController {
     /**
      * 해시태그 업데이트
      */
-    @Transactional
     @ApiOperation("유저 해시태그 업데이트")
     @PutMapping(value = "/users/hashtag/{id}")
     public ResponseEntity<UserResponseDto> updateUserHashtag(@PathVariable(value = "id") Long userId, String[] hashtags) {
@@ -96,7 +87,6 @@ public class UserController {
     /**
      * 프로필 업데이트
      */
-    @Transactional
     @ApiOperation("유저 프로필 업데이트 [사진, 닉네임, 연령대, 해시태그]")
     @PutMapping(value = "/users")
     public ResponseEntity<UserResponseDto> updateUserProfile(UserUpdateRequestDto requestDto) {

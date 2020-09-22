@@ -1,8 +1,12 @@
 package com.mango.harugomin.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.mango.harugomin.dto.PostRequestDto;
+import com.mango.harugomin.service.HashtagService;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 
@@ -23,9 +27,8 @@ public class Post extends BaseTimeEntity {
     @Column(name = "post_id")
     private Long postId;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "user_nickname")
+    private String userNickname;
 
     @Column(name = "title")
     private String title;
@@ -34,10 +37,9 @@ public class Post extends BaseTimeEntity {
     @Lob
     private String content;
 
-    @OneToMany(mappedBy = "post")
-    private List<PostHashtag> postHashtags = new ArrayList<>();
+    private Long tagId;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", fetch = EAGER)
      private List<Comment> comments = new ArrayList<>();
 
     @Column(name = "hits")
@@ -50,20 +52,31 @@ public class Post extends BaseTimeEntity {
     private int expired;
 
     @Builder
-    public Post(User user, String title, String content, List<PostHashtag> postHashtag, int hits, int postLikes, int expired) {
-        this.user = user;
+    public Post(String userNickname, String title, String content, Long tagId, int hits, int postLikes, int expired) {
+        this.userNickname = userNickname;
         this.title = title;
         this.content = content;
-        this.postHashtags = postHashtag;
+        this.tagId = tagId;
         this.hits = hits;
         this.postLikes = postLikes;
         this.expired = expired;
     }
 
-    public void update(String title, String content, List<PostHashtag> postHashtag) {
+    public void update(String title, String content, Hashtag hashtag) {
         this.title = title;
         this.content = content;
-        this.postHashtags = postHashtag;
+        this.tagId = tagId;
         this.setModifiedDate(LocalDateTime.now());
+    }
+
+    @Builder
+    public Post(String userNickname, String title, String content, Long tagId) {
+        this.userNickname = userNickname;
+        this.title = title;
+        this.content = content;
+        this.tagId = tagId;
+        this.hits = 0;
+        this.postLikes = 0;
+        this.expired = 0;
     }
 }
