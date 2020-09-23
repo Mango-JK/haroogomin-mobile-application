@@ -7,6 +7,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,18 +23,13 @@ public class PostServiceTest extends TestCase {
 
     @Test
     public void testFindAllPosts() {
-        // given
-        Post newPost = new Post("정건", "제목1", "내용1", 1L);
-        Post newPost3 = new Post("정건", "제목3", "내용3", 3L);
+        Pageable pageable = PageRequest.of(0, 5, Sort.Direction.DESC, "hits");
+        int postsNum = postService.findAllPosts(pageable).getSize();
+        Assertions.assertThat(postsNum).isEqualTo(5);
 
-        // when
-        int currentPostNum = postService.findAllPosts().size();
-        postService.save(newPost);
-        Assertions.assertThat(postService.findAllPosts().size()).isEqualTo(currentPostNum + 1);
-
-        // then
-        postService.save(newPost3);
-        Assertions.assertThat(postService.findAllPosts().size()).isEqualTo(currentPostNum + 2);
-
+        pageable = PageRequest.of(0, 15);
+        postsNum = postService.findAllPosts(pageable).getSize();
+        Assertions.assertThat(postsNum).isEqualTo(15);
     }
+
 }

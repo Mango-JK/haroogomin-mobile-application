@@ -4,6 +4,8 @@ import com.mango.harugomin.domain.entity.Post;
 import com.mango.harugomin.domain.repository.PostRepository;
 import com.mango.harugomin.dto.PostResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,14 +24,14 @@ public class PostService {
     /**
      * 1. 모든 게시글 조회
      */
-    public List<PostResponseDto> findAllPosts() {
-        List<Post> findAllPost = postRepository.findAll();
-        System.out.println("findAllPost SIze : " + findAllPost.size());
-        List<PostResponseDto> responseDtos = new ArrayList<>();
-        for (Post post : findAllPost) {
-            responseDtos.add(new PostResponseDto(post));
-        }
-        return responseDtos;
+    public Page<Post> findAllPosts(Pageable pageable) {
+        return postRepository.findAll(pageable);
     }
 
+    /**
+     * 태그별 페이징된 고민글 조회
+     */
+//    public Page<Post> findAllPosts(Long tagId, Pageable pageable) {
+//        return postRepository.findAllByHashtag(tagId, pageable);
+//    }
 }

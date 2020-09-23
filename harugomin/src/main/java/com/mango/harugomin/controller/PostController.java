@@ -10,6 +10,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,11 +37,30 @@ public class PostController {
         return new ResponseEntity(postService.save(newPost), HttpStatus.OK);
     }
 
+    /**
+     * 조회수 순으로 페이징한 전체 고민글 조회
+     */
     @ApiOperation("전체 고민글 조회")
     @GetMapping(value = "/posts")
-    public ResponseEntity<List<PostResponseDto>> findAllPosts() {
-        List<PostResponseDto> result = postService.findAllPosts();
+    public ResponseEntity findAllPosts(final Pageable pageable) {
+        Page<Post> result = postService.findAllPosts(pageable);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    /**
+     * 조회수 높은 순으로 페이징된 고민글 조회
+     */
+//    @ApiOperation("태그별 고민글 조회")
+//    @GetMapping(value = "/posts/{tagName}")
+//    public ResponseEntity findAllPostsByHashtag(@PathVariable("tagName") String tagName, final Pageable pageable) {
+//        if(tagName.equals("all")) {
+//            Page<Post> result = postService.findAllPosts(pageable);
+//            return new ResponseEntity<>(result, HttpStatus.OK);
+//        } else {
+//            Hashtag hashtag = hashtagService.findByTagname(tagName);
+//            Page<Post> result = postService.findAllPosts(hashtag.getTagId(), pageable);
+//            return new ResponseEntity<>(result, HttpStatus.OK);
+//        }
+//    }
 
 }

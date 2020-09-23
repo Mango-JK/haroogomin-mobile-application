@@ -34,14 +34,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0dc6c3b9-2347-4119-844a-83a7481f4166" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/harugomin/src/test/java/com/mango/harugomin/service/PostServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/PostController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/Post.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/PostHashtag.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/PostRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/PostService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/test/java/com/mango/harugomin/service/PostServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/test/java/com/mango/harugomin/service/PostServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,16 +150,14 @@
       <recent name="com.mango.harugomin.domain.entity" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.PostServiceTest.testFindAllPosts">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+  <component name="RunManager" selected="Spring Boot.HarugominApplication">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -325,8 +320,8 @@
       <item itemvalue="JUnit.HashtagServiceTest.해시태그_카운트올리기" />
       <item itemvalue="JUnit.UserServiceTest" />
       <item itemvalue="JUnit.UserServiceTest.유저_프로필_업데이트" />
-      <item itemvalue="Spring Boot.HarugominApplication" />
       <item itemvalue="JUnit.PostServiceTest.testFindAllPosts" />
+      <item itemvalue="Spring Boot.HarugominApplication" />
     </list>
     <recent_temporary>
       <list>
@@ -359,6 +354,7 @@
       <workItem from="1600389214467" duration="4603000" />
       <workItem from="1600517916104" duration="158000" />
       <workItem from="1600690596307" duration="1546000" />
+      <workItem from="1600866500220" duration="4559000" />
     </task>
     <servers />
   </component>
@@ -422,38 +418,38 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="478" y="278" key="FileChooserDialogImpl/0.0.2560.1040@0.0.2560.1040" timestamp="1600518068569" />
-    <state width="2517" height="405" key="GridCell.Tab.0.bottom" timestamp="1600784813099">
+    <state width="2517" height="414" key="GridCell.Tab.0.bottom" timestamp="1600871711222">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="405" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1600784813099" />
-    <state width="2517" height="405" key="GridCell.Tab.0.center" timestamp="1600784813099">
+    <state width="2517" height="414" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1600871711222" />
+    <state width="2517" height="414" key="GridCell.Tab.0.center" timestamp="1600871711222">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="405" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1600784813099" />
-    <state width="2517" height="405" key="GridCell.Tab.0.left" timestamp="1600784813099">
+    <state width="2517" height="414" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1600871711222" />
+    <state width="2517" height="414" key="GridCell.Tab.0.left" timestamp="1600871711221">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="405" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1600784813099" />
-    <state width="2517" height="405" key="GridCell.Tab.0.right" timestamp="1600784813099">
+    <state width="2517" height="414" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1600871711221" />
+    <state width="2517" height="414" key="GridCell.Tab.0.right" timestamp="1600871711222">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="405" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1600784813099" />
-    <state width="2517" height="405" key="GridCell.Tab.1.bottom" timestamp="1600784813100">
+    <state width="2517" height="414" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1600871711222" />
+    <state width="2517" height="414" key="GridCell.Tab.1.bottom" timestamp="1600869819570">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="405" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1600784813100" />
-    <state width="2517" height="405" key="GridCell.Tab.1.center" timestamp="1600784813099">
+    <state width="2517" height="414" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1600869819570" />
+    <state width="2517" height="414" key="GridCell.Tab.1.center" timestamp="1600869819569">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="405" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1600784813099" />
-    <state width="2517" height="405" key="GridCell.Tab.1.left" timestamp="1600784813099">
+    <state width="2517" height="414" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1600869819569" />
+    <state width="2517" height="414" key="GridCell.Tab.1.left" timestamp="1600869819569">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="405" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1600784813099" />
-    <state width="2517" height="405" key="GridCell.Tab.1.right" timestamp="1600784813099">
+    <state width="2517" height="414" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1600869819569" />
+    <state width="2517" height="414" key="GridCell.Tab.1.right" timestamp="1600869819570">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="405" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1600784813099" />
+    <state width="2517" height="414" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1600869819570" />
     <state width="2517" height="411" key="GridCell.Tab.2.bottom" timestamp="1600476244875">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
@@ -474,10 +470,14 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="429" y="189" key="SettingsEditor/0.0.2560.1040@0.0.2560.1040" timestamp="1600692876935" />
-    <state x="1461" y="267" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1600784581858">
+    <state x="910" y="130" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1600870372806">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="1461" y="267" key="com.intellij.testIntegration.createTest.CreateTestDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1600784581858" />
+    <state x="910" y="130" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.2560.1040@0.0.2560.1040" timestamp="1600870372806" />
+    <state x="1461" y="267" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1600869596758">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1461" y="267" key="com.intellij.testIntegration.createTest.CreateTestDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1600869596758" />
     <state x="936" y="240" key="run.anything.popup" timestamp="1599552736925">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
