@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,25 +43,21 @@ public class PostController {
      */
     @ApiOperation("전체 고민글 조회")
     @GetMapping(value = "/posts")
-    public ResponseEntity findAllPosts(final Pageable pageable) {
-        Page<Post> result = postService.findAllPosts(pageable);
+    public ResponseEntity findAllPosts(@RequestParam("pageNum")  int pageNum) {
+        PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("hits").descending());
+        Page<Post> result = postService.findAllPosts(pageRequest);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     /**
      * 조회수 높은 순으로 페이징된 고민글 조회
      */
-//    @ApiOperation("태그별 고민글 조회")
-//    @GetMapping(value = "/posts/{tagName}")
-//    public ResponseEntity findAllPostsByHashtag(@PathVariable("tagName") String tagName, final Pageable pageable) {
-//        if(tagName.equals("all")) {
-//            Page<Post> result = postService.findAllPosts(pageable);
-//            return new ResponseEntity<>(result, HttpStatus.OK);
-//        } else {
-//            Hashtag hashtag = hashtagService.findByTagname(tagName);
-//            Page<Post> result = postService.findAllPosts(hashtag.getTagId(), pageable);
-//            return new ResponseEntity<>(result, HttpStatus.OK);
-//        }
-//    }
-
+    @ApiOperation("태그별 고민글 조회")
+    @GetMapping(value = "/posts/{tagName}")
+    public ResponseEntity findAllPostsByHashtag(@PathVariable("tagName") String tagName, @RequestParam("pageNum") int pageNum) {
+        long tagId = hashtagService.findByTagname(tagName).getTagId();
+        PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("hits").descending());
+        Page<Post> result = postService.findAllPostsByHashtag(tagId, pageRequest);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }

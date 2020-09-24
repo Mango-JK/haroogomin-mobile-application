@@ -34,8 +34,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0dc6c3b9-2347-4119-844a-83a7481f4166" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/History.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/PostController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/Post.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/PostRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/PostService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/src/test/java/com/mango/harugomin/service/PostServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/test/java/com/mango/harugomin/service/PostServiceTest.java" afterDir="false" />
@@ -97,8 +100,8 @@
       <list>
         <option value="JUnit5 Test Class" />
         <option value="Interface" />
-        <option value="Class" />
         <option value="JUnit3 Test Class" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -129,7 +132,7 @@
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit3" value="junit.framework.TestCase" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
     <property name="ignore_missing_gitignore" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/Banksalad/StockPriceSearchService_US/spss/build.gradle" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/daou/daou-2020" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -181,24 +184,62 @@
       <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="HashtagServiceTest.해시태그_카운트올리기" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="harugomin.test" />
-      <shortenClasspath name="MANIFEST" />
-      <useClassPathOnly />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.mango.harugomin.service.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.mango.harugomin.service" />
-      <option name="MAIN_CLASS_NAME" value="com.mango.harugomin.service.HashtagServiceTest" />
-      <option name="METHOD_NAME" value="해시태그_카운트올리기" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="PARAMETERS" value="" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
+    <configuration name="harugomin [buildDependents]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/harugomin" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="buildDependents" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="harugomin [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/harugomin" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="harugomin [jar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/harugomin" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="jar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
     </configuration>
     <configuration name="PostServiceTest.testFindAllPosts" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="harugomin.test" />
@@ -213,44 +254,6 @@
       <option name="PACKAGE_NAME" value="com.mango.harugomin.service" />
       <option name="MAIN_CLASS_NAME" value="com.mango.harugomin.service.PostServiceTest" />
       <option name="METHOD_NAME" value="testFindAllPosts" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="PARAMETERS" value="" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="UserServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="harugomin.test" />
-      <shortenClasspath name="MANIFEST" />
-      <useClassPathOnly />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.mango.harugomin.service.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.mango.harugomin.service" />
-      <option name="MAIN_CLASS_NAME" value="com.mango.harugomin.service.UserServiceTest" />
-      <option name="METHOD_NAME" value="" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="PARAMETERS" value="" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="UserServiceTest.유저_프로필_업데이트" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="harugomin.test" />
-      <shortenClasspath name="MANIFEST" />
-      <useClassPathOnly />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.mango.harugomin.service.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.mango.harugomin.service" />
-      <option name="MAIN_CLASS_NAME" value="com.mango.harugomin.service.UserServiceTest" />
-      <option name="METHOD_NAME" value="유저_프로필_업데이트" />
       <option name="TEST_OBJECT" value="method" />
       <option name="PARAMETERS" value="" />
       <method v="2">
@@ -317,19 +320,20 @@
     </configuration>
     <list>
       <item itemvalue="Gradle.harugomin [bootJar]" />
-      <item itemvalue="JUnit.HashtagServiceTest.해시태그_카운트올리기" />
-      <item itemvalue="JUnit.UserServiceTest" />
-      <item itemvalue="JUnit.UserServiceTest.유저_프로필_업데이트" />
+      <item itemvalue="Gradle.harugomin [jar]" />
+      <item itemvalue="Gradle.harugomin [build]" />
+      <item itemvalue="Gradle.harugomin [buildDependents]" />
+      <item itemvalue="JUnit.UserServiceTest.유저_해시태그_업데이트" />
       <item itemvalue="JUnit.PostServiceTest.testFindAllPosts" />
       <item itemvalue="Spring Boot.HarugominApplication" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.harugomin [buildDependents]" />
+        <item itemvalue="Gradle.harugomin [build]" />
+        <item itemvalue="Gradle.harugomin [jar]" />
         <item itemvalue="JUnit.PostServiceTest.testFindAllPosts" />
         <item itemvalue="Gradle.harugomin [bootJar]" />
-        <item itemvalue="JUnit.UserServiceTest.유저_프로필_업데이트" />
-        <item itemvalue="JUnit.UserServiceTest" />
-        <item itemvalue="JUnit.HashtagServiceTest.해시태그_카운트올리기" />
       </list>
     </recent_temporary>
   </component>
@@ -354,7 +358,9 @@
       <workItem from="1600389214467" duration="4603000" />
       <workItem from="1600517916104" duration="158000" />
       <workItem from="1600690596307" duration="1546000" />
-      <workItem from="1600866500220" duration="4559000" />
+      <workItem from="1600866500220" duration="5543000" />
+      <workItem from="1600952122958" duration="5022000" />
+      <workItem from="1600959623568" duration="61000" />
     </task>
     <servers />
   </component>
@@ -410,46 +416,50 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="1231" y="234" key="#com.intellij.ide.util.MemberChooser/0.0.2560.1040@0.0.2560.1040" timestamp="1600781278635" />
+    <state x="1216" y="452" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1600957232222">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1216" y="452" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1600957232222" />
     <state x="1010" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1600782489688">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="1010" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1600782489688" />
-    <state x="478" y="278" key="FileChooserDialogImpl" timestamp="1600518068569">
+    <state x="478" y="278" key="FileChooserDialogImpl" timestamp="1600956278676">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="478" y="278" key="FileChooserDialogImpl/0.0.2560.1040@0.0.2560.1040" timestamp="1600518068569" />
-    <state width="2517" height="414" key="GridCell.Tab.0.bottom" timestamp="1600871711222">
+    <state x="478" y="278" key="FileChooserDialogImpl/0.0.2560.1040@0.0.2560.1040" timestamp="1600956278676" />
+    <state width="2517" height="346" key="GridCell.Tab.0.bottom" timestamp="1600959684218">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="414" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1600871711222" />
-    <state width="2517" height="414" key="GridCell.Tab.0.center" timestamp="1600871711222">
+    <state width="2517" height="346" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1600959684218" />
+    <state width="2517" height="346" key="GridCell.Tab.0.center" timestamp="1600959684218">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="414" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1600871711222" />
-    <state width="2517" height="414" key="GridCell.Tab.0.left" timestamp="1600871711221">
+    <state width="2517" height="346" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1600959684218" />
+    <state width="2517" height="346" key="GridCell.Tab.0.left" timestamp="1600959684218">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="414" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1600871711221" />
-    <state width="2517" height="414" key="GridCell.Tab.0.right" timestamp="1600871711222">
+    <state width="2517" height="346" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1600959684218" />
+    <state width="2517" height="346" key="GridCell.Tab.0.right" timestamp="1600959684218">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="414" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1600871711222" />
-    <state width="2517" height="414" key="GridCell.Tab.1.bottom" timestamp="1600869819570">
+    <state width="2517" height="346" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1600959684218" />
+    <state width="2517" height="346" key="GridCell.Tab.1.bottom" timestamp="1600959684218">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="414" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1600869819570" />
-    <state width="2517" height="414" key="GridCell.Tab.1.center" timestamp="1600869819569">
+    <state width="2517" height="346" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1600959684218" />
+    <state width="2517" height="346" key="GridCell.Tab.1.center" timestamp="1600959684218">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="414" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1600869819569" />
-    <state width="2517" height="414" key="GridCell.Tab.1.left" timestamp="1600869819569">
+    <state width="2517" height="346" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1600959684218" />
+    <state width="2517" height="346" key="GridCell.Tab.1.left" timestamp="1600959684218">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="414" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1600869819569" />
-    <state width="2517" height="414" key="GridCell.Tab.1.right" timestamp="1600869819570">
+    <state width="2517" height="346" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1600959684218" />
+    <state width="2517" height="346" key="GridCell.Tab.1.right" timestamp="1600959684218">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="414" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1600869819570" />
+    <state width="2517" height="346" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1600959684218" />
     <state width="2517" height="411" key="GridCell.Tab.2.bottom" timestamp="1600476244875">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>

@@ -1,6 +1,5 @@
 package com.mango.harugomin.service;
 
-import com.mango.harugomin.domain.entity.Post;
 import junit.framework.TestCase;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;

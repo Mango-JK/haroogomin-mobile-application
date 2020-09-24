@@ -1,12 +1,8 @@
 package com.mango.harugomin.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.mango.harugomin.dto.PostRequestDto;
-import com.mango.harugomin.service.HashtagService;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 
@@ -23,7 +19,8 @@ import static javax.persistence.GenerationType.*;
 @Table(name = "post")
 public class Post extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = IDENTITY)
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "post_id")
     private Long postId;
 
@@ -40,7 +37,7 @@ public class Post extends BaseTimeEntity {
     private Long tagId;
 
     @OneToMany(mappedBy = "post", fetch = EAGER)
-     private List<Comment> comments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 
     @Column(name = "hits")
     private int hits;
@@ -48,18 +45,14 @@ public class Post extends BaseTimeEntity {
     @Column(name = "post_likes")
     private int postLikes;
 
-    @Column(name = "expired")
-    private int expired;
-
     @Builder
-    public Post(String userNickname, String title, String content, Long tagId, int hits, int postLikes, int expired) {
+    public Post(String userNickname, String title, String content, Long tagId, int hits, int postLikes) {
         this.userNickname = userNickname;
         this.title = title;
         this.content = content;
         this.tagId = tagId;
         this.hits = hits;
         this.postLikes = postLikes;
-        this.expired = expired;
     }
 
     public void update(String title, String content, Hashtag hashtag) {
@@ -77,6 +70,5 @@ public class Post extends BaseTimeEntity {
         this.tagId = tagId;
         this.hits = 0;
         this.postLikes = 0;
-        this.expired = 0;
     }
 }

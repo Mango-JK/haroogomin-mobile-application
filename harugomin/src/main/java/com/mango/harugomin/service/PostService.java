@@ -2,14 +2,11 @@ package com.mango.harugomin.service;
 
 import com.mango.harugomin.domain.entity.Post;
 import com.mango.harugomin.domain.repository.PostRepository;
-import com.mango.harugomin.dto.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -26,6 +23,10 @@ public class PostService {
      */
     public Page<Post> findAllPosts(Pageable pageable) {
         return postRepository.findAll(pageable);
+    }
+
+    public Page<Post> findAllPostsByHashtag(long tagId, PageRequest pageRequest) {
+        return postRepository.findAllByTagId(tagId, pageRequest);
     }
 
     /**

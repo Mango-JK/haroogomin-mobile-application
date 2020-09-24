@@ -15,6 +15,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Override
     Page<Post> findAll(Pageable pageable);
 
+    Page<Post> findAllByTagId(Long tagId, Pageable pageable);
 
-    Page<Post> findByTagId(long tagId, Pageable pageable);
 }
