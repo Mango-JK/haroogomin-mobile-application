@@ -19,13 +19,13 @@ import static javax.persistence.GenerationType.*;
 @Table(name = "post")
 public class Post extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = IDENTITY)
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "post_id")
     private Long postId;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "user_nickname")
+    private String userNickname;
 
     @Column(name = "title")
     private String title;
@@ -34,11 +34,10 @@ public class Post extends BaseTimeEntity {
     @Lob
     private String content;
 
-    @OneToMany(mappedBy = "post")
-    private List<PostHashtag> postHashtags = new ArrayList<>();
+    private Long tagId;
 
-    @OneToMany(mappedBy = "post")
-     private List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "post", fetch = EAGER)
+    private List<Comment> comments = new ArrayList<>();
 
     @Column(name = "hits")
     private int hits;
@@ -46,24 +45,30 @@ public class Post extends BaseTimeEntity {
     @Column(name = "post_likes")
     private int postLikes;
 
-    @Column(name = "expired")
-    private int expired;
-
     @Builder
-    public Post(User user, String title, String content, List<PostHashtag> postHashtag, int hits, int postLikes, int expired) {
-        this.user = user;
+    public Post(String userNickname, String title, String content, Long tagId, int hits, int postLikes) {
+        this.userNickname = userNickname;
         this.title = title;
         this.content = content;
-        this.postHashtags = postHashtag;
+        this.tagId = tagId;
         this.hits = hits;
         this.postLikes = postLikes;
-        this.expired = expired;
     }
 
-    public void update(String title, String content, List<PostHashtag> postHashtag) {
+    public void update(String title, String content, Hashtag hashtag) {
         this.title = title;
         this.content = content;
-        this.postHashtags = postHashtag;
+        this.tagId = tagId;
         this.setModifiedDate(LocalDateTime.now());
+    }
+
+    @Builder
+    public Post(String userNickname, String title, String content, Long tagId) {
+        this.userNickname = userNickname;
+        this.title = title;
+        this.content = content;
+        this.tagId = tagId;
+        this.hits = 0;
+        this.postLikes = 0;
     }
 }
