@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+@CrossOrigin(origins = "*")
 @Slf4j
 @Api(tags = "1. User")
 @RequiredArgsConstructor
@@ -80,7 +81,7 @@ public class UserController {
         return new ResponseEntity<>(new UserResponseDto(user), HttpStatus.OK);
     }
 
-    @ApiOperation("(SERVER_TEST용)카카오 코드 발급받기")
+    @ApiOperation("(SERVER_TEST용)카카오 AccessToken 발급받기")
     @GetMapping(value = "/users/login/kakao")
     public String getKakaoCode(@RequestParam("code") String code) {
         log.info("User Kakao Code : " + code);
@@ -92,7 +93,7 @@ public class UserController {
     }
 
 
-    @ApiOperation("(SERVER_TEST용)네이버 코드 발급받기")
+    @ApiOperation("(SERVER_TEST용)네이버 AccessToken 발급받기")
     @GetMapping(value = "/users/login/naver")
     public String getNaverCode(@RequestParam(value = "code") String code,
                                @RequestParam(value = "state") String state) {
