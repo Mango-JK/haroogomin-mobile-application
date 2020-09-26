@@ -8,8 +8,6 @@ import com.mango.harugomin.jwt.JwtService;
 import com.mango.harugomin.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+@CrossOrigin(origins = "*")
 @Slf4j
 @Api(tags = "1. User")
 @RequiredArgsConstructor
@@ -31,18 +30,6 @@ public class UserController {
     private final NaverAPIService naverAPIService;
     private final JwtService jwtService;
     private final S3Service s3Service;
-
-    @ApiOperation(value = "index", notes = "연습용 메인 페이지")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "200 OK !!"),
-            @ApiResponse(code = 500, message = "Internal Server Error !!"),
-            @ApiResponse(code = 404, message = "Not Found !!")
-    })
-    @GetMapping(value = "/")
-    public String Hello() {
-        return "/index";
-    }
-
 
     /**
      * 닉네임 중복 검사
@@ -94,8 +81,7 @@ public class UserController {
         return new ResponseEntity<>(new UserResponseDto(user), HttpStatus.OK);
     }
 
-
-    @ApiOperation("카카오 코드 발급받기")
+    @ApiOperation("(SERVER_TEST용)카카오 AccessToken 발급받기")
     @GetMapping(value = "/users/login/kakao")
     public String getKakaoCode(@RequestParam("code") String code) {
         log.info("User Kakao Code : " + code);
@@ -107,7 +93,7 @@ public class UserController {
     }
 
 
-    @ApiOperation("네이버 코드 발급받기")
+    @ApiOperation("(SERVER_TEST용)네이버 AccessToken 발급받기")
     @GetMapping(value = "/users/login/naver")
     public String getNaverCode(@RequestParam(value = "code") String code,
                                @RequestParam(value = "state") String state) {

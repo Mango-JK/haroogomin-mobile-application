@@ -34,14 +34,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0dc6c3b9-2347-4119-844a-83a7481f4166" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/History.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/CommentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/CommentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/HashtagController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/HashtagController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/PostController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/Post.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/PostRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/PostService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/test/java/com/mango/harugomin/service/PostServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/test/java/com/mango/harugomin/service/PostServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/UserController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,7 +135,7 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -154,13 +152,15 @@
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.HarugominApplication">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -361,6 +361,7 @@
       <workItem from="1600866500220" duration="5543000" />
       <workItem from="1600952122958" duration="5022000" />
       <workItem from="1600959623568" duration="61000" />
+      <workItem from="1601098424151" duration="1348000" />
     </task>
     <servers />
   </component>
@@ -428,38 +429,38 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="478" y="278" key="FileChooserDialogImpl/0.0.2560.1040@0.0.2560.1040" timestamp="1600956278676" />
-    <state width="2517" height="346" key="GridCell.Tab.0.bottom" timestamp="1600959684218">
+    <state width="1517" height="341" key="GridCell.Tab.0.bottom" timestamp="1601100549514">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="346" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1600959684218" />
-    <state width="2517" height="346" key="GridCell.Tab.0.center" timestamp="1600959684218">
+    <state width="1517" height="341" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1601100549514" />
+    <state width="1517" height="341" key="GridCell.Tab.0.center" timestamp="1601100549513">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="346" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1600959684218" />
-    <state width="2517" height="346" key="GridCell.Tab.0.left" timestamp="1600959684218">
+    <state width="1517" height="341" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1601100549513" />
+    <state width="1517" height="341" key="GridCell.Tab.0.left" timestamp="1601100549513">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="346" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1600959684218" />
-    <state width="2517" height="346" key="GridCell.Tab.0.right" timestamp="1600959684218">
+    <state width="1517" height="341" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1601100549513" />
+    <state width="1517" height="341" key="GridCell.Tab.0.right" timestamp="1601100549513">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="346" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1600959684218" />
-    <state width="2517" height="346" key="GridCell.Tab.1.bottom" timestamp="1600959684218">
+    <state width="1517" height="341" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1601100549513" />
+    <state width="1517" height="341" key="GridCell.Tab.1.bottom" timestamp="1601100549514">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="346" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1600959684218" />
-    <state width="2517" height="346" key="GridCell.Tab.1.center" timestamp="1600959684218">
+    <state width="1517" height="341" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1601100549514" />
+    <state width="1517" height="341" key="GridCell.Tab.1.center" timestamp="1601100549514">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="346" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1600959684218" />
-    <state width="2517" height="346" key="GridCell.Tab.1.left" timestamp="1600959684218">
+    <state width="1517" height="341" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1601100549514" />
+    <state width="1517" height="341" key="GridCell.Tab.1.left" timestamp="1601100549514">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="346" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1600959684218" />
-    <state width="2517" height="346" key="GridCell.Tab.1.right" timestamp="1600959684218">
+    <state width="1517" height="341" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1601100549514" />
+    <state width="1517" height="341" key="GridCell.Tab.1.right" timestamp="1601100549514">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="346" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1600959684218" />
+    <state width="1517" height="341" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1601100549514" />
     <state width="2517" height="411" key="GridCell.Tab.2.bottom" timestamp="1600476244875">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
@@ -476,10 +477,10 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state width="2517" height="411" key="GridCell.Tab.2.right/0.0.2560.1040@0.0.2560.1040" timestamp="1600476244875" />
-    <state x="429" y="189" key="SettingsEditor" timestamp="1600692876935">
+    <state x="429" y="189" key="SettingsEditor" timestamp="1601104158326">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="429" y="189" key="SettingsEditor/0.0.2560.1040@0.0.2560.1040" timestamp="1600692876935" />
+    <state x="429" y="189" key="SettingsEditor/0.0.2560.1040@0.0.2560.1040" timestamp="1601104158326" />
     <state x="910" y="130" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1600870372806">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
@@ -492,9 +493,9 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="936" y="240" key="run.anything.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1599552736925" />
-    <state x="472" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1600692793128">
+    <state x="472" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1601104134701">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="472" y="235" width="672" height="678" key="search.everywhere.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1600692793128" />
+    <state x="472" y="235" width="672" height="678" key="search.everywhere.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1601104134701" />
   </component>
 </project>
