@@ -38,7 +38,7 @@ public class UserService {
     }
 
     /**
-     * 1.닉네임 중복 검사
+     * 닉네임 중복 검사
      */
     public boolean duplicationCheck(String nickname) {
         if(userRepository.countByNickname(nickname) > 0) {
@@ -49,7 +49,7 @@ public class UserService {
     }
 
     /**
-     * 2. 유저 해시태그 업데이트
+     * 유저 해시태그 업데이트
      */
     @Transactional
     public User updateUserHashtag(Long userId, String[] hashtags) {
@@ -63,7 +63,7 @@ public class UserService {
     }
 
     /**
-     * 3. 해시태그 추가
+     * 해시태그 추가
      */
     @Transactional
     public UserHashtag addUserHashtag(Long userId, String tagName) {
@@ -76,7 +76,7 @@ public class UserService {
     }
 
     /**
-     * 4. 유저 프로필 업데이트 [사진, 닉네임, 연령대, 해시태그]
+     * 유저 프로필 업데이트 [사진, 닉네임, 연령대, 해시태그]
      */
     @Transactional
     public User updateUser(UserUpdateRequestDto requestDto) {
@@ -88,7 +88,6 @@ public class UserService {
         userRepository.save(user);
         return userRepository.findByUserId(user.getUserId());
     }
-
 
 
     /**
@@ -106,5 +105,6 @@ public class UserService {
     public int useThreePoint(Long userId) {
         return userRepository.useThreePoint(userId);
     }
+
 
 }
