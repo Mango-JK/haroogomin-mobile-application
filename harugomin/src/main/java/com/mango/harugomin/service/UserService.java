@@ -15,16 +15,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
+    private final HashtagService hashtagService;
+    private final UserHashtagService userHashtagService;
+
     private final UserRepository userRepository;
     private final UserHashtagRepository userHashtagRepository;
-
-    private final HashtagService hashtagService;
 
     @Transactional
     public User saveUser(User user){
@@ -32,8 +34,8 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User findById(long id) {
-        User user = userRepository.findByUserId(id);
+    public User findById(long userId) {
+        User user = userRepository.findByUserId(userId);
         return user;
     }
 
@@ -54,41 +56,34 @@ public class UserService {
     @Transactional
     public User updateUserHashtag(Long userId, String[] hashtags) {
         User user = findById(userId);
-        hashtagService.deleteUserHashtag(userId);
+        userHashtagRepository.deleteByUserId(userId);
         user.initHashtag();
+
         for (String tagName : hashtags) {
-            user.addHashtag(addUserHashtag(userId, tagName));
+            Hashtag hashtag = hashtagService.findByTagName(tagName);
+            UserHashtag newUserHashtag = new UserHashtag(user, hashtag);
+            hashtagService.countUp(hashtag.getTagId());
+
+            userHashtagService.addUserHashtag(newUserHashtag);
+            user.userAddTag(newUserHashtag);
         }
+        userRepository.save(user);
+
         return user;
-    }
-
-    /**
-     * 해시태그 추가
-     */
-    @Transactional
-    public UserHashtag addUserHashtag(Long userId, String tagName) {
-        User user = findById(userId);
-        Hashtag hashtag = hashtagService.findByTagname(tagName);
-
-        UserHashtag userHashtag = new UserHashtag(user, hashtag);
-        hashtagService.countUp(hashtag.getTagId());
-        return userHashtagRepository.save(userHashtag);
     }
 
     /**
      * 유저 프로필 업데이트 [사진, 닉네임, 연령대, 해시태그]
      */
     @Transactional
-    public User updateUser(UserUpdateRequestDto requestDto) {
+    public void updateUser(UserUpdateRequestDto requestDto) {
         User user = findById(requestDto.getUserId());
-        user.updateProfile(requestDto);
+        user.updateUserProfile(requestDto);
 
         user = updateUserHashtag(requestDto.getUserId(), requestDto.getUserHashtags());
 
         userRepository.save(user);
-        return userRepository.findByUserId(user.getUserId());
     }
-
 
     /**
      * 댓글 작성 시, User Point 1 증가
@@ -105,6 +100,5 @@ public class UserService {
     public int useThreePoint(Long userId) {
         return userRepository.useThreePoint(userId);
     }
-
 
 }

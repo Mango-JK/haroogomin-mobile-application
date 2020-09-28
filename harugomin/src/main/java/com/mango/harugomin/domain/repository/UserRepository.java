@@ -8,7 +8,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findByUserId(Long id);
+
+    User findByUserId(Long userId);
 
     Long countByNickname(String nickname);
 

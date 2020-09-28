@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -18,15 +19,16 @@ public class HashtagService {
         return hashtagRepository.save(hashtag);
     }
 
-    public Hashtag findByTagname(String hashtag) {
-        return hashtagRepository.findByTagName(hashtag);
+    public Optional<Hashtag> findByTagId(Long tagId){
+        return hashtagRepository.findById(tagId);
+    };
+
+    public Hashtag findByTagName(String tagName) {
+        return hashtagRepository.findByTagName(tagName);
     }
 
     public void countUp(long tagId) {
         hashtagRepository.countUp(tagId);
     }
 
-    public void deleteUserHashtag(Long userId) {
-        hashtagRepository.deleteById(userId);
-    }
 }

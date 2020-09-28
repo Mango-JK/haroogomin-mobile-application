@@ -31,7 +31,6 @@ public class UserController {
     private final JwtService jwtService;
     private final S3Service s3Service;
 
-
     /**
      * 1. 카카오 로그인
      */
@@ -89,8 +88,6 @@ public class UserController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-
-
     /**
      * 4. 프로필 사진 등록
      */
@@ -99,7 +96,7 @@ public class UserController {
     public String updateUserProfile(@PathVariable(value = "id") Long userId, MultipartFile file) throws IOException {
         User user = userService.findById(userId);
         String imgPath = S3Service.CLOUD_FRONT_DOMAIN_NAME + s3Service.upload(user.getProfileImage(), file);
-        user.updateProfileImage(imgPath);
+        user.updateUserImage(imgPath);
         userService.saveUser(user);
 
         return imgPath;
@@ -111,7 +108,8 @@ public class UserController {
     @ApiOperation("유저 프로필 업데이트 [사진, 닉네임, 연령대, 해시태그]")
     @PutMapping(value = "/users")
     public ResponseEntity<UserResponseDto> updateUserProfile(UserUpdateRequestDto requestDto) {
-        User user = userService.updateUser(requestDto);
+        userService.updateUser(requestDto);
+        User user = userService.findById(requestDto.getUserId());
         return new ResponseEntity<>(new UserResponseDto(user), HttpStatus.OK);
     }
 

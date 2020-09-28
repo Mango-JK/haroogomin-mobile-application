@@ -132,7 +132,7 @@ public class KakaoAPIService {
         String profile_needs_agreement = json.get("kakao_account").get("profile_needs_agreement").toString();
         String ageRange = "0";
 
-        if(profile_needs_agreement.equals("true")) {
+        if (profile_needs_agreement.equals("true")) {
             StringTokenizer stringTokenizer = new StringTokenizer(json.get("kakao_account").get("age_range").toString(), "~");
             ageRange = stringTokenizer.nextToken().substring(1, stringTokenizer.nextToken().length());
         }
