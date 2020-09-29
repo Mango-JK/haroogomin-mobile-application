@@ -1,12 +1,13 @@
 package com.mango.harugomin.service;
 
 import com.mango.harugomin.domain.entity.Hashtag;
-import com.mango.harugomin.domain.entity.User;
 import com.mango.harugomin.domain.repository.HashtagRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -31,4 +32,8 @@ public class HashtagService {
         hashtagRepository.countUp(tagId);
     }
 
+    @Transactional(readOnly = true)
+    public Page<Hashtag> findAllTags(Pageable pageable) {
+        return hashtagRepository.findAllTags(pageable);
+    }
 }

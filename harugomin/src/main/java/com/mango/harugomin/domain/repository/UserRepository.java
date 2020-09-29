@@ -14,11 +14,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Long countByNickname(String nickname);
 
     @Modifying(clearAutomatically = true)
-    @Query(value = "update user set point = point + 1 where user_id = ?1 ", nativeQuery = true)
+    @Query(value = "update user set point = point + 10 where user_id = ?1 ", nativeQuery = true)
     int upOnePoint(long userId);
 
     @Modifying(clearAutomatically = true)
-    @Query(value = "update user set point = point - 3 where user_id = ?1 ", nativeQuery = true)
+    @Query(value = "update user set point = point - 30 where user_id = ?1 ", nativeQuery = true)
     int useThreePoint(Long userId);
 
 }
