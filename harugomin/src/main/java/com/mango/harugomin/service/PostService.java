@@ -1,8 +1,10 @@
 package com.mango.harugomin.service;
 
 import com.mango.harugomin.domain.entity.Hashtag;
+import com.mango.harugomin.domain.entity.History;
 import com.mango.harugomin.domain.entity.Post;
 import com.mango.harugomin.domain.entity.User;
+import com.mango.harugomin.domain.repository.HistoryRepository;
 import com.mango.harugomin.domain.repository.PostRepository;
 import com.mango.harugomin.dto.PostSaveRequestDto;
 import com.mango.harugomin.dto.PostUpdateRequestDto;
@@ -13,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ public class PostService {
     private final UserService userService;
     private final HashtagService hashtagService;
     private final PostRepository postRepository;
+    private final HistoryRepository historyRepository;
 
     /**
      * 1. 고민글 작성
@@ -90,15 +92,29 @@ public class PostService {
     }
 
     /**
-     * 제목, 내용에서 keyword로 검색
+     * 7. 제목, 내용에서 keyword로 검색
      */
     @Transactional(readOnly = true)
     public Page<Post> searchAllPosts(String keyword, PageRequest pageRequest) {
         return postRepository.searchAllPosts(keyword, pageRequest);
     }
 
+    /**
+     * 8. 고민글 조회수 카운팅
+     */
     @Transactional
     public void postHits(Long postId) {
         postRepository.postHits(postId);
+    }
+
+    /**
+     * 9. 하루 지난 고민글 History로 이동
+     */
+    @Transactional
+    public void postToHistory(Long postId) {
+        Post targetPost = postRepository.findById(postId).get();
+        History history = new History(targetPost);
+        historyRepository.save(history);
+        postRepository.delete(targetPost);
     }
 }

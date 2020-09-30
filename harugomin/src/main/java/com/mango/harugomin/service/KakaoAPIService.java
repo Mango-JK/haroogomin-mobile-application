@@ -133,11 +133,6 @@ public class KakaoAPIService {
         String profile_needs_agreement = json.get("kakao_account").get("profile_needs_agreement").toString();
         String ageRange = "0";
 
-        if (profile_needs_agreement.equals("true")) {
-            StringTokenizer stringTokenizer = new StringTokenizer(json.get("kakao_account").get("age_range").toString(), "~");
-            ageRange = stringTokenizer.nextToken().substring(1, stringTokenizer.nextToken().length());
-        }
-
         String picture = null;
         if (json.get("kakao_account").get("profile").has("thumbnail_image_url")) {
             picture = json.get("kakao_account").get("profile").get("thumbnail_image_url").toString();
