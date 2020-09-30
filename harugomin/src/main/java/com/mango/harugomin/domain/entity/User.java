@@ -2,7 +2,6 @@ package com.mango.harugomin.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mango.harugomin.dto.UserUpdateRequestDto;
-import com.mango.harugomin.dto.UserUpdateResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,10 +9,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.EAGER;
 
 @NoArgsConstructor
 @Getter
@@ -45,11 +43,12 @@ public class User extends BaseTimeEntity {
     private int enablePosting;
 
     @Builder
-    public User(long userId, String nickname, String profileImage, int ageRange, int point, int enablePosting) {
+    public User(long userId, String nickname, String profileImage, int ageRange, List<UserHashtag> userHashtags, int point, int enablePosting) {
         this.userId = userId;
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.ageRange = ageRange;
+        this.userHashtags = userHashtags;
         this.point = point;
         this.enablePosting = enablePosting;
     }
@@ -60,25 +59,26 @@ public class User extends BaseTimeEntity {
         this.setModifiedDate(LocalDateTime.now());
     }
 
-    public void updateProfileImage(String imagePath) {
+
+    public void updateUserImage(String imagePath) {
         this.profileImage = imagePath;
         this.setModifiedDate(LocalDateTime.now());
     }
 
-    public void updateProfile(UserUpdateRequestDto updateRequestDto) {
+    public void updateUserProfile(UserUpdateRequestDto updateRequestDto) {
         this.nickname = updateRequestDto.getNickname();
-        this.profileImage = updateRequestDto.getProfileImage();
         this.ageRange = updateRequestDto.getAgeRange();
-        this.setModifiedDate(LocalDateTime.now());
-    }
-
-    public void addHashtag(UserHashtag userHashtag) {
-        this.userHashtags.add(userHashtag);
+        this.profileImage = updateRequestDto.getProfileImage();
         this.setModifiedDate(LocalDateTime.now());
     }
 
     public void initHashtag(){
         this.userHashtags = new ArrayList<>();
+        this.setModifiedDate(LocalDateTime.now());
+    }
+
+    public void userAddTag(UserHashtag userHashtag) {
+        this.userHashtags.add(userHashtag);
         this.setModifiedDate(LocalDateTime.now());
     }
 

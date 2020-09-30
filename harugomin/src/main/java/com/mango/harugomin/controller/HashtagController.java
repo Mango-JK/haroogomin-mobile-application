@@ -21,7 +21,7 @@ public class HashtagController {
      */
     @PostMapping(value = "/hashtag")
     public long addUserHashtag(@RequestParam("tagName") String tagName){
-        Hashtag hashtag = new Hashtag(tagName, 0, 0);
+        Hashtag hashtag = new Hashtag(tagName, 0);
         return hashtagService.saveHashtag(hashtag).getTagId();
     }
 

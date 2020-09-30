@@ -8,18 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 
 @NoArgsConstructor
 @Getter
 @Entity
 @Table(name = "post")
-public class History extends BaseTimeEntity{
+public class History extends BaseTimeEntity {
     @Id
     @Column(name = "post_id")
     private Long postId;
 
-    @Column(name = "user_nickname")
-    private String userNickname;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "title")
     private String title;
@@ -28,7 +30,11 @@ public class History extends BaseTimeEntity{
     @Lob
     private String content;
 
-    private Long tagId;
+    @Column(name = "tag_name")
+    private String tagName;
+
+    @Column(name = "post_image")
+    private String postImage;
 
     @OneToMany(mappedBy = "post", fetch = EAGER)
     private List<Comment> comments = new ArrayList<>();
@@ -41,10 +47,11 @@ public class History extends BaseTimeEntity{
 
     public History(Post post) {
         this.postId = post.getPostId();
-        this.userNickname = post.getUserNickname();
+        this.user = post.getUser();
         this.title = post.getTitle();
         this.content = post.getContent();
-        this.tagId = post.getTagId();
+        this.tagName = post.getTagName();
+        this.postImage = post.getPostImage();
         this.comments = post.getComments();
         this.hits = post.getHits();
         this.postLikes = post.getPostLikes();
