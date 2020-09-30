@@ -1,5 +1,6 @@
 package com.mango.harugomin.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 
@@ -24,8 +26,10 @@ public class Post extends BaseTimeEntity {
     @Column(name = "post_id")
     private Long postId;
 
-    @Column(name = "user_nickname")
-    private String userNickname;
+    @JsonIgnore
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "title")
     private String title;
@@ -34,7 +38,11 @@ public class Post extends BaseTimeEntity {
     @Lob
     private String content;
 
-    private Long tagId;
+    @Column(name = "tag_name")
+    private String tagName;
+
+    @Column(name = "post_image")
+    private String postImage;
 
     @OneToMany(mappedBy = "post", fetch = EAGER)
     private List<Comment> comments = new ArrayList<>();
@@ -46,28 +54,32 @@ public class Post extends BaseTimeEntity {
     private int postLikes;
 
     @Builder
-    public Post(String userNickname, String title, String content, Long tagId, int hits, int postLikes) {
-        this.userNickname = userNickname;
+    public Post(User user, String title, String content, String tagName, String postImage, int hits, int postLikes) {
+        this.user = user;
         this.title = title;
         this.content = content;
-        this.tagId = tagId;
+        this.tagName = tagName;
+        this.postImage = postImage;
         this.hits = hits;
         this.postLikes = postLikes;
     }
 
-    public void update(String title, String content, Hashtag hashtag) {
+    public void update(String title, String content, String tagName, String postImage) {
         this.title = title;
         this.content = content;
-        this.tagId = tagId;
+        this.tagName = tagName;
+        this.postImage = postImage;
         this.setModifiedDate(LocalDateTime.now());
     }
 
     @Builder
-    public Post(String userNickname, String title, String content, Long tagId) {
-        this.userNickname = userNickname;
+    public Post(User user, String title, String content, String tagName, String postImage) {
+        this.user = user;
         this.title = title;
         this.content = content;
-        this.tagId = tagId;
+        this.tagName = tagName;
+        this.postImage = postImage;
+        this.comments = new ArrayList<>();
         this.hits = 0;
         this.postLikes = 0;
     }
