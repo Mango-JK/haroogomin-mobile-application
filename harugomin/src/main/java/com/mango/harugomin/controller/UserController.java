@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -37,9 +38,10 @@ public class UserController {
      */
     @ApiOperation("카카오 로그인")
     @PostMapping("/users/login/kakao")
-    public ResponseEntity kakaoLogin(@RequestParam String accessToken, HttpServletResponse response) {
+    public ResponseEntity kakaoLogin(HttpServletRequest request) {
         log.info("POST :: /user/login/kakao");
 
+        String accessToken = request.getHeader("accessToken");
         JsonNode json = kakaoAPIService.getKaKaoUserInfo(accessToken);
 
         String result = null;
@@ -47,10 +49,9 @@ public class UserController {
             result = kakaoAPIService.redirectToken(json); // 토큰 발행
         } catch (Exception e) {
             log.error(e + "");
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(result, HttpStatus.BAD_REQUEST);
         }
-        response.setHeader("jwt-auth-token", result);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(result, HttpStatus.OK);
     }
 
     /**
@@ -149,10 +150,6 @@ public class UserController {
 //
 //        return new ResponseEntity<>(deleteUserId, HttpStatus.OK);
 //    }
-
-
-
-
 
 
     @ApiOperation("(SERVER_TEST용)카카오 AccessToken 발급받기")

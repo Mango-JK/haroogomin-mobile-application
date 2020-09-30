@@ -1,9 +1,11 @@
 package com.mango.harugomin.controller;
 
+import com.mango.harugomin.domain.entity.Hashtag;
 import com.mango.harugomin.domain.entity.Post;
 import com.mango.harugomin.dto.PostResponseDto;
 import com.mango.harugomin.dto.PostSaveRequestDto;
 import com.mango.harugomin.dto.PostUpdateRequestDto;
+import com.mango.harugomin.dto.PostsHomeResponseDto;
 import com.mango.harugomin.service.HashtagService;
 import com.mango.harugomin.service.PostService;
 import io.swagger.annotations.Api;
@@ -96,6 +98,7 @@ public class PostController {
     @GetMapping(value = "/posts/{postId}")
     public ResponseEntity findOne(@PathVariable("postId") Long postId) {
         Post post = postService.findById(postId).get();
+        postService.postHits(postId);
         if (post == null) {
             return new ResponseEntity(post, HttpStatus.NOT_FOUND);
         }
@@ -135,28 +138,27 @@ public class PostController {
     }
 
     /**
-     * 8. 두번째 탭
+     * 8. Home Tab List 출력
      */
-//    @ApiOperation("hago Second Tab")
-//    @GetMapping(value = "/posts/home")
-//    public ResponseEntity homeView(@RequestParam("tagName") String tagName) {
-//        PageRequest tagRequest = PageRequest.of(0, 12, Sort.by("posting_count"));
-//        Object[] topTags = hashtagService.findAllTags(tagRequest).get().toArray();
-//        for(Object tags : topTags) {
-//            log.info(":::: " + tags.toString());
-//        }
-//
-//
-//        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("created_date").descending());
-//        List<Post> story = postService.findAllPosts(pageRequest).getContent();
-//
-//        for(Post p : story) {
-//            log.info(":::: " + p.getTitle() + ", " + p.getContent());
-//        }
-//
-//
-//
-//        return new ResponseEntity(HttpStatus.NOT_FOUND);
-//    }
+    @ApiOperation("hago Second Tab")
+    @GetMapping(value = "/posts/home/{tagName}")
+    public ResponseEntity homeView(@PathVariable("tagName") String tagName, int pageNum) throws Exception {
+        PostsHomeResponseDto responseDtos = null;
+
+        try {
+            PageRequest tagRequest = PageRequest.of(0, 12, Sort.by("postingCount").descending());
+            List<Hashtag> topTags = hashtagService.findAllTags(tagRequest).getContent();
+
+            PageRequest storyRequest = PageRequest.of(0, 10, Sort.by("createdDate"));
+            List<Post> story = postService.findAllPosts(storyRequest).getContent();
+
+            PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
+            List<Post> postLists = postService.findAllByHashtag(tagName, pageRequest).getContent();
+            responseDtos = new PostsHomeResponseDto(topTags, story, postLists);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(responseDtos, HttpStatus.OK);
+    }
 
 }

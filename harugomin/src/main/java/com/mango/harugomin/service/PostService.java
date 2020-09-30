@@ -96,4 +96,9 @@ public class PostService {
     public Page<Post> searchAllPosts(String keyword, PageRequest pageRequest) {
         return postRepository.searchAllPosts(keyword, pageRequest);
     }
+
+    @Transactional
+    public void postHits(Long postId) {
+        postRepository.postHits(postId);
+    }
 }
