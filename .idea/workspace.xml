@@ -34,18 +34,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0dc6c3b9-2347-4119-844a-83a7481f4166" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/Liker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/LikerRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/CommentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/CommentController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/PostController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/Comment.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/Comment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/Post.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/CommentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/CommentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/History.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/History.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/HistoryRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/HistoryRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/KakaoAPIService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/KakaoAPIService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/NaverAPIService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/NaverAPIService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -332,7 +327,7 @@
       <workItem from="1601296709225" duration="8794000" />
       <workItem from="1601381211876" duration="19254000" />
       <workItem from="1601439945010" duration="18394000" />
-      <workItem from="1601464558782" duration="13160000" />
+      <workItem from="1601464558782" duration="20386000" />
     </task>
     <servers />
   </component>
@@ -400,38 +395,38 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="478" y="278" key="FileChooserDialogImpl/0.0.2560.1040@0.0.2560.1040" timestamp="1600956278676" />
-    <state width="1451" height="386" key="GridCell.Tab.0.bottom" timestamp="1601477467442">
+    <state width="1390" height="386" key="GridCell.Tab.0.bottom" timestamp="1601484895489">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1451" height="386" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1601477467442" />
-    <state width="1451" height="386" key="GridCell.Tab.0.center" timestamp="1601477467442">
+    <state width="1390" height="386" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1601484895489" />
+    <state width="1390" height="386" key="GridCell.Tab.0.center" timestamp="1601484895489">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1451" height="386" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1601477467442" />
-    <state width="1451" height="386" key="GridCell.Tab.0.left" timestamp="1601477467441">
+    <state width="1390" height="386" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1601484895489" />
+    <state width="1390" height="386" key="GridCell.Tab.0.left" timestamp="1601484895489">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1451" height="386" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1601477467441" />
-    <state width="1451" height="386" key="GridCell.Tab.0.right" timestamp="1601477467442">
+    <state width="1390" height="386" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1601484895489" />
+    <state width="1390" height="386" key="GridCell.Tab.0.right" timestamp="1601484895489">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1451" height="386" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1601477467442" />
-    <state width="1451" height="386" key="GridCell.Tab.1.bottom" timestamp="1601477467442">
+    <state width="1390" height="386" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1601484895489" />
+    <state width="1390" height="386" key="GridCell.Tab.1.bottom" timestamp="1601484895489">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1451" height="386" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1601477467442" />
-    <state width="1451" height="386" key="GridCell.Tab.1.center" timestamp="1601477467442">
+    <state width="1390" height="386" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1601484895489" />
+    <state width="1390" height="386" key="GridCell.Tab.1.center" timestamp="1601484895489">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1451" height="386" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1601477467442" />
-    <state width="1451" height="386" key="GridCell.Tab.1.left" timestamp="1601477467442">
+    <state width="1390" height="386" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1601484895489" />
+    <state width="1390" height="386" key="GridCell.Tab.1.left" timestamp="1601484895489">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1451" height="386" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1601477467442" />
-    <state width="1451" height="386" key="GridCell.Tab.1.right" timestamp="1601477467442">
+    <state width="1390" height="386" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1601484895489" />
+    <state width="1390" height="386" key="GridCell.Tab.1.right" timestamp="1601484895489">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1451" height="386" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1601477467442" />
+    <state width="1390" height="386" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1601484895489" />
     <state width="2517" height="411" key="GridCell.Tab.2.bottom" timestamp="1600476244875">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
@@ -468,9 +463,9 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="936" y="240" key="run.anything.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1599552736925" />
-    <state x="472" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1601104134701">
+    <state x="472" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1601483585936">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="472" y="235" width="672" height="678" key="search.everywhere.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1601104134701" />
+    <state x="472" y="235" width="672" height="678" key="search.everywhere.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1601483585936" />
   </component>
 </project>

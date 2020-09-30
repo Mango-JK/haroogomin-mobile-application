@@ -96,10 +96,10 @@ public class UserController {
      */
     @ApiOperation("토큰 검증")
     @PostMapping("/users/check")
-    public Object checkToken( HttpServletRequest request) {
+    public Object checkToken(@RequestParam String jwtToken2) {
         log.info("UserController : checkToken");
 
-        String jwtToken = request.getHeader("Authorization");
+        String jwtToken = jwtToken2;
         Object result = null;
 
         if (jwtService.isUsable(jwtToken)) {
@@ -114,7 +114,7 @@ public class UserController {
      */
     @ApiOperation("유저 프로필 사진 업데이트")
     @PutMapping(value = "/users/profileImage/{id}")
-    public String updateUserProfile(@PathVariable(value = "id") Long userId, MultipartFile file) throws IOException {
+    public String updateUserProfile(@PathVariable(value = "id") Long userId, @RequestParam MultipartFile file) throws IOException {
         User user = userService.findById(userId);
         String imgPath = S3Service.CLOUD_FRONT_DOMAIN_NAME + s3Service.upload(user.getProfileImage(), file);
         user.updateUserImage(imgPath);
@@ -128,7 +128,7 @@ public class UserController {
 
     @ApiOperation("유저 프로필 업데이트 [사진, 닉네임, 연령대, 해시태그]")
     @PutMapping(value = "/users")
-    public ResponseEntity<UserResponseDto> updateUserProfile(UserUpdateRequestDto requestDto) {
+    public ResponseEntity<UserResponseDto> updateUserProfile(@RequestBody UserUpdateRequestDto requestDto) {
         userService.updateUser(requestDto);
         User user = userService.findById(requestDto.getUserId());
         return new ResponseEntity<>(new UserResponseDto(user), HttpStatus.OK);
@@ -139,7 +139,7 @@ public class UserController {
      */
     @ApiOperation("유저 해시태그 업데이트")
     @PutMapping(value = "/users/hashtag/{id}")
-    public ResponseEntity<UserResponseDto> updateUserHashtag(@PathVariable(value = "id") Long userId, String[] hashtags) {
+    public ResponseEntity<UserResponseDto> updateUserHashtag(@PathVariable(value = "id") Long userId, @RequestParam String[] hashtags) {
 
         User user = userService.updateUserHashtag(userId, hashtags);
 
@@ -174,7 +174,7 @@ public class UserController {
      */
     @ApiOperation("내 글 보관함")
     @GetMapping(value = "/users/history/{userId}")
-    public ResponseEntity myHistoryPost(@PathVariable("userId") Long userId, int pageNum) throws Exception {
+    public ResponseEntity myHistoryPost(@PathVariable("userId") Long userId, @RequestParam int pageNum) throws Exception {
         PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
         Page<History> result = null;
         try {
