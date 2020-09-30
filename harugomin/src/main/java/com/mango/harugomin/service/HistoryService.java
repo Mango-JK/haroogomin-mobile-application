@@ -16,6 +16,6 @@ public class HistoryService {
      * 1. 내 글 보관함
      */
     public Page<History> myHistoryPost(Long userId, PageRequest pageRequest) {
-        return historyRepository.findAllByUser(userId, pageRequest);
+        return historyRepository.findAllByUserUserId(userId, pageRequest);
     }
 }

@@ -1,5 +1,6 @@
 package com.mango.harugomin.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,12 +15,13 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "post")
+@Table(name = "history")
 public class History extends BaseTimeEntity {
     @Id
     @Column(name = "post_id")
     private Long postId;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;

@@ -39,18 +39,14 @@ public class User extends BaseTimeEntity {
     @Column(name = "point")
     private int point;
 
-    @Column(name = "enable_posting")
-    private int enablePosting;
-
     @Builder
-    public User(long userId, String nickname, String profileImage, int ageRange, List<UserHashtag> userHashtags, int point, int enablePosting) {
+    public User(long userId, String nickname, String profileImage, int ageRange, List<UserHashtag> userHashtags, int point) {
         this.userId = userId;
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.ageRange = ageRange;
         this.userHashtags = userHashtags;
         this.point = point;
-        this.enablePosting = enablePosting;
     }
 
     public void update(String nickname, String profileImage) {
@@ -66,6 +62,7 @@ public class User extends BaseTimeEntity {
     }
 
     public void updateUserProfile(UserUpdateRequestDto updateRequestDto) {
+        this.ageRange = updateRequestDto.getAgeRange();
         this.nickname = updateRequestDto.getNickname();
         this.ageRange = updateRequestDto.getAgeRange();
         this.profileImage = updateRequestDto.getProfileImage();

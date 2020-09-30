@@ -45,7 +45,7 @@ public class PostController {
      */
     @ApiOperation("고민글 작성")
     @PostMapping(value = "/posts")
-    public ResponseEntity writePost(PostSaveRequestDto requestDto) throws Exception {
+    public ResponseEntity writePost(@RequestBody PostSaveRequestDto requestDto) throws Exception {
         PostResponseDto responseDto = null;
         try {
             responseDto = new PostResponseDto(postService.save(requestDto));
@@ -105,8 +105,8 @@ public class PostController {
     @ApiOperation("고민글 상세 조회")
     @GetMapping(value = "/posts/{postId}")
     public ResponseEntity findOne(@PathVariable("postId") Long postId) {
-        Post post = postService.findById(postId).get();
         postService.postHits(postId);
+        Post post = postService.findById(postId).get();
         if (post == null) {
             return new ResponseEntity(post, HttpStatus.NOT_FOUND);
         }
@@ -118,7 +118,7 @@ public class PostController {
      */
     @ApiOperation("고민글 해시태그별 조회")
     @GetMapping(value = "/posts/hashtag/{tagName}")
-    public ResponseEntity findAllByHashtag(@PathVariable("tagName") String tagName, int pageNum) throws Exception {
+    public ResponseEntity findAllByHashtag(@PathVariable("tagName") String tagName, @RequestParam int pageNum) throws Exception {
         PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
         Page<Post> result = null;
         try {
@@ -150,7 +150,7 @@ public class PostController {
      */
     @ApiOperation("hago Second Tab")
     @GetMapping(value = "/posts/home/{tagName}")
-    public ResponseEntity homeView(@PathVariable("tagName") String tagName, int pageNum) throws Exception {
+    public ResponseEntity homeView(@PathVariable("tagName") String tagName, @RequestParam int pageNum) throws Exception {
         PostsHomeResponseDto responseDtos = null;
 
         try {

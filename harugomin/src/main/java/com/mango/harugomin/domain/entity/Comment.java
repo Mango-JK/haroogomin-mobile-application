@@ -1,14 +1,17 @@
 package com.mango.harugomin.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.*;
 
 @Getter
@@ -21,10 +24,16 @@ public class Comment extends BaseTimeEntity {
     @Column(name = "comment_id")
     private Long commentId;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
 
+    @Column(name = "nickname")
+    private String nickname;
+
+    @Column(name = "profile_image")
+    private String profileImage;
+
+    @JsonBackReference
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
@@ -36,10 +45,15 @@ public class Comment extends BaseTimeEntity {
     @Column(name = "comment_likes")
     private int commentLikes;
 
+    @OneToMany(mappedBy = "comment", fetch = EAGER)
+    private List<Liker> likers = new ArrayList<>();
+
     @Builder
-    public Comment(Post post, User user, String content, int commentLikes) {
+    public Comment(Long userId, String nickname, String profileImage, Post post, String content, int commentLikes) {
+        this.userId = userId;
+        this.nickname = nickname;
+        this.profileImage = profileImage;
         this.post = post;
-        this.user = user;
         this.content = content;
         this.commentLikes = commentLikes;
     }
