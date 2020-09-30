@@ -29,7 +29,7 @@ public class CommentController {
      */
     @ApiOperation("댓글 작성")
     @PostMapping(value = "/comments")
-    public ResponseEntity writePost(CommentSaveRequestDto requestDto) throws Exception {
+    public ResponseEntity writePost(@RequestBody CommentSaveRequestDto requestDto) throws Exception {
         CommentResponseDto responseDto = null;
         try {
             responseDto = new CommentResponseDto(commentService.save(requestDto));

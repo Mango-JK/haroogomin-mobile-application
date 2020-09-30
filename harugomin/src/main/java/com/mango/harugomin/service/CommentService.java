@@ -36,7 +36,10 @@ public class CommentService {
     @Transactional
     public void updateComment(Long commentId, CommentUpdateRequestDto requestDto) {
         Comment comment = commentRepository.findById(commentId).get();
+        Post post = postService.findById(requestDto.getPostId()).get();
+        post.getComments().remove(comment);
         comment.update(requestDto.getContent());
+        post.getComments().add(comment);
     }
 
     @Transactional
