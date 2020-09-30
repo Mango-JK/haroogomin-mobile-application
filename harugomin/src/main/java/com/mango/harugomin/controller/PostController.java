@@ -1,11 +1,15 @@
 package com.mango.harugomin.controller;
 
+import com.google.gson.JsonObject;
+import com.mango.harugomin.domain.entity.Hashtag;
 import com.mango.harugomin.domain.entity.Post;
 import com.mango.harugomin.dto.PostResponseDto;
 import com.mango.harugomin.dto.PostSaveRequestDto;
 import com.mango.harugomin.dto.PostUpdateRequestDto;
+import com.mango.harugomin.dto.PostsHomeResponseDto;
 import com.mango.harugomin.service.HashtagService;
 import com.mango.harugomin.service.PostService;
+import com.mango.harugomin.service.S3Service;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +20,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -29,6 +38,7 @@ public class PostController {
 
     private final PostService postService;
     private final HashtagService hashtagService;
+    private final S3Service s3Service;
 
     /**
      * 1. 고민글 작성
@@ -96,6 +106,7 @@ public class PostController {
     @GetMapping(value = "/posts/{postId}")
     public ResponseEntity findOne(@PathVariable("postId") Long postId) {
         Post post = postService.findById(postId).get();
+        postService.postHits(postId);
         if (post == null) {
             return new ResponseEntity(post, HttpStatus.NOT_FOUND);
         }
@@ -135,28 +146,72 @@ public class PostController {
     }
 
     /**
-     * 8. 두번째 탭
+     * 8. Home Tab List 출력
      */
-//    @ApiOperation("hago Second Tab")
-//    @GetMapping(value = "/posts/home")
-//    public ResponseEntity homeView(@RequestParam("tagName") String tagName) {
-//        PageRequest tagRequest = PageRequest.of(0, 12, Sort.by("posting_count"));
-//        Object[] topTags = hashtagService.findAllTags(tagRequest).get().toArray();
-//        for(Object tags : topTags) {
-//            log.info(":::: " + tags.toString());
-//        }
-//
-//
-//        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("created_date").descending());
-//        List<Post> story = postService.findAllPosts(pageRequest).getContent();
-//
-//        for(Post p : story) {
-//            log.info(":::: " + p.getTitle() + ", " + p.getContent());
-//        }
-//
-//
-//
-//        return new ResponseEntity(HttpStatus.NOT_FOUND);
-//    }
+    @ApiOperation("hago Second Tab")
+    @GetMapping(value = "/posts/home/{tagName}")
+    public ResponseEntity homeView(@PathVariable("tagName") String tagName, int pageNum) throws Exception {
+        PostsHomeResponseDto responseDtos = null;
 
+        try {
+            PageRequest tagRequest = PageRequest.of(0, 12, Sort.by("postingCount").descending());
+            List<Hashtag> topTags = hashtagService.findAllTags(tagRequest).getContent();
+
+            LocalDateTime currentTime = LocalDateTime.now();
+            PageRequest storyRequest = PageRequest.of(0, 13, Sort.by("createdDate"));
+            List<Post> data = postService.findAllPosts(storyRequest).getContent();
+            List<Post> story = new ArrayList<>();
+            for (Post post : data) {
+                Duration duration = Duration.between(post.getCreatedDate(), currentTime);
+                long minute = duration.getSeconds();
+
+                if (duration.getSeconds() >= 86400) {
+                    postService.postToHistory(post.getPostId());
+                } else
+                    story.add(post);
+                if (story.size() > 9)
+                    break;
+            }
+
+            PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
+            List<Post> postLists = postService.findAllByHashtag(tagName, pageRequest).getContent();
+            responseDtos = new PostsHomeResponseDto(topTags, story, postLists);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(responseDtos, HttpStatus.OK);
+    }
+
+    /**
+     * 9. 메인 고민글 3개 출력
+     */
+    @ApiOperation("Main 고민")
+    @GetMapping(value = "/posts/main")
+    public ResponseEntity mainView() throws Exception {
+        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by("hits").descending());
+        Page<Post> result = null;
+        try {
+            result = postService.findAllPosts(pageRequest);
+        } catch (Exception e) {
+            return new ResponseEntity(result, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    /**
+     * 10. 고민글 사진 업로드
+     */
+    @ApiOperation("고민글 사진 업로드")
+    @PostMapping(value = "/posts/image")
+    public String uploadPostImage(MultipartFile file) throws IOException {
+        try {
+            String imgPath = S3Service.CLOUD_FRONT_DOMAIN_NAME + s3Service.upload(null, file);
+            JsonObject data = new JsonObject();
+            data.addProperty("imgPath", imgPath);
+            data.addProperty("status", String.valueOf(HttpStatus.OK));
+            return data.toString();
+        } catch (Exception e) {
+            return HttpStatus.FORBIDDEN.toString();
+        }
+    }
 }
