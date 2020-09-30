@@ -105,8 +105,8 @@ public class PostController {
     @ApiOperation("고민글 상세 조회")
     @GetMapping(value = "/posts/{postId}")
     public ResponseEntity findOne(@PathVariable("postId") Long postId) {
-        Post post = postService.findById(postId).get();
         postService.postHits(postId);
+        Post post = postService.findById(postId).get();
         if (post == null) {
             return new ResponseEntity(post, HttpStatus.NOT_FOUND);
         }

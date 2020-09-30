@@ -96,9 +96,10 @@ public class UserController {
      */
     @ApiOperation("토큰 검증")
     @PostMapping("/users/check")
-    public Object checkToken(@RequestParam String jwtToken) {
+    public Object checkToken( HttpServletRequest request) {
         log.info("UserController : checkToken");
 
+        String jwtToken = request.getHeader("Authorization");
         Object result = null;
 
         if (jwtService.isUsable(jwtToken)) {
