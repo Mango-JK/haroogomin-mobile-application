@@ -1,5 +1,6 @@
 package com.mango.harugomin.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +21,7 @@ public class History extends BaseTimeEntity {
     @Column(name = "post_id")
     private Long postId;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;
