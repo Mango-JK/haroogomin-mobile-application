@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @CrossOrigin(origins = "*")
@@ -36,7 +37,7 @@ public class UserController {
      */
     @ApiOperation("카카오 로그인")
     @PostMapping("/users/login/kakao")
-    public String kakaoLogin(@RequestParam String accessToken) {
+    public ResponseEntity kakaoLogin(@RequestParam String accessToken, HttpServletResponse response) {
         log.info("POST :: /user/login/kakao");
 
         JsonNode json = kakaoAPIService.getKaKaoUserInfo(accessToken);
@@ -46,9 +47,10 @@ public class UserController {
             result = kakaoAPIService.redirectToken(json); // 토큰 발행
         } catch (Exception e) {
             log.error(e + "");
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-
-        return result;
+        response.setHeader("jwt-auth-token", result);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
@@ -56,7 +58,7 @@ public class UserController {
      */
     @ApiOperation("네이버 로그인")
     @PostMapping("/users/login/naver")
-    public String naverLogin(@RequestParam String accessToken) {
+    public ResponseEntity naverLogin(@RequestParam String accessToken, HttpServletResponse response) {
         log.info("POST :: /user/login/naver");
 
         JsonNode json = naverAPIService.getNaverUserInfo(accessToken);
@@ -66,9 +68,10 @@ public class UserController {
             result = naverAPIService.redirectToken(json);
         } catch (Exception e) {
             log.error(e + "");
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-
-        return result;
+        response.setHeader("jwt-auth-token", result);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**

@@ -1,6 +1,5 @@
 package com.mango.harugomin.controller;
 
-import com.mango.harugomin.domain.entity.Hashtag;
 import com.mango.harugomin.domain.entity.Post;
 import com.mango.harugomin.dto.PostResponseDto;
 import com.mango.harugomin.dto.PostSaveRequestDto;
@@ -138,26 +137,26 @@ public class PostController {
     /**
      * 8. 두번째 탭
      */
-    @ApiOperation("hago Second Tab")
-    @GetMapping(value = "/posts/home")
-    public ResponseEntity homeView(@RequestParam("tagName") String tagName) {
-        PageRequest tagRequest = PageRequest.of(0, 12, Sort.by("posting_count"));
-        Object[] topTags = hashtagService.findAllTags(tagRequest).get().toArray();
-        for(Object tags : topTags) {
-            log.info(":::: " + tags.toString());
-        }
-
-
-        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("created_date").descending());
-        List<Post> story = postService.findAllPosts(pageRequest).getContent();
-
-        for(Post p : story) {
-            log.info(":::: " + p.getTitle() + ", " + p.getContent());
-        }
-
-
-
-        return new ResponseEntity(HttpStatus.NOT_FOUND);
-    }
+//    @ApiOperation("hago Second Tab")
+//    @GetMapping(value = "/posts/home")
+//    public ResponseEntity homeView(@RequestParam("tagName") String tagName) {
+//        PageRequest tagRequest = PageRequest.of(0, 12, Sort.by("posting_count"));
+//        Object[] topTags = hashtagService.findAllTags(tagRequest).get().toArray();
+//        for(Object tags : topTags) {
+//            log.info(":::: " + tags.toString());
+//        }
+//
+//
+//        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("created_date").descending());
+//        List<Post> story = postService.findAllPosts(pageRequest).getContent();
+//
+//        for(Post p : story) {
+//            log.info(":::: " + p.getTitle() + ", " + p.getContent());
+//        }
+//
+//
+//
+//        return new ResponseEntity(HttpStatus.NOT_FOUND);
+//    }
 
 }

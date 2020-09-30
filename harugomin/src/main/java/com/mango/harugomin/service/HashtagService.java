@@ -28,12 +28,13 @@ public class HashtagService {
         return hashtagRepository.findByTagName(tagName);
     }
 
+    @Transactional
     public void countUp(long tagId) {
         hashtagRepository.countUp(tagId);
     }
 
     @Transactional(readOnly = true)
     public Page<Hashtag> findAllTags(Pageable pageable) {
-        return hashtagRepository.findAllTags(pageable);
+        return hashtagRepository.findAll(pageable);
     }
 }

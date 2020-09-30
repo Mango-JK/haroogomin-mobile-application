@@ -27,5 +27,5 @@ public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
     @Query(value = "delete from user_hashtag where user_id = ?1 ", nativeQuery = true)
     void deleteByUserId(Long userId);
 
-    Page<Hashtag> findAllTags(Pageable pageable);
+    Page<Hashtag> findAll(Pageable pageable);
 }
