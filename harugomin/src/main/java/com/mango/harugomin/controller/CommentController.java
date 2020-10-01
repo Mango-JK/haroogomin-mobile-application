@@ -1,13 +1,14 @@
 package com.mango.harugomin.controller;
 
+import com.mango.harugomin.domain.entity.Comment;
+import com.mango.harugomin.domain.entity.Liker;
 import com.mango.harugomin.dto.CommentResponseDto;
 import com.mango.harugomin.dto.CommentSaveRequestDto;
 import com.mango.harugomin.dto.CommentUpdateRequestDto;
 import com.mango.harugomin.service.CommentService;
+import com.mango.harugomin.service.LikerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
 
     private final CommentService commentService;
+    private final LikerService likerService;
 
     /**
      * 1. 댓글 작성
@@ -67,13 +69,26 @@ public class CommentController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-//    /**
-//     * 4. 댓글 좋아요 or 취소
-//     */
-//    @ApiOperation("댓글 좋아요")
-//    @DeleteMapping(value = "/comments/like")
-//    public ResponseEntity likeComment(@RequestParam("commentId") Long commentId, @RequestParam("userId") Long userId) throws Exception {
-//
-//    }
+    /**
+     * 4. 댓글 좋아요 or 취소
+     */
+    @ApiOperation("댓글 좋아요")
+    @PutMapping(value = "/comments/like")
+    public ResponseEntity likeComment(@RequestParam("commentId") Long commentId, @RequestParam("userId") Long userId) throws Exception {
+        Comment comment = commentService.findById(commentId).get();
+        try {
+            if (likerService.findLiker(commentId, userId) > 0) {
+                likerService.deteleLike(commentId, userId);
+                commentService.likeUpdate(commentId, -1);
+            } else {
+                Liker liker = new Liker(userId, comment);
+                likerService.save(liker);
+                commentService.likeUpdate(commentId, 1);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(HttpStatus.OK);
+    }
 
 }
