@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
@@ -26,4 +27,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Modifying(clearAutomatically = true)
     @Query(value = "update post set hits = hits + 1 where post_id = ?1 ", nativeQuery = true)
     void postHits(Long postId);
+
+    Optional<List<Post>> findAllByUserUserId(Long userId);
 }

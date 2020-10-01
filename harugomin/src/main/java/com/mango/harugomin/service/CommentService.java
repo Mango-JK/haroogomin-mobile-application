@@ -6,14 +6,22 @@ import com.mango.harugomin.domain.repository.CommentRepository;
 import com.mango.harugomin.dto.CommentSaveRequestDto;
 import com.mango.harugomin.dto.CommentUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;
     private final PostService postService;
+
+    public Optional<Comment> findById(Long commentId){
+        return commentRepository.findById(commentId);
+    }
 
     @Transactional
     public Comment save(CommentSaveRequestDto requestDto) {
@@ -48,5 +56,15 @@ public class CommentService {
         Post post = postService.findById(comment.getPost().getPostId()).get();
         post.getComments().remove(comment);
         commentRepository.delete(comment);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Comment> pagingComment(Long postId, PageRequest pageRequest){
+        return commentRepository.findAllByPostPostId(postId, pageRequest);
+    }
+
+    @Transactional
+    public void likeUpdate(Long commentId, int value) {
+        commentRepository.likeUpdate(commentId, value);
     }
 }
