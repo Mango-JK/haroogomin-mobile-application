@@ -3,9 +3,7 @@ package com.mango.harugomin.controller;
 import com.google.gson.JsonObject;
 import com.mango.harugomin.domain.entity.Hashtag;
 import com.mango.harugomin.domain.entity.Post;
-import com.mango.harugomin.dto.PostResponseDto;
 import com.mango.harugomin.dto.PostSaveRequestDto;
-import com.mango.harugomin.dto.PostUpdateRequestDto;
 import com.mango.harugomin.dto.PostsHomeResponseDto;
 import com.mango.harugomin.service.HashtagService;
 import com.mango.harugomin.service.PostService;
@@ -41,28 +39,16 @@ public class PostController {
     private final S3Service s3Service;
 
     /**
-     * 1. 고민글 작성
+     * 1. 고민글 작성 or 수정
      */
-    @ApiOperation("고민글 작성")
+    @ApiOperation("고민글 작성 or 수정")
     @PostMapping(value = "/posts")
-    public ResponseEntity writePost(@RequestBody PostSaveRequestDto requestDto) throws Exception {
-        PostResponseDto responseDto = null;
+    public ResponseEntity updatePost(@RequestBody PostSaveRequestDto requestDto) throws Exception {
         try {
-            responseDto = new PostResponseDto(postService.save(requestDto));
-        } catch (Exception e) {
-            return new ResponseEntity(responseDto, HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity(responseDto, HttpStatus.OK);
-    }
-
-    /**
-     * 2. 고민글 수정
-     */
-    @ApiOperation("고민글 수정")
-    @PutMapping(value = "/posts/{postId}")
-    public ResponseEntity updatePost(@PathVariable("postId") Long postId, @RequestBody PostUpdateRequestDto requestDto) throws Exception {
-        try {
-            postService.updatePost(postId, requestDto);
+            if (requestDto.getPostId() == -1) {
+                postService.save(requestDto);
+            } else
+                postService.updatePost(requestDto);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
@@ -70,7 +56,7 @@ public class PostController {
     }
 
     /**
-     * 3. 고민글 삭제 (History로 이동)
+     * 2. 고민글 삭제 (History로 이동)
      */
     @ApiOperation("고민글 삭제")
     @DeleteMapping(value = "/posts/{postId}")
@@ -84,7 +70,7 @@ public class PostController {
     }
 
     /**
-     * 4. 고민글 전체 조회
+     * 3. 고민글 전체 조회
      */
     @ApiOperation("고민글 전체 조회")
     @GetMapping(value = "/posts")
@@ -100,7 +86,7 @@ public class PostController {
     }
 
     /**
-     * 5. 고민글 상세 조회
+     * 4. 고민글 상세 조회
      */
     @ApiOperation("고민글 상세 조회")
     @GetMapping(value = "/posts/{postId}")
@@ -114,7 +100,7 @@ public class PostController {
     }
 
     /**
-     * 6. 고민글 해시태그별 조회
+     * 5. 고민글 해시태그별 조회
      */
     @ApiOperation("고민글 해시태그별 조회")
     @GetMapping(value = "/posts/hashtag/{tagName}")
@@ -130,7 +116,7 @@ public class PostController {
     }
 
     /**
-     * 7. 고민글 검색
+     * 6. 고민글 검색
      */
     @ApiOperation("고민글 통합 검색")
     @GetMapping(value = "/posts/search/{keyword}")
@@ -146,7 +132,7 @@ public class PostController {
     }
 
     /**
-     * 8. Home Tab List 출력
+     * 7. Home Tab List 출력
      */
     @ApiOperation("hago Second Tab")
     @GetMapping(value = "/posts/home/{tagName}")
@@ -183,7 +169,7 @@ public class PostController {
     }
 
     /**
-     * 9. 메인 고민글 3개 출력
+     * 8. 메인 고민글 3개 출력
      */
     @ApiOperation("Main 고민")
     @GetMapping(value = "/posts/main")
@@ -199,7 +185,7 @@ public class PostController {
     }
 
     /**
-     * 10. 고민글 사진 업로드
+     * 9. 고민글 사진 업로드
      */
     @ApiOperation("고민글 사진 업로드")
     @PostMapping(value = "/posts/image")

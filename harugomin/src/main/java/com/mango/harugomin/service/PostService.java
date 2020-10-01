@@ -7,7 +7,6 @@ import com.mango.harugomin.domain.entity.User;
 import com.mango.harugomin.domain.repository.HistoryRepository;
 import com.mango.harugomin.domain.repository.PostRepository;
 import com.mango.harugomin.dto.PostSaveRequestDto;
-import com.mango.harugomin.dto.PostUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -51,8 +50,8 @@ public class PostService {
      * 2. 고민글 수정
      */
     @Transactional
-    public void updatePost(Long postId, PostUpdateRequestDto requestDto) {
-        Post post = postRepository.findById(postId).get();
+    public void updatePost(PostSaveRequestDto requestDto) {
+        Post post = postRepository.findById(requestDto.getPostId()).get();
         post.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getTagName(), requestDto.getPostImage());
     }
 
