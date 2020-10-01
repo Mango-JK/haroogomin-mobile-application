@@ -23,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @Slf4j
@@ -38,6 +40,7 @@ public class UserController {
     private final JwtService jwtService;
     private final S3Service s3Service;
     private final HistoryService historyService;
+    private final PostService postService;
 
     /**
      * 1. 카카오 로그인
@@ -96,10 +99,9 @@ public class UserController {
      */
     @ApiOperation("토큰 검증")
     @PostMapping("/users/check")
-    public Object checkToken(@RequestParam String jwtToken2) {
+    public Object checkToken(@RequestParam String jwtToken) {
         log.info("UserController : checkToken");
 
-        String jwtToken = jwtToken2;
         Object result = null;
 
         if (jwtService.isUsable(jwtToken)) {
@@ -126,6 +128,9 @@ public class UserController {
         return data.toString();
     }
 
+    /**
+     * 5. 프로필 업데이트
+     */
     @ApiOperation("유저 프로필 업데이트 [사진, 닉네임, 연령대, 해시태그]")
     @PutMapping(value = "/users")
     public ResponseEntity<UserResponseDto> updateUserProfile(@RequestBody UserUpdateRequestDto requestDto) {
@@ -164,13 +169,24 @@ public class UserController {
 //    @ApiOperation("유저 삭제")
 //    @GetMapping(value = "/users/{userId}")
 //    public ResponseEntity<Long> deleteUser(@PathVariable("userId") Long userId) {
-//        Long deleteUserId = userService.deleteUser(userId);
+//        // 글 삭제
+//
+//        // 댓글 삭제
 //
 //        return new ResponseEntity<>(deleteUserId, HttpStatus.OK);
 //    }
 
     /**
-     * 9. 내 글 보관함
+     * 9. 현재 게시중인 글
+     */
+    @ApiOperation("현재 게시중인 고민글")
+    @GetMapping(value = "/users/posts/{userId}")
+    public Optional<List<Post>> myCurrentPosting(@PathVariable("userId") Long userId) throws Exception{
+        return postService.findAllByUserId(userId);
+    }
+
+    /**
+     * 10. 내 글 보관함
      */
     @ApiOperation("내 글 보관함")
     @GetMapping(value = "/users/history/{userId}")

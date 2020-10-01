@@ -1,10 +1,12 @@
 package com.mango.harugomin.controller;
 
 import com.google.gson.JsonObject;
+import com.mango.harugomin.domain.entity.Comment;
 import com.mango.harugomin.domain.entity.Hashtag;
 import com.mango.harugomin.domain.entity.Post;
 import com.mango.harugomin.dto.PostSaveRequestDto;
 import com.mango.harugomin.dto.PostsHomeResponseDto;
+import com.mango.harugomin.service.CommentService;
 import com.mango.harugomin.service.HashtagService;
 import com.mango.harugomin.service.PostService;
 import com.mango.harugomin.service.S3Service;
@@ -36,6 +38,7 @@ public class PostController {
 
     private final PostService postService;
     private final HashtagService hashtagService;
+    private final CommentService commentService;
     private final S3Service s3Service;
 
     /**
@@ -90,12 +93,20 @@ public class PostController {
      */
     @ApiOperation("고민글 상세 조회")
     @GetMapping(value = "/posts/{postId}")
-    public ResponseEntity findOne(@PathVariable("postId") Long postId) {
-        postService.postHits(postId);
+    public ResponseEntity findOne(@PathVariable("postId") Long postId, @RequestParam int pageNum) {
+        PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").ascending());
+        Page<Comment> result = null;
+        result = commentService.pagingComment(postId, pageRequest);
+
         Post post = postService.findById(postId).get();
         if (post == null) {
             return new ResponseEntity(post, HttpStatus.NOT_FOUND);
         }
+
+        postService.postHits(postId);
+        post.getComments().clear();
+        post.addCommentList(result.getContent());
+
         return new ResponseEntity(post, HttpStatus.OK);
     }
 
@@ -179,9 +190,9 @@ public class PostController {
         try {
             result = postService.findAllPosts(pageRequest);
         } catch (Exception e) {
-            return new ResponseEntity(result, HttpStatus.NOT_FOUND);
+            return new ResponseEntity(result.getContent(), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(result.getContent(), HttpStatus.OK);
     }
 
     /**

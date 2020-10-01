@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -115,5 +116,12 @@ public class PostService {
         History history = new History(targetPost);
         historyRepository.save(history);
         postRepository.delete(targetPost);
+    }
+
+    /**
+     * 10. 현재 게시중인 글
+     */
+    public Optional<List<Post>> findAllByUserId(Long userId) {
+        return postRepository.findAllByUserUserId(userId);
     }
 }
