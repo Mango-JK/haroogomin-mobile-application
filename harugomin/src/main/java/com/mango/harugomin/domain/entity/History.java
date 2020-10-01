@@ -1,9 +1,11 @@
 package com.mango.harugomin.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,12 +15,13 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "post")
+@Table(name = "history")
 public class History extends BaseTimeEntity {
     @Id
     @Column(name = "post_id")
     private Long postId;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -55,5 +58,6 @@ public class History extends BaseTimeEntity {
         this.comments = post.getComments();
         this.hits = post.getHits();
         this.postLikes = post.getPostLikes();
+        this.setModifiedDate(LocalDateTime.now());
     }
 }

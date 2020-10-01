@@ -114,7 +114,6 @@ public class NaverAPIService {
                     .userId(id)
                     .ageRange(Integer.parseInt(ageRange))
                     .point(0)
-                    .enablePosting(1)
                     .build();
 
             user = userService.saveUser(newUser);

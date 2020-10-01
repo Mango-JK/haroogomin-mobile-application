@@ -1,6 +1,9 @@
 package com.mango.harugomin.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.google.gson.JsonObject;
+import com.mango.harugomin.domain.entity.History;
+import com.mango.harugomin.domain.entity.Post;
 import com.mango.harugomin.domain.entity.User;
 import com.mango.harugomin.dto.UserResponseDto;
 import com.mango.harugomin.dto.UserUpdateRequestDto;
@@ -10,13 +13,15 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @CrossOrigin(origins = "*")
@@ -32,26 +37,33 @@ public class UserController {
     private final NaverAPIService naverAPIService;
     private final JwtService jwtService;
     private final S3Service s3Service;
+    private final HistoryService historyService;
 
     /**
      * 1. 카카오 로그인
      */
     @ApiOperation("카카오 로그인")
     @PostMapping("/users/login/kakao")
-    public ResponseEntity kakaoLogin(HttpServletRequest request) {
+    @ResponseBody
+    public String kakaoLogin(HttpServletRequest request) {
         log.info("POST :: /user/login/kakao");
 
         String accessToken = request.getHeader("accessToken");
         JsonNode json = kakaoAPIService.getKaKaoUserInfo(accessToken);
 
         String result = null;
+        JsonObject data = new JsonObject();
         try {
             result = kakaoAPIService.redirectToken(json); // 토큰 발행
         } catch (Exception e) {
             log.error(e + "");
-            return new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+            data.addProperty("jwt", result);
+            data.addProperty("status", String.valueOf(HttpStatus.BAD_REQUEST));
+            return data.toString();
         }
-        return new ResponseEntity(result, HttpStatus.OK);
+        data.addProperty("jwt", result);
+        data.addProperty("status", String.valueOf(HttpStatus.OK));
+        return data.toString();
     }
 
     /**
@@ -59,20 +71,24 @@ public class UserController {
      */
     @ApiOperation("네이버 로그인")
     @PostMapping("/users/login/naver")
-    public ResponseEntity naverLogin(@RequestParam String accessToken, HttpServletResponse response) {
+    public String naverLogin(HttpServletRequest request) {
         log.info("POST :: /user/login/naver");
 
+        String accessToken = request.getHeader("accessToken");
         JsonNode json = naverAPIService.getNaverUserInfo(accessToken);
 
         String result = null;
+        JsonObject data = new JsonObject();
         try {
             result = naverAPIService.redirectToken(json);
         } catch (Exception e) {
-            log.error(e + "");
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            data.addProperty("jwt", result);
+            data.addProperty("status", String.valueOf(HttpStatus.BAD_REQUEST));
+            return data.toString();
         }
-        response.setHeader("jwt-auth-token", result);
-        return new ResponseEntity(HttpStatus.OK);
+        data.addProperty("jwt", result);
+        data.addProperty("status", String.valueOf(HttpStatus.OK));
+        return data.toString();
     }
 
     /**
@@ -80,9 +96,10 @@ public class UserController {
      */
     @ApiOperation("토큰 검증")
     @PostMapping("/users/check")
-    public Object checkToken(@RequestParam String jwtToken) {
+    public Object checkToken(@RequestParam String jwtToken2) {
         log.info("UserController : checkToken");
 
+        String jwtToken = jwtToken2;
         Object result = null;
 
         if (jwtService.isUsable(jwtToken)) {
@@ -97,21 +114,21 @@ public class UserController {
      */
     @ApiOperation("유저 프로필 사진 업데이트")
     @PutMapping(value = "/users/profileImage/{id}")
-    public String updateUserProfile(@PathVariable(value = "id") Long userId, MultipartFile file) throws IOException {
+    public String updateUserProfile(@PathVariable(value = "id") Long userId, @RequestParam MultipartFile file) throws IOException {
         User user = userService.findById(userId);
         String imgPath = S3Service.CLOUD_FRONT_DOMAIN_NAME + s3Service.upload(user.getProfileImage(), file);
         user.updateUserImage(imgPath);
         userService.saveUser(user);
+        JsonObject data = new JsonObject();
+        data.addProperty("imgPath", imgPath);
+        data.addProperty("status", String.valueOf(HttpStatus.OK));
 
-        return imgPath;
+        return data.toString();
     }
 
-    /**
-     * 5. 유저 프로필 업데이트
-     */
     @ApiOperation("유저 프로필 업데이트 [사진, 닉네임, 연령대, 해시태그]")
     @PutMapping(value = "/users")
-    public ResponseEntity<UserResponseDto> updateUserProfile(UserUpdateRequestDto requestDto) {
+    public ResponseEntity<UserResponseDto> updateUserProfile(@RequestBody UserUpdateRequestDto requestDto) {
         userService.updateUser(requestDto);
         User user = userService.findById(requestDto.getUserId());
         return new ResponseEntity<>(new UserResponseDto(user), HttpStatus.OK);
@@ -122,7 +139,7 @@ public class UserController {
      */
     @ApiOperation("유저 해시태그 업데이트")
     @PutMapping(value = "/users/hashtag/{id}")
-    public ResponseEntity<UserResponseDto> updateUserHashtag(@PathVariable(value = "id") Long userId, String[] hashtags) {
+    public ResponseEntity<UserResponseDto> updateUserHashtag(@PathVariable(value = "id") Long userId, @RequestParam String[] hashtags) {
 
         User user = userService.updateUserHashtag(userId, hashtags);
 
@@ -134,10 +151,11 @@ public class UserController {
      */
     @ApiOperation("유저 닉네임 중복검사")
     @GetMapping(value = "/users/check/{nickname}")
-    public ResponseEntity<Boolean> duplicationCheck(@PathVariable("nickname") String nickname) {
-        boolean nicknameDuplicationCheckStatus = userService.duplicationCheck(nickname);
+    public ResponseEntity<String> duplicationCheck(@PathVariable("nickname") String nickname) {
+        JsonObject data = new JsonObject();
+        data.addProperty("flag", userService.duplicationCheck(nickname));
 
-        return new ResponseEntity<>(nicknameDuplicationCheckStatus, HttpStatus.OK);
+        return new ResponseEntity<>(data.toString(), HttpStatus.OK);
     }
 
 //    /**
@@ -150,6 +168,22 @@ public class UserController {
 //
 //        return new ResponseEntity<>(deleteUserId, HttpStatus.OK);
 //    }
+
+    /**
+     * 9. 내 글 보관함
+     */
+    @ApiOperation("내 글 보관함")
+    @GetMapping(value = "/users/history/{userId}")
+    public ResponseEntity myHistoryPost(@PathVariable("userId") Long userId, @RequestParam int pageNum) throws Exception {
+        PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
+        Page<History> result = null;
+        try {
+            result = historyService.myHistoryPost(userId, pageRequest);
+        } catch (Exception e) {
+            return new ResponseEntity(result, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
 
     @ApiOperation("(SERVER_TEST용)카카오 AccessToken 발급받기")
