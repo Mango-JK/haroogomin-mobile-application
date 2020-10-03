@@ -83,9 +83,9 @@ public class PostController {
         try {
             result = postService.findAllPosts(pageRequest);
         } catch (Exception e) {
-            return new ResponseEntity(result, HttpStatus.NOT_FOUND);
+            return new ResponseEntity(result.getContent(), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(result.getContent(), HttpStatus.OK);
     }
 
     /**
@@ -121,13 +121,13 @@ public class PostController {
         try {
             result = postService.findAllByHashtag(tagName, pageRequest);
         } catch (Exception e) {
-            return new ResponseEntity(result, HttpStatus.NOT_FOUND);
+            return new ResponseEntity(result.getContent(), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(result.getContent(), HttpStatus.OK);
     }
 
     /**
-     * 6. 고민글 검색
+     * 6. 고민글 통합 검색
      */
     @ApiOperation("고민글 통합 검색")
     @GetMapping(value = "/posts/search/{keyword}")
@@ -137,9 +137,9 @@ public class PostController {
         try {
             result = postService.searchAllPosts(keyword, pageRequest);
         } catch (Exception e) {
-            return new ResponseEntity(result, HttpStatus.NOT_FOUND);
+            return new ResponseEntity(result.getContent(), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(result, HttpStatus.OK);
+        return new ResponseEntity(result.getContent(), HttpStatus.OK);
     }
 
     /**
