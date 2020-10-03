@@ -99,12 +99,12 @@ public class UserController {
      */
     @ApiOperation("토큰 검증")
     @PostMapping("/users/check")
-    public Object checkToken(@RequestParam String jwtToken) {
+    public Object checkToken(HttpServletRequest request) {
         log.info("UserController : checkToken");
 
         Object result = null;
 
-        if (jwtService.isUsable(jwtToken)) {
+        if (jwtService.isUsable(request.getHeader("jwt"))) {
             result = jwtService.get("user");
         }
 
@@ -196,9 +196,9 @@ public class UserController {
         try {
             result = historyService.myHistoryPost(userId, pageRequest);
         } catch (Exception e) {
-            return new ResponseEntity(result, HttpStatus.NOT_FOUND);
+            return new ResponseEntity(result.getContent(), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(result.getContent(), HttpStatus.OK);
     }
 
 
@@ -212,7 +212,6 @@ public class UserController {
         log.info("My AccessToken : " + AccessToken);
         return "index";
     }
-
 
     @ApiOperation("(SERVER_TEST용)네이버 AccessToken 발급받기")
     @GetMapping(value = "/users/login/naver")
