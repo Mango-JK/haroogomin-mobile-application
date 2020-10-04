@@ -6,15 +6,11 @@ import com.mango.harugomin.domain.entity.UserHashtag;
 import com.mango.harugomin.domain.repository.UserHashtagRepository;
 import com.mango.harugomin.domain.repository.UserRepository;
 import com.mango.harugomin.dto.UserUpdateRequestDto;
-import com.mango.harugomin.dto.UserUpdateResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.asm.Advice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -33,10 +29,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @Transactional(readOnly = true)
-    public User findById(long userId) {
-        User user = userRepository.findByUserId(userId);
-        return user;
+    public Optional<User> findById(long userId) {
+        return userRepository.findById(userId);
     }
 
     /**
@@ -55,7 +49,7 @@ public class UserService {
      */
     @Transactional
     public User updateUserHashtag(Long userId, String[] hashtags) {
-        User user = findById(userId);
+        User user = findById(userId).get();
         userHashtagRepository.deleteByUserId(userId);
         user.initHashtag();
 
@@ -77,28 +71,12 @@ public class UserService {
      */
     @Transactional
     public void updateUser(UserUpdateRequestDto requestDto) {
-        User user = findById(requestDto.getUserId());
+        User user = findById(requestDto.getUserId()).get();
         user.updateUserProfile(requestDto);
 
         user = updateUserHashtag(requestDto.getUserId(), requestDto.getUserHashtags());
 
         userRepository.save(user);
-    }
-
-    /**
-     * 댓글 작성 시, User Point 1 증가
-     */
-    @Transactional
-    public int upOnePoint(Long userId) {
-        return userRepository.upOnePoint(userId);
-    }
-
-    /**
-     * 포인트 사용 시, User Point 3 감소
-     */
-    @Transactional
-    public int useThreePoint(Long userId) {
-        return userRepository.useThreePoint(userId);
     }
 
 }

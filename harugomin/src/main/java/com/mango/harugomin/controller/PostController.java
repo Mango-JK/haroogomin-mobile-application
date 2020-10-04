@@ -60,7 +60,7 @@ public class PostController {
     /**
      * 2. 고민글 삭제 (History로 이동)
      */
-    @ApiOperation("고민글 삭제")
+    @ApiOperation("고민글 삭제 (History로 이동)")
     @DeleteMapping(value = "/posts/{postId}")
     public ResponseEntity deletePost(@PathVariable("postId") Long postId) throws Exception {
         try {
@@ -77,12 +77,12 @@ public class PostController {
     @ApiOperation("고민글 전체 조회")
     @GetMapping(value = "/posts")
     public ResponseEntity findAllPosts(@RequestParam("pageNum") int pageNum) throws Exception {
-        PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
+        PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").ascending());
         Page<Post> result = null;
         try {
             result = postService.findAllPosts(pageRequest);
         } catch (Exception e) {
-            return new ResponseEntity(result.getContent(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(result.getContent(), HttpStatus.OK);
     }
@@ -92,27 +92,18 @@ public class PostController {
      */
     @ApiOperation("고민글 상세 조회")
     @GetMapping(value = "/posts/{postId}")
-    public ResponseEntity findOne(@PathVariable("postId") Long postId, @RequestParam int pageNum) {
-        PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").ascending());
-        Page<Comment> result = null;
-        result = commentService.pagingComment(postId, pageRequest);
-
+    public ResponseEntity findOne(@PathVariable("postId") Long postId) {
         Post post = postService.findById(postId).get();
         if (post == null) {
             return new ResponseEntity(post, HttpStatus.NOT_FOUND);
         }
-
-        postService.postHits(postId);
-        post.getComments().clear();
-        post.addCommentList(result.getContent());
-
         return new ResponseEntity(post, HttpStatus.OK);
     }
 
     /**
      * 5.(Home) - 인기순 해시태그 리스트
      */
-    @ApiOperation("(HOME) - 인기순 해시태그 리스트")
+    @ApiOperation("(Home) - 인기순 해시태그 리스트")
     @GetMapping(value = "/posts/home/hashtag")
     public ResponseEntity homeBestHashtag() throws Exception {
         PageRequest tagRequest = PageRequest.of(0, 12, Sort.by("postingCount").descending());
@@ -128,7 +119,7 @@ public class PostController {
     /**
      * 6. (Home) - 스토리
      */
-    @ApiOperation("(HOME) - 스토리")
+    @ApiOperation("(Home) - 스토리")
     @GetMapping(value = "/posts/home/story")
     public ResponseEntity homeStory() throws Exception {
         List<Post> story = null;
@@ -162,6 +153,9 @@ public class PostController {
     @ApiOperation("(HOME) - 태그별 새 고민글")
     @GetMapping(value = "/posts/home/{tagName}")
     public ResponseEntity homePosting(@PathVariable("tagName") String tagName, @RequestParam int pageNum) throws Exception {
+        if(tagName.equals("전체")){
+            return findAllPosts(pageNum);
+        }
         PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").ascending());
         Page<Post> result = null;
         try {
@@ -191,7 +185,7 @@ public class PostController {
     /**
      * 9. 메인 고민글 3개 출력
      */
-    @ApiOperation("(Main) 고민글 3개 출력")
+    @ApiOperation("메인 고민글 3개 출력")
     @GetMapping(value = "/posts/main")
     public ResponseEntity mainView() throws Exception {
         PageRequest pageRequest = PageRequest.of(0, 3, Sort.by("hits").descending());

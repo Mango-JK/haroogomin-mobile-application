@@ -31,7 +31,6 @@ public class Comment extends BaseTimeEntity {
     @Column(name = "profile_image")
     private String profileImage;
 
-    @JsonBackReference
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "post_id")
     private Post post;

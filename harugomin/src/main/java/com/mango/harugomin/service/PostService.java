@@ -31,7 +31,7 @@ public class PostService {
      */
     @Transactional
     public Post save(PostSaveRequestDto requestDto) {
-        User user = userService.findById(requestDto.getUserId());
+        User user = userService.findById(requestDto.getUserId()).get();
         Hashtag hashtag = hashtagService.findByTagName(requestDto.getTagName());
         hashtagService.countUp(hashtag.getTagId());
 
@@ -65,7 +65,6 @@ public class PostService {
         postRepository.delete(deleteTargetPost);
     }
 
-
     /**
      * 4. 모든 고민글 조회
      */
@@ -73,7 +72,6 @@ public class PostService {
     public Page<Post> findAllPosts(Pageable pageable) {
         return postRepository.findAll(pageable);
     }
-
 
     /**
      * 5. 고민글 상세 조회

@@ -2,6 +2,7 @@ package com.mango.harugomin.controller;
 
 import com.mango.harugomin.domain.entity.Comment;
 import com.mango.harugomin.domain.entity.Liker;
+import com.mango.harugomin.domain.entity.Post;
 import com.mango.harugomin.dto.CommentResponseDto;
 import com.mango.harugomin.dto.CommentSaveRequestDto;
 import com.mango.harugomin.dto.CommentUpdateRequestDto;
@@ -11,9 +12,15 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @Slf4j
@@ -89,6 +96,20 @@ public class CommentController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    /**
+     * 5. 댓글 조회 (페이징)
+     */
+    @ApiOperation("댓글 조회 (페이징)")
+    @GetMapping(value = "/comment/{postId}")
+    public ResponseEntity findOne(@PathVariable("postId") Long postId, @RequestParam("pageNum") int pageNum) {
+        PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
+        List<Comment> result = commentService.findAllByPostPostId(postId, pageRequest).getContent();
+        if (result == null) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(result, HttpStatus.OK);
     }
 
 }
