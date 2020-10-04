@@ -117,7 +117,7 @@ public class UserController {
     @ApiOperation("유저 프로필 사진 업데이트")
     @PutMapping(value = "/users/profileImage/{id}")
     public String updateUserProfile(@PathVariable(value = "id") Long userId, @RequestParam MultipartFile file) throws IOException {
-        User user = userService.findById(userId);
+        User user = userService.findById(userId).get();
         String imgPath = S3Service.CLOUD_FRONT_DOMAIN_NAME + s3Service.upload(user.getProfileImage(), file);
         user.updateUserImage(imgPath);
         userService.saveUser(user);
@@ -135,7 +135,7 @@ public class UserController {
     @PutMapping(value = "/users")
     public ResponseEntity<UserResponseDto> updateUserProfile(@RequestBody UserUpdateRequestDto requestDto) {
         userService.updateUser(requestDto);
-        User user = userService.findById(requestDto.getUserId());
+        User user = userService.findById(requestDto.getUserId()).get();
         return new ResponseEntity<>(new UserResponseDto(user), HttpStatus.OK);
     }
 

@@ -36,17 +36,13 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", fetch = EAGER)
     private List<UserHashtag> userHashtags = new ArrayList<>();
 
-    @Column(name = "point")
-    private int point;
-
     @Builder
-    public User(long userId, String nickname, String profileImage, int ageRange, List<UserHashtag> userHashtags, int point) {
+    public User(long userId, String nickname, String profileImage, int ageRange, List<UserHashtag> userHashtags) {
         this.userId = userId;
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.ageRange = ageRange;
         this.userHashtags = userHashtags;
-        this.point = point;
     }
 
     public void update(String nickname, String profileImage) {

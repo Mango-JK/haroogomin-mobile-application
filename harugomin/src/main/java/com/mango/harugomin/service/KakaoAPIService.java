@@ -40,8 +40,8 @@ public class KakaoAPIService {
         final String tokenRequestUrl = AUTH_HOST + "/oauth/token";
 
         String CLIENT_ID = "7a888c52e90c278c82e7da483c93375f";
-//        String REDIRECT_URI = "http://52.78.127.67:8080/api/v1/users/login/kakao";
-        String REDIRECT_URI = "http://localhost:8080/api/v1/users/login/kakao";
+        String REDIRECT_URI = "http://52.78.127.67:8080/api/v1/users/login/kakao";
+//        String REDIRECT_URI = "http://localhost:8080/api/v1/users/login/kakao";
 
         HttpsURLConnection conn = null;
         OutputStreamWriter writer = null;
@@ -142,13 +142,12 @@ public class KakaoAPIService {
             picture = temp + "s" + temp2;
         }
 
-        User user = userService.findById(id);
+        User user = userService.findById(id).get();
 
         if (user == null) {
             User newUser = User.builder()
                     .userId(id)
                     .ageRange(Integer.parseInt(ageRange))
-                    .point(0)
                     .build();
 
             user = userService.saveUser(newUser);

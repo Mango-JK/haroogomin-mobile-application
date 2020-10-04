@@ -77,12 +77,12 @@ public class PostController {
     @ApiOperation("고민글 전체 조회")
     @GetMapping(value = "/posts")
     public ResponseEntity findAllPosts(@RequestParam("pageNum") int pageNum) throws Exception {
-        PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
+        PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").ascending());
         Page<Post> result = null;
         try {
             result = postService.findAllPosts(pageRequest);
         } catch (Exception e) {
-            return new ResponseEntity(result.getContent(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(result.getContent(), HttpStatus.OK);
     }
@@ -153,6 +153,9 @@ public class PostController {
     @ApiOperation("(HOME) - 태그별 새 고민글")
     @GetMapping(value = "/posts/home/{tagName}")
     public ResponseEntity homePosting(@PathVariable("tagName") String tagName, @RequestParam int pageNum) throws Exception {
+        if(tagName.equals("전체")){
+            return findAllPosts(pageNum);
+        }
         PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").ascending());
         Page<Post> result = null;
         try {

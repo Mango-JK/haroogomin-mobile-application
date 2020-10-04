@@ -93,32 +93,35 @@ public class NaverAPIService {
     }
 
     @Transactional
-    public String redirectToken(JsonNode json) {
+    public String redirectToken(JsonNode json) throws Exception{
         log.info("NaverAPIService :: redirectToken");
 
         long id = json.get("response").get("id").asLong();
         String nickname = json.get("response").get("nickname").toString();
         nickname = nickname.substring(1, nickname.length() - 1);
-        String profileImage = json.get("response").get("profile_image").toString();
-        profileImage = profileImage.substring(1, profileImage.length() - 1);
+        String profileImage = null;
+
+        try{
+            profileImage = json.get("response").get("profile_image").toString().substring(1, profileImage.length() - 1);
+        } catch (Exception e){
+            profileImage = "https://ssl.pstatic.net/static/pwe/address/img_profile.png";
+        }
 
         String age = json.get("response").get("age").toString();
         age = age.substring(1, age.length() - 1);
         StringTokenizer stringTokenizer = new StringTokenizer(age, "-");
         String ageRange = stringTokenizer.nextToken();
 
-        User user = userService.findById(id);
+        User user = userService.findById(id).get();
 
         if (user == null) {
             User newUser = User.builder()
                     .userId(id)
                     .ageRange(Integer.parseInt(ageRange))
-                    .point(0)
                     .build();
 
             user = userService.saveUser(newUser);
         }
-
         user.update(nickname, profileImage);
 
         UserRequestDto userResponseDto = new UserRequestDto(user);

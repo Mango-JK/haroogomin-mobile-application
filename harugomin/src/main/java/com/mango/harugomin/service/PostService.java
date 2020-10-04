@@ -31,7 +31,7 @@ public class PostService {
      */
     @Transactional
     public Post save(PostSaveRequestDto requestDto) {
-        User user = userService.findById(requestDto.getUserId());
+        User user = userService.findById(requestDto.getUserId()).get();
         Hashtag hashtag = hashtagService.findByTagName(requestDto.getTagName());
         hashtagService.countUp(hashtag.getTagId());
 
