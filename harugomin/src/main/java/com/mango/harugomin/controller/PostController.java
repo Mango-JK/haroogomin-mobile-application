@@ -1,7 +1,6 @@
 package com.mango.harugomin.controller;
 
 import com.google.gson.JsonObject;
-import com.mango.harugomin.domain.entity.Comment;
 import com.mango.harugomin.domain.entity.Hashtag;
 import com.mango.harugomin.domain.entity.Post;
 import com.mango.harugomin.dto.PostSaveRequestDto;
@@ -153,7 +152,7 @@ public class PostController {
     @ApiOperation("(HOME) - 태그별 새 고민글")
     @GetMapping(value = "/posts/home/{tagName}")
     public ResponseEntity homePosting(@PathVariable("tagName") String tagName, @RequestParam int pageNum) throws Exception {
-        if(tagName.equals("전체")){
+        if (tagName.equals("전체")) {
             return findAllPosts(pageNum);
         }
         PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").ascending());
@@ -171,13 +170,13 @@ public class PostController {
      */
     @ApiOperation("고민글 통합 검색")
     @GetMapping(value = "/posts/search/{keyword}")
-    public ResponseEntity searchAllPosts(@PathVariable("keyword") String keyword) throws Exception {
-        PageRequest pageRequest = PageRequest.of(0, 15, Sort.by("created_date").descending());
+    public ResponseEntity searchAllPosts(@PathVariable("keyword") String keyword, @RequestParam int pageNum) throws Exception {
+        PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("created_date").descending());
         Page<Post> result = null;
         try {
             result = postService.searchAllPosts(keyword, pageRequest);
         } catch (Exception e) {
-            return new ResponseEntity(result.getContent(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity(result.getContent(), HttpStatus.OK);
     }

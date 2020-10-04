@@ -92,4 +92,9 @@ public class Post extends BaseTimeEntity {
     public void addCommentList(List<Comment> comments){
         this.comments = comments;
     }
+
+    public long getUserId() {
+        return user.getUserId();
+    }
+
 }

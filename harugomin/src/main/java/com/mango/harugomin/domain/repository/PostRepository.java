@@ -12,16 +12,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PostRepository extends JpaRepository<Post, Long> {
+public interface PostRepository extends JpaRepository<Post, Long>{
+
     @Override
     Page<Post> findAll(Pageable pageable);
 
     Page<Post> findAllByTagName(String tagName, Pageable pageable);
 
-    @Query(nativeQuery = true, value = " select * " +
-            " from post " +
-            " where content like %?1% " +
-            " or title like %?1% ")
+    @Query(nativeQuery = true, value = " select * from post where content like %?1% OR title like %?1% ",
+    countQuery = "SELECT COUNT(p.post_id) FROM post p WHERE p.title LIKE %?1% OR p.content LIKE %?1% ")
     Page<Post> searchAllPosts(String keyword, Pageable pageable);
 
     @Modifying(clearAutomatically = true)
@@ -29,4 +28,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     void postHits(Long postId);
 
     Optional<List<Post>> findAllByUserUserId(Long userId);
+
 }
