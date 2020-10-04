@@ -2,7 +2,6 @@ package com.mango.harugomin.controller;
 
 import com.mango.harugomin.domain.entity.Comment;
 import com.mango.harugomin.domain.entity.Liker;
-import com.mango.harugomin.domain.entity.Post;
 import com.mango.harugomin.dto.CommentResponseDto;
 import com.mango.harugomin.dto.CommentSaveRequestDto;
 import com.mango.harugomin.dto.CommentUpdateRequestDto;
@@ -12,7 +11,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -20,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @Slf4j

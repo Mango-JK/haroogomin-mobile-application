@@ -20,15 +20,15 @@ public class PostServiceTest extends TestCase {
     @Autowired
     PostService postService;
 
-    @Test
-    public void testFindAllPosts() {
-        Pageable pageable = PageRequest.of(0, 5, Sort.Direction.DESC, "hits");
-        int postsNum = postService.findAllPosts(pageable).getSize();
-        Assertions.assertThat(postsNum).isEqualTo(5);
-
-        pageable = PageRequest.of(0, 15);
-        postsNum = postService.findAllPosts(pageable).getSize();
-        Assertions.assertThat(postsNum).isEqualTo(15);
-    }
+//    @Test
+//    public void testFindAllPosts() {
+//        Pageable pageable = PageRequest.of(0, 5, Sort.Direction.DESC, "hits");
+//        int postsNum = postService.findAllPosts(pageable).getSize();
+//        Assertions.assertThat(postsNum).isEqualTo(5);
+//
+//        pageable = PageRequest.of(0, 15);
+//        postsNum = postService.findAllPosts(pageable).getSize();
+//        Assertions.assertThat(postsNum).isEqualTo(15);
+//    }
 
 }

@@ -8,13 +8,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
-
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long>{
 
-    @Override
     Page<Post> findAll(Pageable pageable);
 
     Page<Post> findAllByTagName(String tagName, Pageable pageable);
@@ -27,6 +23,9 @@ public interface PostRepository extends JpaRepository<Post, Long>{
     @Query(value = "update post set hits = hits + 1 where post_id = ?1 ", nativeQuery = true)
     void postHits(Long postId);
 
-    Optional<List<Post>> findAllByUserUserId(Long userId);
+    Page<Post> findAllByUserUserId(Long userId, Pageable pageable);
+
+    @Modifying(clearAutomatically = true)
+    void deleteByUserUserId(Long userId);
 
 }

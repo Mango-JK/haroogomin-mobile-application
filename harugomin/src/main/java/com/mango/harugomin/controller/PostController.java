@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import com.mango.harugomin.domain.entity.Hashtag;
 import com.mango.harugomin.domain.entity.Post;
 import com.mango.harugomin.dto.PostSaveRequestDto;
-import com.mango.harugomin.service.CommentService;
 import com.mango.harugomin.service.HashtagService;
 import com.mango.harugomin.service.PostService;
 import com.mango.harugomin.service.S3Service;
@@ -36,7 +35,6 @@ public class PostController {
 
     private final PostService postService;
     private final HashtagService hashtagService;
-    private final CommentService commentService;
     private final S3Service s3Service;
 
     /**
@@ -71,23 +69,7 @@ public class PostController {
     }
 
     /**
-     * 3. 고민글 전체 조회
-     */
-    @ApiOperation("고민글 전체 조회")
-    @GetMapping(value = "/posts")
-    public ResponseEntity findAllPosts(@RequestParam("pageNum") int pageNum) throws Exception {
-        PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").ascending());
-        Page<Post> result = null;
-        try {
-            result = postService.findAllPosts(pageRequest);
-        } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(result.getContent(), HttpStatus.OK);
-    }
-
-    /**
-     * 4. 고민글 상세 조회
+     * 3. 고민글 상세 조회
      */
     @ApiOperation("고민글 상세 조회")
     @GetMapping(value = "/posts/{postId}")
@@ -100,7 +82,7 @@ public class PostController {
     }
 
     /**
-     * 5.(Home) - 인기순 해시태그 리스트
+     * 4.(Home) - 인기순 해시태그 리스트
      */
     @ApiOperation("(Home) - 인기순 해시태그 리스트")
     @GetMapping(value = "/posts/home/hashtag")
@@ -116,7 +98,7 @@ public class PostController {
     }
 
     /**
-     * 6. (Home) - 스토리
+     * 5. (Home) - 스토리
      */
     @ApiOperation("(Home) - 스토리")
     @GetMapping(value = "/posts/home/story")
@@ -147,16 +129,19 @@ public class PostController {
     }
 
     /**
-     * 7. (HOME) - 태그별 새 고민글
+     * 6. (HOME) - 태그별 새 고민글
      */
     @ApiOperation("(HOME) - 태그별 새 고민글")
     @GetMapping(value = "/posts/home/{tagName}")
     public ResponseEntity homePosting(@PathVariable("tagName") String tagName, @RequestParam int pageNum) throws Exception {
-        if (tagName.equals("전체")) {
-            return findAllPosts(pageNum);
-        }
-        PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").ascending());
+        PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
         Page<Post> result = null;
+
+        if (tagName.equals("전체")) {
+            result = postService.findAllPosts(pageRequest);
+            return new ResponseEntity(result.getContent(), HttpStatus.OK);
+        }
+
         try {
             result = postService.findAllByHashtag(tagName, pageRequest);
         } catch (Exception e) {
@@ -166,7 +151,7 @@ public class PostController {
     }
 
     /**
-     * 8. 고민글 통합 검색
+     * 7. 고민글 통합 검색
      */
     @ApiOperation("고민글 통합 검색")
     @GetMapping(value = "/posts/search/{keyword}")
@@ -182,7 +167,7 @@ public class PostController {
     }
 
     /**
-     * 9. 메인 고민글 3개 출력
+     * 8. 메인 고민글 3개 출력
      */
     @ApiOperation("메인 고민글 3개 출력")
     @GetMapping(value = "/posts/main")
@@ -198,7 +183,7 @@ public class PostController {
     }
 
     /**
-     * 10. 고민글 사진 업로드
+     * 9. 고민글 사진 업로드
      */
     @ApiOperation("고민글 사진 업로드")
     @PostMapping(value = "/posts/image")
