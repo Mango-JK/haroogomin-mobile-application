@@ -8,9 +8,11 @@ import com.mango.harugomin.dto.CommentUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -59,8 +61,8 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Comment> pagingComment(Long postId, PageRequest pageRequest){
-        return commentRepository.findAllByPostPostId(postId, pageRequest);
+    public Page<Comment> findAllByPostPostId(Long postId, Pageable pageable){
+        return commentRepository.findAllByPostPostId(postId, pageable);
     }
 
     @Transactional

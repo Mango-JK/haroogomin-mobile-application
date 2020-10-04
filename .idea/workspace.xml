@@ -35,7 +35,12 @@
   <component name="ChangeListManager">
     <list default="true" id="0dc6c3b9-2347-4119-844a-83a7481f4166" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/CommentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/CommentController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/PostController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/Post.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/CommentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/CommentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/CommentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/CommentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/PostService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,15 +153,13 @@
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.HarugominApplication">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -394,38 +397,38 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="478" y="278" key="FileChooserDialogImpl/0.0.2560.1040@0.0.2560.1040" timestamp="1600956278676" />
-    <state width="2517" height="394" key="GridCell.Tab.0.bottom" timestamp="1601703874018">
+    <state width="2215" height="422" key="GridCell.Tab.0.bottom" timestamp="1601774671808">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="394" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1601703874018" />
-    <state width="2517" height="394" key="GridCell.Tab.0.center" timestamp="1601703874018">
+    <state width="2215" height="422" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1601774671808" />
+    <state width="2215" height="422" key="GridCell.Tab.0.center" timestamp="1601774671808">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="394" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1601703874018" />
-    <state width="2517" height="394" key="GridCell.Tab.0.left" timestamp="1601703874018">
+    <state width="2215" height="422" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1601774671808" />
+    <state width="2215" height="422" key="GridCell.Tab.0.left" timestamp="1601774671808">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="394" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1601703874018" />
-    <state width="2517" height="394" key="GridCell.Tab.0.right" timestamp="1601703874018">
+    <state width="2215" height="422" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1601774671808" />
+    <state width="2215" height="422" key="GridCell.Tab.0.right" timestamp="1601774671808">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="394" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1601703874018" />
-    <state width="2517" height="394" key="GridCell.Tab.1.bottom" timestamp="1601703874018">
+    <state width="2215" height="422" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1601774671808" />
+    <state width="2215" height="422" key="GridCell.Tab.1.bottom" timestamp="1601774671808">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="394" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1601703874018" />
-    <state width="2517" height="394" key="GridCell.Tab.1.center" timestamp="1601703874018">
+    <state width="2215" height="422" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1601774671808" />
+    <state width="2215" height="422" key="GridCell.Tab.1.center" timestamp="1601774671808">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="394" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1601703874018" />
-    <state width="2517" height="394" key="GridCell.Tab.1.left" timestamp="1601703874018">
+    <state width="2215" height="422" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1601774671808" />
+    <state width="2215" height="422" key="GridCell.Tab.1.left" timestamp="1601774671808">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="394" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1601703874018" />
-    <state width="2517" height="394" key="GridCell.Tab.1.right" timestamp="1601703874018">
+    <state width="2215" height="422" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1601774671808" />
+    <state width="2215" height="422" key="GridCell.Tab.1.right" timestamp="1601774671808">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="394" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1601703874018" />
+    <state width="2215" height="422" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1601774671808" />
     <state width="2517" height="411" key="GridCell.Tab.2.bottom" timestamp="1600476244875">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>

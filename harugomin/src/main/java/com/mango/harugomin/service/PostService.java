@@ -65,7 +65,6 @@ public class PostService {
         postRepository.delete(deleteTargetPost);
     }
 
-
     /**
      * 4. 모든 고민글 조회
      */
@@ -73,7 +72,6 @@ public class PostService {
     public Page<Post> findAllPosts(Pageable pageable) {
         return postRepository.findAll(pageable);
     }
-
 
     /**
      * 5. 고민글 상세 조회

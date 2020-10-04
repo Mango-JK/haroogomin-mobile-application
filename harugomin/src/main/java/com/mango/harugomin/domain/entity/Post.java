@@ -45,7 +45,7 @@ public class Post extends BaseTimeEntity {
     private String postImage;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "post", fetch = EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "post", fetch = LAZY, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @Column(name = "hits")
