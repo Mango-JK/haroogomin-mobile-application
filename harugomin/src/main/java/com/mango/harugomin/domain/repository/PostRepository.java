@@ -11,6 +11,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long>{
 
+    @Override
+    Post save(Post post);
+
     Page<Post> findAll(Pageable pageable);
 
     Page<Post> findAllByTagName(String tagName, Pageable pageable);

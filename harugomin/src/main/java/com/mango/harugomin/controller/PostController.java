@@ -43,15 +43,16 @@ public class PostController {
     @ApiOperation("고민글 작성 or 수정")
     @PostMapping(value = "/posts")
     public ResponseEntity updatePost(@RequestBody PostSaveRequestDto requestDto) throws Exception {
+        Post post = null;
         try {
             if (requestDto.getPostId() == -1) {
-                postService.save(requestDto);
+                post = postService.save(requestDto);
             } else
-                postService.updatePost(requestDto);
+                post = postService.updatePost(requestDto);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(post, HttpStatus.OK);
     }
 
     /**
