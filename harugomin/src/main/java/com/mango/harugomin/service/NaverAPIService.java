@@ -106,9 +106,9 @@ public class NaverAPIService {
         StringTokenizer stringTokenizer = new StringTokenizer(age, "-");
         String ageRange = stringTokenizer.nextToken();
 
-        User user = null;
+        User user = userService.findById(id).get();
 
-        if (!userService.findById(id).isPresent()) {
+        if (user == null) {
             User newUser = User.builder()
                     .userId(id)
                     .ageRange(Integer.parseInt(ageRange))

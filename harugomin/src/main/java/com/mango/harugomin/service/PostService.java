@@ -10,11 +10,8 @@ import com.mango.harugomin.dto.PostSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -51,9 +48,10 @@ public class PostService {
      * 2. 고민글 수정
      */
     @Transactional
-    public void updatePost(PostSaveRequestDto requestDto) {
+    public Post updatePost(PostSaveRequestDto requestDto) {
         Post post = postRepository.findById(requestDto.getPostId()).get();
         post.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getTagName(), requestDto.getPostImage());
+        return post;
     }
 
     /**
@@ -69,8 +67,8 @@ public class PostService {
      * 4. 모든 고민글 조회
      */
     @Transactional(readOnly = true)
-    public Page<Post> findAllPosts(Pageable pageable) {
-        return postRepository.findAll(pageable);
+    public Page<Post> findAllPosts(PageRequest pageRequest) {
+        return postRepository.findAll(pageRequest);
     }
 
     /**
@@ -119,7 +117,15 @@ public class PostService {
     /**
      * 10. 현재 게시중인 글
      */
-    public Optional<List<Post>> findAllByUserId(Long userId) {
-        return postRepository.findAllByUserUserId(userId);
+    public Page<Post> findAllByUserId(Long userId, PageRequest pageRequest) {
+        return postRepository.findAllByUserUserId(userId, pageRequest);
+    }
+
+    /**
+     * 11. 유저가 작성한 게시글 삭제
+     */
+    @Transactional
+    public void deleteUserPosts(Long userId) {
+        postRepository.deleteByUserUserId(userId);
     }
 }
