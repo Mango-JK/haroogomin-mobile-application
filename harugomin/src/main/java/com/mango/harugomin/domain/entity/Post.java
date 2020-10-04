@@ -1,7 +1,6 @@
 package com.mango.harugomin.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,8 +43,8 @@ public class Post extends BaseTimeEntity {
     @Column(name = "post_image")
     private String postImage;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "post", fetch = EAGER, orphanRemoval = true)
+    @JsonIgnore
+    @OneToMany(mappedBy = "post", fetch = LAZY, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @Column(name = "hits")
@@ -89,7 +88,8 @@ public class Post extends BaseTimeEntity {
         this.comments.add(comment);
     }
 
-    public void addCommentList(List<Comment> comments){
-        this.comments = comments;
+    public long getUserId() {
+        return user.getUserId();
     }
+
 }

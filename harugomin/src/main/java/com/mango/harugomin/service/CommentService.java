@@ -7,7 +7,7 @@ import com.mango.harugomin.dto.CommentSaveRequestDto;
 import com.mango.harugomin.dto.CommentUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,12 +59,17 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Comment> pagingComment(Long postId, PageRequest pageRequest){
-        return commentRepository.findAllByPostPostId(postId, pageRequest);
+    public Page<Comment> findAllByPostPostId(Long postId, Pageable pageable){
+        return commentRepository.findAllByPostPostId(postId, pageable);
     }
 
     @Transactional
     public void likeUpdate(Long commentId, int value) {
         commentRepository.likeUpdate(commentId, value);
+    }
+
+    @Transactional
+    public void deleteByUserId(Long userId) {
+        commentRepository.deleteByUserId(userId);
     }
 }

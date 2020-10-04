@@ -23,8 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @Slf4j
@@ -41,6 +39,7 @@ public class UserController {
     private final S3Service s3Service;
     private final HistoryService historyService;
     private final PostService postService;
+    private final CommentService commentService;
 
     /**
      * 1. 카카오 로그인
@@ -117,7 +116,7 @@ public class UserController {
     @ApiOperation("유저 프로필 사진 업데이트")
     @PutMapping(value = "/users/profileImage/{id}")
     public String updateUserProfile(@PathVariable(value = "id") Long userId, @RequestParam MultipartFile file) throws IOException {
-        User user = userService.findById(userId);
+        User user = userService.findById(userId).get();
         String imgPath = S3Service.CLOUD_FRONT_DOMAIN_NAME + s3Service.upload(user.getProfileImage(), file);
         user.updateUserImage(imgPath);
         userService.saveUser(user);
@@ -135,7 +134,7 @@ public class UserController {
     @PutMapping(value = "/users")
     public ResponseEntity<UserResponseDto> updateUserProfile(@RequestBody UserUpdateRequestDto requestDto) {
         userService.updateUser(requestDto);
-        User user = userService.findById(requestDto.getUserId());
+        User user = userService.findById(requestDto.getUserId()).get();
         return new ResponseEntity<>(new UserResponseDto(user), HttpStatus.OK);
     }
 
@@ -163,26 +162,37 @@ public class UserController {
         return new ResponseEntity<>(data.toString(), HttpStatus.OK);
     }
 
-//    /**
-//     * 8. 유저 삭제
-//     */
-//    @ApiOperation("유저 삭제")
-//    @GetMapping(value = "/users/{userId}")
-//    public ResponseEntity<Long> deleteUser(@PathVariable("userId") Long userId) {
-//        // 글 삭제
-//
-//        // 댓글 삭제
-//
-//        return new ResponseEntity<>(deleteUserId, HttpStatus.OK);
-//    }
+    /**
+     * 8. 유저 삭제
+     */
+    @ApiOperation("유저 삭제")
+    @DeleteMapping(value = "/users/{userId}")
+    public ResponseEntity<Long> deleteUser(@PathVariable("userId") Long userId) {
+        try{
+            commentService.deleteByUserId(userId);
+            postService.deleteUserPosts(userId);
+            userService.deleteById(userId);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     /**
      * 9. 현재 게시중인 글
      */
     @ApiOperation("현재 게시중인 고민글")
     @GetMapping(value = "/users/posts/{userId}")
-    public Optional<List<Post>> myCurrentPosting(@PathVariable("userId") Long userId) throws Exception{
-        return postService.findAllByUserId(userId);
+    public ResponseEntity myCurrentPosting(@PathVariable("userId") Long userId, @RequestParam int pageNum) throws Exception{
+        PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
+        Page<Post> result = null;
+
+        try {
+            result = postService.findAllByUserId(userId, pageRequest);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(result.getContent(), HttpStatus.OK);
     }
 
     /**
@@ -200,7 +210,6 @@ public class UserController {
         }
         return new ResponseEntity<>(result.getContent(), HttpStatus.OK);
     }
-
 
     @ApiOperation("(SERVER_TEST용)카카오 AccessToken 발급받기")
     @GetMapping(value = "/users/login/kakao")
@@ -225,5 +234,4 @@ public class UserController {
         log.info("Naver AccessToken : " + AccessToken);
         return "index";
     }
-
 }

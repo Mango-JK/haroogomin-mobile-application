@@ -1,7 +1,6 @@
 package com.mango.harugomin.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,7 +30,7 @@ public class Comment extends BaseTimeEntity {
     @Column(name = "profile_image")
     private String profileImage;
 
-    @JsonBackReference
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "post_id")
     private Post post;

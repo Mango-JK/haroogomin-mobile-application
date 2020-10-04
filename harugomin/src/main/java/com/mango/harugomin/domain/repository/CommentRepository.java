@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
@@ -16,4 +19,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Modifying(clearAutomatically = true)
     @Query(value = "update comment set comment_likes = comment_likes + ?2 where comment_id = ?1 ", nativeQuery = true)
     void likeUpdate(Long commentId, int value);
+
+    void deleteByUserId(Long userId);
 }
