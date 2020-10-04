@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.URL;
+import java.util.Optional;
 import java.util.StringTokenizer;
 
 import org.apache.http.HttpResponse;
@@ -142,9 +143,8 @@ public class KakaoAPIService {
             picture = temp + "s" + temp2;
         }
 
-        User user = null;
-
-        if (!userService.findById(id).isPresent()) {
+        User user = userService.findById(id).get();
+        if (user == null) {
             User newUser = User.builder()
                     .userId(id)
                     .ageRange(Integer.parseInt(ageRange))

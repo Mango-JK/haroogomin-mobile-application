@@ -48,9 +48,10 @@ public class PostService {
      * 2. 고민글 수정
      */
     @Transactional
-    public void updatePost(PostSaveRequestDto requestDto) {
+    public Post updatePost(PostSaveRequestDto requestDto) {
         Post post = postRepository.findById(requestDto.getPostId()).get();
         post.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getTagName(), requestDto.getPostImage());
+        return post;
     }
 
     /**
