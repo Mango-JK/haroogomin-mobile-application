@@ -45,6 +45,12 @@ public class User extends BaseTimeEntity {
         this.userHashtags = userHashtags;
     }
 
+    @Builder
+    public User(long userId, int ageRange) {
+        this.userId = userId;
+        this.ageRange = ageRange;
+    }
+
     public void update(String nickname, String profileImage) {
         this.nickname = nickname;
         this.profileImage = profileImage;

@@ -142,9 +142,9 @@ public class KakaoAPIService {
             picture = temp + "s" + temp2;
         }
 
-        User user = userService.findById(id).get();
+        User user = null;
 
-        if (user == null) {
+        if (!userService.findById(id).isPresent()) {
             User newUser = User.builder()
                     .userId(id)
                     .ageRange(Integer.parseInt(ageRange))

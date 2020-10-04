@@ -9,7 +9,8 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findByUserId(Long userId);
+    @Override
+    Optional<User> findById(Long userId);
 
     Long countByNickname(String nickname);
 }

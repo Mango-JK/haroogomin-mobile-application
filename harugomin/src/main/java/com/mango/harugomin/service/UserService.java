@@ -29,9 +29,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @Transactional(readOnly = true)
     public Optional<User> findById(long userId) {
-        return userRepository.findByUserId(userId);
+        return userRepository.findById(userId);
     }
 
     /**
