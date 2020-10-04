@@ -1,16 +1,14 @@
 package com.mango.harugomin.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.*;
 
@@ -45,9 +43,6 @@ public class Comment extends BaseTimeEntity {
     @Column(name = "comment_likes")
     private int commentLikes;
 
-    @OneToMany(mappedBy = "comment", fetch = EAGER)
-    private List<Liker> likers = new ArrayList<>();
-
     @Builder
     public Comment(Long userId, String nickname, String profileImage, Post post, String content, int commentLikes) {
         this.userId = userId;
@@ -62,4 +57,5 @@ public class Comment extends BaseTimeEntity {
         this.content = content;
         this.setModifiedDate(LocalDateTime.now());
     }
+
 }

@@ -1,6 +1,5 @@
 package com.mango.harugomin.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
@@ -13,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 
@@ -89,5 +87,9 @@ public class Post extends BaseTimeEntity {
 
     public void addComment(Comment comment){
         this.comments.add(comment);
+    }
+
+    public void addCommentList(List<Comment> comments){
+        this.comments = comments;
     }
 }
