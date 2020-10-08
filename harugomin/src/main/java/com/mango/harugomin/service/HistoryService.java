@@ -12,9 +12,6 @@ import org.springframework.stereotype.Service;
 public class HistoryService {
     private final HistoryRepository historyRepository;
 
-    /**
-     * 1. 내 글 보관함
-     */
     public Page<History> myHistoryPost(Long userId, PageRequest pageRequest) {
         return historyRepository.findAllByUserUserId(userId, pageRequest);
     }

@@ -30,9 +30,6 @@ public class CommentController {
     private final CommentService commentService;
     private final LikerService likerService;
 
-    /**
-     * 1. 댓글 작성
-     */
     @ApiOperation("댓글 작성")
     @PostMapping(value = "/comments")
     public ResponseEntity writePost(@RequestBody CommentSaveRequestDto requestDto) throws Exception {
@@ -45,9 +42,6 @@ public class CommentController {
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 
-    /**
-     * 2. 댓글 수정
-     */
     @ApiOperation("댓글 수정")
     @PutMapping(value = "/comments/{commentId}")
     public ResponseEntity updatePost(@PathVariable("commentId") Long commentId, @RequestBody CommentUpdateRequestDto requestDto) throws Exception {
@@ -59,9 +53,6 @@ public class CommentController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    /**
-     * 3. 댓글 삭제
-     */
     @ApiOperation("댓글 삭제")
     @DeleteMapping(value = "/comments/{commentId}")
     public ResponseEntity deletePost(@PathVariable("commentId") Long commentId) throws Exception {
@@ -73,9 +64,6 @@ public class CommentController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    /**
-     * 4. 댓글 좋아요 or 취소
-     */
     @ApiOperation("댓글 좋아요")
     @PutMapping(value = "/comments/like")
     public ResponseEntity likeComment(@RequestParam("commentId") Long commentId, @RequestParam("userId") Long userId) throws Exception {
@@ -95,9 +83,6 @@ public class CommentController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    /**
-     * 5. 댓글 조회 (페이징)
-     */
     @ApiOperation("댓글 조회 (페이징)")
     @GetMapping(value = "/comment/{postId}")
     public ResponseEntity findOne(@PathVariable("postId") Long postId, @RequestParam("pageNum") int pageNum) {

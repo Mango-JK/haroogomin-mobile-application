@@ -67,8 +67,6 @@ public class NaverAPIService {
     }
 
     public JsonNode getNaverUserInfo(String accessToken) {
-        log.info("NaverAPIService :: getNaverUserInfo");
-
         String requestURL = "https://openapi.naver.com/v1/nid/me";
 
         final HttpClient client = HttpClientBuilder.create().build();
@@ -88,14 +86,11 @@ public class NaverAPIService {
             e.printStackTrace();
         }
 
-        log.info(returnNode.toString());
         return returnNode;
     }
 
     @Transactional
     public String redirectToken(JsonNode json) throws Exception{
-        log.info("NaverAPIService :: redirectToken");
-
         long id = json.get("response").get("id").asLong();
         String nickname = json.get("response").get("nickname").toString();
         nickname = nickname.substring(1, nickname.length() - 1);
@@ -106,9 +101,9 @@ public class NaverAPIService {
         StringTokenizer stringTokenizer = new StringTokenizer(age, "-");
         String ageRange = stringTokenizer.nextToken();
 
-        User user = userService.findById(id).get();
+        User user = null;
 
-        if (user == null) {
+        if (!userService.findById(id).isPresent()) {
             User newUser = User.builder()
                     .userId(id)
                     .ageRange(Integer.parseInt(ageRange))

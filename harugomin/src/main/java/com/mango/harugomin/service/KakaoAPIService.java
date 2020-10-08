@@ -36,8 +36,6 @@ public class KakaoAPIService {
     private final String AUTH_HOST = "https://kauth.kakao.com";
 
     public ResponseEntity<String> getAccessToken(String code) {
-        log.info("KAKAO API SERVICE :: Start getAccessToken -> CODE : " + code);
-
         final String tokenRequestUrl = AUTH_HOST + "/oauth/token";
 
         String CLIENT_ID = "7a888c52e90c278c82e7da483c93375f";
@@ -65,8 +63,6 @@ public class KakaoAPIService {
             writer.flush();
 
             int responseCode = conn.getResponseCode();
-            log.info("\nSending 'POST' request to URL : " + tokenRequestUrl);
-            log.info("Response Code : " + responseCode);
 
             isr = new InputStreamReader(conn.getInputStream());
             reader = new BufferedReader(isr);
@@ -101,7 +97,6 @@ public class KakaoAPIService {
     }
 
     public JsonNode getKaKaoUserInfo(String access_Token) {
-        log.info("KakaoAPIService :: getKaKaoUserInfo");
 
         final HttpClient client = HttpClientBuilder.create().build();
         final HttpPost post = new HttpPost(requestURL);
@@ -120,13 +115,11 @@ public class KakaoAPIService {
             e.printStackTrace();
         }
 
-        log.info(returnNode.toString());
         return returnNode;
     }
 
     @Transactional
     public String redirectToken(JsonNode json) {
-        log.info("KakaoAPIService :: redirectToken");
 
         long id = json.get("id").asLong();
         String nickname = json.get("kakao_account").get("profile").get("nickname").toString();
@@ -143,8 +136,8 @@ public class KakaoAPIService {
             picture = temp + "s" + temp2;
         }
 
-        User user = userService.findById(id).get();
-        if (user == null) {
+        User user = null;
+        if(!userService.findById(id).isPresent()){
             User newUser = User.builder()
                     .userId(id)
                     .ageRange(Integer.parseInt(ageRange))

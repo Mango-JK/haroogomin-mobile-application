@@ -33,9 +33,6 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
-    /**
-     * 닉네임 중복 검사
-     */
     public boolean duplicationCheck(String nickname) {
         if(userRepository.countByNickname(nickname) > 0) {
             return false;
@@ -44,9 +41,6 @@ public class UserService {
         }
     }
 
-    /**
-     * 유저 해시태그 업데이트
-     */
     @Transactional
     public User updateUserHashtag(Long userId, String[] hashtags) {
         User user = findById(userId).get();
@@ -66,9 +60,6 @@ public class UserService {
         return user;
     }
 
-    /**
-     * 유저 프로필 업데이트 [사진, 닉네임, 연령대, 해시태그]
-     */
     @Transactional
     public void updateUser(UserUpdateRequestDto requestDto) {
         User user = findById(requestDto.getUserId()).get();
