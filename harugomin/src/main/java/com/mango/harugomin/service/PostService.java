@@ -97,6 +97,6 @@ public class PostService {
 
     @Transactional
     public void deleteUserPosts(Long userId) {
-        postRepository.deleteByUserUserId(userId);
+        postRepository.deleteAllByUserUserId(userId);
     }
 }

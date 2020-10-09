@@ -19,4 +19,8 @@ public interface LikerRepository extends JpaRepository<Liker, Long> {
     int deleteAllByPostId(Long postId);
 
     Optional<Liker> findByComment_CommentIdAndUserId(Long commentId, Long userId);
+
+    @Modifying(clearAutomatically = true)
+    @Query(value = "delete from liker where user_id = ?1 ", nativeQuery = true)
+    void deleteAllbyUsers(Long userId);
 }

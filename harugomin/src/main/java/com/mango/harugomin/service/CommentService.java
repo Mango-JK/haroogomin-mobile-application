@@ -70,6 +70,6 @@ public class CommentService {
 
     @Transactional
     public void deleteByUserId(Long userId) {
-        commentRepository.deleteByUserId(userId);
+        commentRepository.deleteAllByUserId(userId);
     }
 }

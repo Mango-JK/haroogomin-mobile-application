@@ -40,6 +40,8 @@ public class UserController {
     private final HistoryService historyService;
     private final PostService postService;
     private final CommentService commentService;
+    private final LikerService likerService;
+    private final UserHashtagService userHashtagService;
 
     @ApiOperation("카카오 로그인")
     @PostMapping("/users/login/kakao")
@@ -142,10 +144,13 @@ public class UserController {
     @DeleteMapping(value = "/users/{userId}")
     public ResponseEntity<Long> deleteUser(@PathVariable("userId") Long userId) {
         try{
-            commentService.deleteByUserId(userId);
+            historyService.deleteUserHistories(userId);
             postService.deleteUserPosts(userId);
+            commentService.deleteByUserId(userId);
+            likerService.deleteAllByUsers(userId);
+            userHashtagService.deleteAllByUsers(userId);
             userService.deleteById(userId);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);

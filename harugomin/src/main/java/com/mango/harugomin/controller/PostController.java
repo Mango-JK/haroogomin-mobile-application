@@ -52,7 +52,7 @@ public class PostController {
         return new ResponseEntity(post, HttpStatus.OK);
     }
 
-    @ApiOperation("고민글 삭제 (History로 이동)")
+    @ApiOperation("고민글 삭제")
     @DeleteMapping(value = "/posts/{postId}")
     public ResponseEntity deletePost(@PathVariable("postId") Long postId) throws Exception {
         try {

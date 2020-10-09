@@ -23,6 +23,11 @@ public class LikerService {
     }
 
     @Transactional
+    public void deleteAllByUsers(Long userId){
+        likerRepository.deleteAllbyUsers(userId);
+    }
+
+    @Transactional
     public void save(Liker liker) {
         likerRepository.save(liker);
     }
