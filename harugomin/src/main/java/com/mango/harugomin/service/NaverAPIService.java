@@ -67,8 +67,6 @@ public class NaverAPIService {
     }
 
     public JsonNode getNaverUserInfo(String accessToken) {
-        log.info("NaverAPIService :: getNaverUserInfo");
-
         String requestURL = "https://openapi.naver.com/v1/nid/me";
 
         final HttpClient client = HttpClientBuilder.create().build();
@@ -88,35 +86,36 @@ public class NaverAPIService {
             e.printStackTrace();
         }
 
-        log.info(returnNode.toString());
         return returnNode;
     }
 
     @Transactional
-    public String redirectToken(JsonNode json) throws Exception{
-        log.info("NaverAPIService :: redirectToken");
-
+    public String redirectToken(JsonNode json) throws Exception {
         long id = json.get("response").get("id").asLong();
         String nickname = json.get("response").get("nickname").toString();
         nickname = nickname.substring(1, nickname.length() - 1);
-        String profileImage = "https://ssl.pstatic.net/static/pwe/address/img_profile.png";
+        String ageRange = "0";
+//        String profileImage = "https://ssl.pstatic.net/static/pwe/address/img_profile.png";
+//        String age = json.get("response").get("age").toString();
+//        age = age.substring(1, age.length() - 1);
+//        StringTokenizer stringTokenizer = new StringTokenizer(age, "-");
+//        String ageRange = stringTokenizer.nextToken();
 
-        String age = json.get("response").get("age").toString();
-        age = age.substring(1, age.length() - 1);
-        StringTokenizer stringTokenizer = new StringTokenizer(age, "-");
-        String ageRange = stringTokenizer.nextToken();
-
-        User user = userService.findById(id).get();
-
-        if (user == null) {
+        User user = null;
+        int random = (int) Math.round(Math.random() * 4) + 1;
+        String image = "https://hago-storage-bucket.s3.ap-northeast-2.amazonaws.com/default0" + random + ".jpg";
+        if (!userService.findById(id).isPresent()) {
             User newUser = User.builder()
                     .userId(id)
+                    .nickname(nickname)
+                    .profileImage(image)
                     .ageRange(Integer.parseInt(ageRange))
                     .build();
 
             user = userService.saveUser(newUser);
+        } else {
+            user = userService.findById(id).get();
         }
-        user.update(nickname, profileImage);
 
         UserRequestDto userResponseDto = new UserRequestDto(user);
         String jwt = jwtService.create("user", userResponseDto, "user");

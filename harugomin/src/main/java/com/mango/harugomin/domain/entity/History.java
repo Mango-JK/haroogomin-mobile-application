@@ -45,8 +45,8 @@ public class History extends BaseTimeEntity {
     @Column(name = "hits")
     private int hits;
 
-    @Column(name = "post_likes")
-    private int postLikes;
+    @Column(name = "comment_num")
+    private int commentsNum;
 
     public History(Post post) {
         this.postId = post.getPostId();
@@ -57,7 +57,7 @@ public class History extends BaseTimeEntity {
         this.postImage = post.getPostImage();
         this.comments = post.getComments();
         this.hits = post.getHits();
-        this.postLikes = post.getPostLikes();
+        this.commentsNum = post.getCommentsNum();
         this.setModifiedDate(LocalDateTime.now());
     }
 }

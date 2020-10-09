@@ -35,6 +35,7 @@ public class CommentService {
                 .commentLikes(0)
                 .build()
         );
+        post.upCommentCount();
         post.addComment(comment);
         commentRepository.save(comment);
 
@@ -70,6 +71,6 @@ public class CommentService {
 
     @Transactional
     public void deleteByUserId(Long userId) {
-        commentRepository.deleteByUserId(userId);
+        commentRepository.deleteAllByUserId(userId);
     }
 }

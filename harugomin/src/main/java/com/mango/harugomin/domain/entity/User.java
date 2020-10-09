@@ -51,13 +51,6 @@ public class User extends BaseTimeEntity {
         this.ageRange = ageRange;
     }
 
-    public void update(String nickname, String profileImage) {
-        this.nickname = nickname;
-        this.profileImage = profileImage;
-        this.setModifiedDate(LocalDateTime.now());
-    }
-
-
     public void updateUserImage(String imagePath) {
         this.profileImage = imagePath;
         this.setModifiedDate(LocalDateTime.now());

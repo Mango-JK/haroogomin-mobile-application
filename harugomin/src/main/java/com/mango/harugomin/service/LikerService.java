@@ -6,8 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @RequiredArgsConstructor
 @Service
 public class LikerService {
@@ -22,6 +20,11 @@ public class LikerService {
     public void deteleLike(Long commentId, Long userId) {
         Liker liker = likerRepository.findByComment_CommentIdAndUserId(commentId, userId).get();
         likerRepository.delete(liker);
+    }
+
+    @Transactional
+    public void deleteAllByUsers(Long userId){
+        likerRepository.deleteAllbyUsers(userId);
     }
 
     @Transactional

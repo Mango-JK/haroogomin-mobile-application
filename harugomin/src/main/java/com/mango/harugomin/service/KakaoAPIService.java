@@ -36,8 +36,6 @@ public class KakaoAPIService {
     private final String AUTH_HOST = "https://kauth.kakao.com";
 
     public ResponseEntity<String> getAccessToken(String code) {
-        log.info("KAKAO API SERVICE :: Start getAccessToken -> CODE : " + code);
-
         final String tokenRequestUrl = AUTH_HOST + "/oauth/token";
 
         String CLIENT_ID = "7a888c52e90c278c82e7da483c93375f";
@@ -65,8 +63,6 @@ public class KakaoAPIService {
             writer.flush();
 
             int responseCode = conn.getResponseCode();
-            log.info("\nSending 'POST' request to URL : " + tokenRequestUrl);
-            log.info("Response Code : " + responseCode);
 
             isr = new InputStreamReader(conn.getInputStream());
             reader = new BufferedReader(isr);
@@ -101,7 +97,6 @@ public class KakaoAPIService {
     }
 
     public JsonNode getKaKaoUserInfo(String access_Token) {
-        log.info("KakaoAPIService :: getKaKaoUserInfo");
 
         final HttpClient client = HttpClientBuilder.create().build();
         final HttpPost post = new HttpPost(requestURL);
@@ -120,40 +115,43 @@ public class KakaoAPIService {
             e.printStackTrace();
         }
 
-        log.info(returnNode.toString());
         return returnNode;
     }
 
     @Transactional
     public String redirectToken(JsonNode json) {
-        log.info("KakaoAPIService :: redirectToken");
 
         long id = json.get("id").asLong();
         String nickname = json.get("kakao_account").get("profile").get("nickname").toString();
         nickname = nickname.substring(1, nickname.length() - 1);
-        String profile_needs_agreement = json.get("kakao_account").get("profile_needs_agreement").toString();
         String ageRange = "0";
 
-        String picture = null;
-        if (json.get("kakao_account").get("profile").has("thumbnail_image_url")) {
-            picture = json.get("kakao_account").get("profile").get("thumbnail_image_url").toString();
-            picture = picture.substring(1, picture.length() - 1);
-            String temp = picture.substring(0, 4);
-            String temp2 = picture.substring(4, picture.length());
-            picture = temp + "s" + temp2;
-        }
-
-        User user = userService.findById(id).get();
-        if (user == null) {
+//        String profile_needs_agreement = json.get("kakao_account").get("profile_needs_agreement").toString();
+//        String picture = null;
+//        if (json.get("kakao_account").get("profile").has("thumbnail_image_url")) {
+//            picture = json.get("kakao_account").get("profile").get("thumbnail_image_url").toString();
+//            picture = picture.substring(1, picture.length() - 1);
+//            String temp = picture.substring(0, 4);
+//            String temp2 = picture.substring(4, picture.length());
+//            picture = temp + "s" + temp2;
+//        }
+        int random = (int) Math.round(Math.random() * 4) + 1;
+        String image = "https://hago-storage-bucket.s3.ap-northeast-2.amazonaws.com/default0" + random + ".jpg";
+        User user = null;
+        if (!userService.findById(id).isPresent()) {
             User newUser = User.builder()
                     .userId(id)
+                    .nickname(nickname)
+                    .profileImage(image)
                     .ageRange(Integer.parseInt(ageRange))
                     .build();
 
             user = userService.saveUser(newUser);
+        } else {
+            user = userService.findById(id).get();
         }
 
-        user.update(nickname, picture);
+//        user.update(picture);
 
         UserRequestDto userRequestDto = new UserRequestDto(user);
         String jwt = jwtService.create("user", userRequestDto, "user");

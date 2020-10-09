@@ -3,6 +3,7 @@ package com.mango.harugomin.controller;
 import com.google.gson.JsonObject;
 import com.mango.harugomin.domain.entity.Hashtag;
 import com.mango.harugomin.domain.entity.Post;
+import com.mango.harugomin.dto.PostResponseDto;
 import com.mango.harugomin.dto.PostSaveRequestDto;
 import com.mango.harugomin.service.HashtagService;
 import com.mango.harugomin.service.PostService;
@@ -37,9 +38,6 @@ public class PostController {
     private final HashtagService hashtagService;
     private final S3Service s3Service;
 
-    /**
-     * 1. 고민글 작성 or 수정
-     */
     @ApiOperation("고민글 작성 or 수정")
     @PostMapping(value = "/posts")
     public ResponseEntity updatePost(@RequestBody PostSaveRequestDto requestDto) throws Exception {
@@ -52,13 +50,10 @@ public class PostController {
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(post, HttpStatus.OK);
+        return new ResponseEntity(new PostResponseDto(post), HttpStatus.OK);
     }
 
-    /**
-     * 2. 고민글 삭제 (History로 이동)
-     */
-    @ApiOperation("고민글 삭제 (History로 이동)")
+    @ApiOperation("고민글 삭제")
     @DeleteMapping(value = "/posts/{postId}")
     public ResponseEntity deletePost(@PathVariable("postId") Long postId) throws Exception {
         try {
@@ -69,9 +64,6 @@ public class PostController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    /**
-     * 3. 고민글 상세 조회
-     */
     @ApiOperation("고민글 상세 조회")
     @GetMapping(value = "/posts/{postId}")
     public ResponseEntity findOne(@PathVariable("postId") Long postId) {
@@ -79,7 +71,7 @@ public class PostController {
         if (post == null) {
             return new ResponseEntity(post, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(post, HttpStatus.OK);
+        return new ResponseEntity(new PostResponseDto(post), HttpStatus.OK);
     }
 
     /**
@@ -98,40 +90,21 @@ public class PostController {
         return new ResponseEntity(topTags, HttpStatus.OK);
     }
 
-    /**
-     * 5. (Home) - 스토리
-     */
     @ApiOperation("(Home) - 스토리")
     @GetMapping(value = "/posts/home/story")
     public ResponseEntity homeStory() throws Exception {
         List<Post> story = null;
 
         try {
-            LocalDateTime currentTime = LocalDateTime.now();
             PageRequest storyRequest = PageRequest.of(0, 13, Sort.by("createdDate"));
             List<Post> data = postService.findAllPosts(storyRequest).getContent();
             story = new ArrayList<>();
-            for (Post post : data) {
-                Duration duration = Duration.between(post.getCreatedDate(), currentTime);
-                long minute = duration.getSeconds();
-
-                if (duration.getSeconds() >= 86400) {
-                    postService.postToHistory(post.getPostId());
-                } else
-                    story.add(post);
-                if (story.size() > 9)
-                    break;
-            }
-
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity(story, HttpStatus.OK);
     }
 
-    /**
-     * 6. (HOME) - 태그별 새 고민글
-     */
     @ApiOperation("(HOME) - 태그별 새 고민글")
     @GetMapping(value = "/posts/home/{tagName}")
     public ResponseEntity homePosting(@PathVariable("tagName") String tagName, @RequestParam int pageNum) throws Exception {
@@ -139,7 +112,22 @@ public class PostController {
         Page<Post> result = null;
 
         if (tagName.equals("전체")) {
+            pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").ascending());
             result = postService.findAllPosts(pageRequest);
+            LocalDateTime currentTime = LocalDateTime.now();
+            for (Post post : result) {
+                Duration duration = Duration.between(post.getCreatedDate(), currentTime);
+                long minute = duration.getSeconds();
+
+                if (duration.getSeconds() >= 86400) {
+                    postService.postToHistory(post.getPostId());
+                } else
+                    break;
+
+            pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
+            result = postService.findAllPosts(pageRequest);
+
+            }
             return new ResponseEntity(result.getContent(), HttpStatus.OK);
         }
 
@@ -151,9 +139,6 @@ public class PostController {
         return new ResponseEntity<>(result.getContent(), HttpStatus.OK);
     }
 
-    /**
-     * 7. 고민글 통합 검색
-     */
     @ApiOperation("고민글 통합 검색")
     @GetMapping(value = "/posts/search/{keyword}")
     public ResponseEntity searchAllPosts(@PathVariable("keyword") String keyword, @RequestParam int pageNum) throws Exception {
@@ -167,9 +152,6 @@ public class PostController {
         return new ResponseEntity(result.getContent(), HttpStatus.OK);
     }
 
-    /**
-     * 8. 메인 고민글 3개 출력
-     */
     @ApiOperation("메인 고민글 3개 출력")
     @GetMapping(value = "/posts/main")
     public ResponseEntity mainView() throws Exception {
@@ -183,9 +165,6 @@ public class PostController {
         return new ResponseEntity<>(result.getContent(), HttpStatus.OK);
     }
 
-    /**
-     * 9. 고민글 사진 업로드
-     */
     @ApiOperation("고민글 사진 업로드")
     @PostMapping(value = "/posts/image")
     public String uploadPostImage(MultipartFile file) throws IOException {
