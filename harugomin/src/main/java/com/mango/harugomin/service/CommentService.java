@@ -35,6 +35,7 @@ public class CommentService {
                 .commentLikes(0)
                 .build()
         );
+        post.upCommentCount();
         post.addComment(comment);
         commentRepository.save(comment);
 

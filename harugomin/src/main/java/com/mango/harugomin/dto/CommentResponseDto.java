@@ -1,18 +1,20 @@
 package com.mango.harugomin.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mango.harugomin.domain.entity.BaseTimeEntity;
 import com.mango.harugomin.domain.entity.Comment;
 import com.mango.harugomin.domain.entity.Post;
-import com.mango.harugomin.domain.entity.User;
 import lombok.Getter;
 
 import javax.persistence.Lob;
 
 @Getter
-public class CommentResponseDto {
+public class CommentResponseDto extends BaseTimeEntity {
     private Long commentId;
     private Long userId;
     private String nickname;
     private String profileImage;
+    @JsonIgnore
     private Post post;
     @Lob
     private String content;
@@ -26,5 +28,7 @@ public class CommentResponseDto {
         this.post = entity.getPost();
         this.content = entity.getContent();
         this.commentLikes = entity.getCommentLikes();
+        this.setCreatedDate(entity.getCreatedDate());
+        this.setModifiedDate(entity.getModifiedDate());
     }
 }

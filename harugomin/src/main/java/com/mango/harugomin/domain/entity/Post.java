@@ -50,18 +50,18 @@ public class Post extends BaseTimeEntity {
     @Column(name = "hits")
     private int hits;
 
-    @Column(name = "post_likes")
-    private int postLikes;
+    @Column(name = "comment_num")
+    private int commentsNum;
 
     @Builder
-    public Post(User user, String title, String content, String tagName, String postImage, int hits, int postLikes) {
+    public Post(User user, String title, String content, String tagName, String postImage, int hits) {
         this.user = user;
         this.title = title;
         this.content = content;
         this.tagName = tagName;
         this.postImage = postImage;
         this.hits = hits;
-        this.postLikes = postLikes;
+        this.commentsNum = 0;
     }
 
     public void update(String title, String content, String tagName, String postImage) {
@@ -81,7 +81,7 @@ public class Post extends BaseTimeEntity {
         this.postImage = postImage;
         this.comments = new ArrayList<>();
         this.hits = 0;
-        this.postLikes = 0;
+        this.commentsNum = 0;
     }
 
     public void addComment(Comment comment){
@@ -90,6 +90,14 @@ public class Post extends BaseTimeEntity {
 
     public long getUserId() {
         return user.getUserId();
+    }
+
+    public String getUserNickname(){return user.getNickname();}
+
+    public String getUserProfileImage(){return user.getProfileImage();}
+
+    public void upCommentCount(){
+        this.commentsNum++;
     }
 
 }
