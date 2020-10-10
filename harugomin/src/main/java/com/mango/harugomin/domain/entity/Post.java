@@ -51,7 +51,7 @@ public class Post extends BaseTimeEntity {
     private int hits;
 
     @Column(name = "comment_num")
-    private int commentsNum;
+    private int commentNum;
 
     @Builder
     public Post(User user, String title, String content, String tagName, String postImage, int hits) {
@@ -61,7 +61,7 @@ public class Post extends BaseTimeEntity {
         this.tagName = tagName;
         this.postImage = postImage;
         this.hits = hits;
-        this.commentsNum = 0;
+        this.commentNum = 0;
     }
 
     public void update(String title, String content, String tagName, String postImage) {
@@ -81,7 +81,7 @@ public class Post extends BaseTimeEntity {
         this.postImage = postImage;
         this.comments = new ArrayList<>();
         this.hits = 0;
-        this.commentsNum = 0;
+        this.commentNum = 0;
     }
 
     public void addComment(Comment comment){
@@ -97,7 +97,11 @@ public class Post extends BaseTimeEntity {
     public String getUserProfileImage(){return user.getProfileImage();}
 
     public void upCommentCount(){
-        this.commentsNum++;
+        this.commentNum++;
+    }
+
+    public void downCommentCount(){
+        this.commentNum--;
     }
 
 }

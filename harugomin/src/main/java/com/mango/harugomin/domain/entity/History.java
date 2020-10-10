@@ -57,7 +57,7 @@ public class History extends BaseTimeEntity {
         this.postImage = post.getPostImage();
         this.comments = post.getComments();
         this.hits = post.getHits();
-        this.commentsNum = post.getCommentsNum();
+        this.commentsNum = post.getCommentNum();
         this.setModifiedDate(LocalDateTime.now());
     }
 }
