@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,4 +24,8 @@ public interface LikerRepository extends JpaRepository<Liker, Long> {
     @Modifying(clearAutomatically = true)
     @Query(value = "delete from liker where user_id = ?1 ", nativeQuery = true)
     void deleteAllbyUsers(Long userId);
+
+    @Modifying(clearAutomatically = true)
+    @Query(value = "select comment_id from liker where user_id = ?1 ", nativeQuery = true)
+    List<Long> findAllByUserId(Long userId);
 }

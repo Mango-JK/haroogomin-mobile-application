@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 public class LikerService {
@@ -30,5 +33,10 @@ public class LikerService {
     @Transactional
     public void save(Liker liker) {
         likerRepository.save(liker);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Long> findAllByUserId(Long userId) {
+        return likerRepository.findAllByUserId(userId);
     }
 }

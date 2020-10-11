@@ -36,16 +36,8 @@
     <list default="true" id="0dc6c3b9-2347-4119-844a-83a7481f4166" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/CommentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/CommentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/PostController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/History.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/History.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/Post.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/dto/CommentResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/dto/CommentResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/dto/PostResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/dto/PostResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/CommentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/CommentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/KakaoAPIService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/KakaoAPIService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/NaverAPIService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/NaverAPIService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/PostService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/LikerRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/LikerRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/LikerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/LikerService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -341,7 +333,9 @@
       <workItem from="1601813626031" duration="8258000" />
       <workItem from="1602169783900" duration="5574000" />
       <workItem from="1602224112176" duration="5719000" />
-      <workItem from="1602250810026" duration="6633000" />
+      <workItem from="1602250810026" duration="12010000" />
+      <workItem from="1602338070241" duration="3310000" />
+      <workItem from="1602379732477" duration="5015000" />
     </task>
     <servers />
   </component>
@@ -409,38 +403,38 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="478" y="278" key="FileChooserDialogImpl/0.0.2560.1040@0.0.2560.1040" timestamp="1600956278676" />
-    <state width="2517" height="399" key="GridCell.Tab.0.bottom" timestamp="1602257470343">
+    <state width="2517" height="409" key="GridCell.Tab.0.bottom" timestamp="1602412313291">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="399" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1602257470343" />
-    <state width="2517" height="399" key="GridCell.Tab.0.center" timestamp="1602257470343">
+    <state width="2517" height="409" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1602412313291" />
+    <state width="2517" height="409" key="GridCell.Tab.0.center" timestamp="1602412313291">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="399" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1602257470343" />
-    <state width="2517" height="399" key="GridCell.Tab.0.left" timestamp="1602257470343">
+    <state width="2517" height="409" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1602412313291" />
+    <state width="2517" height="409" key="GridCell.Tab.0.left" timestamp="1602412313291">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="399" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1602257470343" />
-    <state width="2517" height="399" key="GridCell.Tab.0.right" timestamp="1602257470343">
+    <state width="2517" height="409" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1602412313291" />
+    <state width="2517" height="409" key="GridCell.Tab.0.right" timestamp="1602412313291">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="399" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1602257470343" />
-    <state width="2517" height="399" key="GridCell.Tab.1.bottom" timestamp="1602257470343">
+    <state width="2517" height="409" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1602412313291" />
+    <state width="2517" height="409" key="GridCell.Tab.1.bottom" timestamp="1602412313291">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="399" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1602257470343" />
-    <state width="2517" height="399" key="GridCell.Tab.1.center" timestamp="1602257470343">
+    <state width="2517" height="409" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1602412313291" />
+    <state width="2517" height="409" key="GridCell.Tab.1.center" timestamp="1602412313291">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="399" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1602257470343" />
-    <state width="2517" height="399" key="GridCell.Tab.1.left" timestamp="1602257470343">
+    <state width="2517" height="409" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1602412313291" />
+    <state width="2517" height="409" key="GridCell.Tab.1.left" timestamp="1602412313291">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="399" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1602257470343" />
-    <state width="2517" height="399" key="GridCell.Tab.1.right" timestamp="1602257470343">
+    <state width="2517" height="409" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1602412313291" />
+    <state width="2517" height="409" key="GridCell.Tab.1.right" timestamp="1602412313291">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="399" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1602257470343" />
+    <state width="2517" height="409" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1602412313291" />
     <state width="2517" height="411" key="GridCell.Tab.2.bottom" timestamp="1600476244875">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
@@ -469,10 +463,10 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="1461" y="267" key="com.intellij.testIntegration.createTest.CreateTestDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1600869596758" />
-    <state x="474" y="256" width="584" height="630" key="find.popup" timestamp="1602253062078">
+    <state x="474" y="256" width="584" height="630" key="find.popup" timestamp="1602383145688">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="474" y="256" width="584" height="630" key="find.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1602253062078" />
+    <state x="474" y="256" width="584" height="630" key="find.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1602383145688" />
     <state x="936" y="240" key="run.anything.popup" timestamp="1599552736925">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
