@@ -90,7 +90,7 @@ public class NaverAPIService {
     }
 
     @Transactional
-    public String redirectToken(JsonNode json) throws Exception {
+    public String redirectToken(JsonNode json) {
         long id = json.get("response").get("id").asLong();
         String nickname = json.get("response").get("nickname").toString();
         nickname = nickname.substring(1, nickname.length() - 1);
@@ -104,7 +104,7 @@ public class NaverAPIService {
         User user = null;
         int random = (int) Math.round(Math.random() * 4) + 1;
         String image = "https://hago-storage-bucket.s3.ap-northeast-2.amazonaws.com/default0" + random + ".jpg";
-        if (!userService.findById(id).isPresent()) {
+        if (userService.findById(id).isEmpty()) {
             User newUser = User.builder()
                     .userId(id)
                     .nickname(nickname)
@@ -116,7 +116,6 @@ public class NaverAPIService {
         } else {
             user = userService.findById(id).get();
         }
-
         UserRequestDto userResponseDto = new UserRequestDto(user);
         String jwt = jwtService.create("user", userResponseDto, "user");
 

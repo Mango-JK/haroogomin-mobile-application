@@ -58,6 +58,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId).get();
         Post post = postService.findById(comment.getPost().getPostId()).get();
         post.getComments().remove(comment);
+        post.downCommentCount();
         commentRepository.delete(comment);
     }
 

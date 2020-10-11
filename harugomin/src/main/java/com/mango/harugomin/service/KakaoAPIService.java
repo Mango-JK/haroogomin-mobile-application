@@ -120,7 +120,6 @@ public class KakaoAPIService {
 
     @Transactional
     public String redirectToken(JsonNode json) {
-
         long id = json.get("id").asLong();
         String nickname = json.get("kakao_account").get("profile").get("nickname").toString();
         nickname = nickname.substring(1, nickname.length() - 1);
@@ -138,21 +137,18 @@ public class KakaoAPIService {
         int random = (int) Math.round(Math.random() * 4) + 1;
         String image = "https://hago-storage-bucket.s3.ap-northeast-2.amazonaws.com/default0" + random + ".jpg";
         User user = null;
-        if (!userService.findById(id).isPresent()) {
+        if (userService.findById(id).isEmpty()) {
             User newUser = User.builder()
                     .userId(id)
                     .nickname(nickname)
                     .profileImage(image)
                     .ageRange(Integer.parseInt(ageRange))
                     .build();
-
             user = userService.saveUser(newUser);
         } else {
             user = userService.findById(id).get();
         }
-
 //        user.update(picture);
-
         UserRequestDto userRequestDto = new UserRequestDto(user);
         String jwt = jwtService.create("user", userRequestDto, "user");
 

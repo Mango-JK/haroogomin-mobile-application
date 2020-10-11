@@ -20,6 +20,7 @@ public class PostResponseDto {
     private String tagName;
     private String postImage;
     private int hits;
+    private int commentNum;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
     private Long userId;
@@ -38,5 +39,6 @@ public class PostResponseDto {
         this.userId = entity.getUserId();
         this.userNickname = entity.getUserNickname();
         this.userProfileImage = entity.getUserProfileImage();
+        this.commentNum = entity.getCommentNum();
     }
 }

@@ -74,9 +74,6 @@ public class PostController {
         return new ResponseEntity(new PostResponseDto(post), HttpStatus.OK);
     }
 
-    /**
-     * 4.(Home) - 인기순 해시태그 리스트
-     */
     @ApiOperation("(Home) - 인기순 해시태그 리스트")
     @GetMapping(value = "/posts/home/hashtag")
     public ResponseEntity homeBestHashtag() throws Exception {
@@ -99,6 +96,11 @@ public class PostController {
             PageRequest storyRequest = PageRequest.of(0, 13, Sort.by("createdDate"));
             List<Post> data = postService.findAllPosts(storyRequest).getContent();
             story = new ArrayList<>();
+            for (Post post : data) {
+                story.add(post);
+                if (story.size() > 9)
+                    break;
+            }
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
@@ -112,7 +114,7 @@ public class PostController {
         Page<Post> result = null;
 
         if (tagName.equals("전체")) {
-            pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").ascending());
+            pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
             result = postService.findAllPosts(pageRequest);
             LocalDateTime currentTime = LocalDateTime.now();
             for (Post post : result) {
@@ -124,8 +126,8 @@ public class PostController {
                 } else
                     break;
 
-            pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
-            result = postService.findAllPosts(pageRequest);
+                pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
+                result = postService.findAllPosts(pageRequest);
 
             }
             return new ResponseEntity(result.getContent(), HttpStatus.OK);

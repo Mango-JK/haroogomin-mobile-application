@@ -100,4 +100,8 @@ public class Post extends BaseTimeEntity {
         this.commentNum++;
     }
 
+    public void downCommentCount(){
+        this.commentNum--;
+    }
+
 }
