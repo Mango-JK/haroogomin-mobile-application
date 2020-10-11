@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @Slf4j
@@ -84,12 +85,26 @@ public class CommentController {
     }
 
     @ApiOperation("댓글 조회 (페이징)")
-    @GetMapping(value = "/comment/{postId}")
-    public ResponseEntity findOne(@PathVariable("postId") Long postId, @RequestParam("pageNum") int pageNum) {
+    @GetMapping(value = "/comments/{postId}")
+    public ResponseEntity findOne(@PathVariable("postId") Long postId, @RequestParam("userId") long userId, @RequestParam("pageNum") int pageNum) {
         PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
         List<Comment> result = commentService.findAllByPostPostId(postId, pageRequest).getContent();
         if (result == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            new ResponseEntity(HttpStatus.OK);
+        }
+        List<Liker> likers = likerService.findAllLikers(userId);
+        if (likers == null) {
+            return new ResponseEntity(result, HttpStatus.OK);
+        } else {
+            for (Liker liker : likers) {
+                Comment comment = liker.getComment();
+                if(result.contains(comment)) {
+                    for(Comment c : result) {
+                        if(c.getCommentId() == comment.getCommentId())
+                            c.userLikeThis();
+                    }
+                }
+            }
         }
         return new ResponseEntity(result, HttpStatus.OK);
     }

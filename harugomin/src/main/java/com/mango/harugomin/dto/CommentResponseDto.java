@@ -19,6 +19,7 @@ public class CommentResponseDto extends BaseTimeEntity {
     @Lob
     private String content;
     private int commentLikes;
+    private boolean isLike;
 
     public CommentResponseDto(Comment entity) {
         this.commentId = entity.getCommentId();
@@ -30,5 +31,6 @@ public class CommentResponseDto extends BaseTimeEntity {
         this.commentLikes = entity.getCommentLikes();
         this.setCreatedDate(entity.getCreatedDate());
         this.setModifiedDate(entity.getModifiedDate());
+        this.isLike = false;
     }
 }

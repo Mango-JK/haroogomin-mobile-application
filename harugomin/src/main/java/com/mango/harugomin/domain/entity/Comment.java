@@ -42,6 +42,9 @@ public class Comment extends BaseTimeEntity {
     @Column(name = "comment_likes")
     private int commentLikes;
 
+    @Column(name = "is_like")
+    private boolean isLike = false;
+
     @Builder
     public Comment(Long userId, String nickname, String profileImage, Post post, String content, int commentLikes) {
         this.userId = userId;
@@ -50,11 +53,16 @@ public class Comment extends BaseTimeEntity {
         this.post = post;
         this.content = content;
         this.commentLikes = commentLikes;
+        this.isLike = false;
     }
 
     public void update(String content) {
         this.content = content;
         this.setModifiedDate(LocalDateTime.now());
+    }
+
+    public void userLikeThis(){
+        this.isLike = true;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.mango.harugomin.service;
 
 import com.mango.harugomin.domain.entity.Comment;
+import com.mango.harugomin.domain.entity.Liker;
 import com.mango.harugomin.domain.entity.Post;
 import com.mango.harugomin.domain.repository.CommentRepository;
 import com.mango.harugomin.dto.CommentSaveRequestDto;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -73,4 +75,5 @@ public class CommentService {
     public void deleteByUserId(Long userId) {
         commentRepository.deleteAllByUserId(userId);
     }
+
 }
