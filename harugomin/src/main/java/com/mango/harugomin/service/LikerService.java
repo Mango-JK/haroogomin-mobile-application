@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -34,7 +35,8 @@ public class LikerService {
         likerRepository.save(liker);
     }
 
-    public List<Liker> findAllLikers(long userId) {
-        return likerRepository.findAllByUserId(userId).get();
+    @Transactional(readOnly = true)
+    public List<Long> findAllByUserId(Long userId) {
+        return likerRepository.findAllByUserId(userId);
     }
 }

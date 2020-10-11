@@ -25,5 +25,7 @@ public interface LikerRepository extends JpaRepository<Liker, Long> {
     @Query(value = "delete from liker where user_id = ?1 ", nativeQuery = true)
     void deleteAllbyUsers(Long userId);
 
-    Optional<List<Liker>> findAllByUserId(long userId);
+    @Modifying(clearAutomatically = true)
+    @Query(value = "select comment_id from liker where user_id = ?1 ", nativeQuery = true)
+    List<Long> findAllByUserId(Long userId);
 }

@@ -89,20 +89,18 @@ public class CommentController {
     public ResponseEntity findOne(@PathVariable("postId") Long postId, @RequestParam("userId") long userId, @RequestParam("pageNum") int pageNum) {
         PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
         List<Comment> result = commentService.findAllByPostPostId(postId, pageRequest).getContent();
+
         if (result == null) {
             new ResponseEntity(HttpStatus.OK);
         }
-        List<Liker> likers = likerService.findAllLikers(userId);
-        if (likers == null) {
+
+        List<Long> likers = likerService.findAllByUserId(userId);
+        if(likers.isEmpty())
             return new ResponseEntity(result, HttpStatus.OK);
-        } else {
-            for (Liker liker : likers) {
-                Comment comment = liker.getComment();
-                if(result.contains(comment)) {
-                    for(Comment c : result) {
-                        if(c.getCommentId() == comment.getCommentId())
-                            c.userLikeThis();
-                    }
+        else {
+            for(Comment comment : result) {
+                if(likers.contains(comment.getCommentId())){
+                    comment.userLikeThis();
                 }
             }
         }
