@@ -38,7 +38,6 @@ public class PostService {
                 .tagName(requestDto.getTagName())
                 .postImage(requestDto.getPostImage())
                 .hits(0)
-                .postLikes(0)
                 .build()
         );
     }
@@ -61,7 +60,7 @@ public class PostService {
         return postRepository.findAll(pageRequest);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Optional<Post> findById(Long postId) {
         postRepository.postHits(postId);
         return postRepository.findById(postId);

@@ -37,7 +37,7 @@ public class CommentController {
         try {
             responseDto = new CommentResponseDto(commentService.save(requestDto));
         } catch (Exception e) {
-            return new ResponseEntity(responseDto, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }

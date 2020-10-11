@@ -3,6 +3,7 @@ package com.mango.harugomin.controller;
 import com.google.gson.JsonObject;
 import com.mango.harugomin.domain.entity.Hashtag;
 import com.mango.harugomin.domain.entity.Post;
+import com.mango.harugomin.dto.PostResponseDto;
 import com.mango.harugomin.dto.PostSaveRequestDto;
 import com.mango.harugomin.service.HashtagService;
 import com.mango.harugomin.service.PostService;
@@ -49,7 +50,7 @@ public class PostController {
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(post, HttpStatus.OK);
+        return new ResponseEntity(new PostResponseDto(post), HttpStatus.OK);
     }
 
     @ApiOperation("고민글 삭제")
@@ -70,7 +71,7 @@ public class PostController {
         if (post == null) {
             return new ResponseEntity(post, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(post, HttpStatus.OK);
+        return new ResponseEntity(new PostResponseDto(post), HttpStatus.OK);
     }
 
     /**

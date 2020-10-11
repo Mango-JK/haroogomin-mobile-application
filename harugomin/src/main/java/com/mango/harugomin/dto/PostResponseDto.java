@@ -1,5 +1,6 @@
 package com.mango.harugomin.dto;
 
+import com.mango.harugomin.domain.entity.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +13,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class PostResponseDto {
     private Long postId;
-    private Long userId;
     @Lob
     private String title;
     @Lob
@@ -20,6 +20,23 @@ public class PostResponseDto {
     private String tagName;
     private String postImage;
     private int hits;
-    private int postLikes;
     private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
+    private Long userId;
+    private String userNickname;
+    private String userProfileImage;
+
+    public PostResponseDto(Post entity) {
+        this.postId = entity.getPostId();
+        this.title = entity.getTitle();
+        this.content = entity.getContent();
+        this.tagName = entity.getTagName();
+        this.postImage = entity.getPostImage();
+        this.hits = entity.getHits();
+        this.createdDate = entity.getCreatedDate();
+        this.modifiedDate = entity.getModifiedDate();
+        this.userId = entity.getUserId();
+        this.userNickname = entity.getUserNickname();
+        this.userProfileImage = entity.getUserProfileImage();
+    }
 }
