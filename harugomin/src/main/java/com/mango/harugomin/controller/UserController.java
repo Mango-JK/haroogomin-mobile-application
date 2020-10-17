@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.JsonObject;
 import com.mango.harugomin.domain.entity.History;
 import com.mango.harugomin.domain.entity.Post;
+import com.mango.harugomin.domain.entity.ServicesResponse;
 import com.mango.harugomin.domain.entity.User;
 import com.mango.harugomin.dto.UserResponseDto;
 import com.mango.harugomin.dto.UserUpdateRequestDto;
@@ -42,6 +43,7 @@ public class UserController {
     private final CommentService commentService;
     private final LikerService likerService;
     private final UserHashtagService userHashtagService;
+    private final AppleAPIService appleAPIService;
 
     @ApiOperation("카카오 로그인")
     @PostMapping("/users/login/kakao")
@@ -83,6 +85,36 @@ public class UserController {
         data.addProperty("jwt", result);
         data.addProperty("status", String.valueOf(HttpStatus.OK));
         return data.toString();
+    }
+
+    @ApiOperation("애플 로그인")
+    @PostMapping("/users/login/apple")
+    public String appleLogin(ServicesResponse servicesResponse) {
+        if(servicesResponse == null)
+            return null;
+
+        String code = servicesResponse.getCode();
+        String client_secret = appleAPIService.getAppleClientSecret(servicesResponse.getId_token());
+
+        log.info("code "  + code);
+        log.info("client_secret : " + client_secret);
+
+        return code;
+//        String accessToken = request.getHeader("accessToken");
+//        JsonNode json = naverAPIService.getNaverUserInfo(accessToken);
+//
+//        String result = null;
+//        JsonObject data = new JsonObject();
+//        try {
+//            result = naverAPIService.redirectToken(json);
+//        } catch (Exception e) {
+//            data.addProperty("jwt", result);
+//            data.addProperty("status", String.valueOf(HttpStatus.BAD_REQUEST));
+//            return data.toString();
+//        }
+//        data.addProperty("jwt", result);
+//        data.addProperty("status", String.valueOf(HttpStatus.OK));
+//        return data.toString();
     }
 
     @ApiOperation("토큰 검증")
