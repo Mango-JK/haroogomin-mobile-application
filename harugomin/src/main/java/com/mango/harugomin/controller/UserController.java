@@ -2,10 +2,7 @@ package com.mango.harugomin.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.JsonObject;
-import com.mango.harugomin.domain.entity.History;
-import com.mango.harugomin.domain.entity.Post;
-import com.mango.harugomin.domain.entity.ServicesResponse;
-import com.mango.harugomin.domain.entity.User;
+import com.mango.harugomin.domain.entity.*;
 import com.mango.harugomin.dto.UserResponseDto;
 import com.mango.harugomin.dto.UserUpdateRequestDto;
 import com.mango.harugomin.jwt.JwtService;
@@ -19,11 +16,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @Slf4j
@@ -87,34 +86,37 @@ public class UserController {
         return data.toString();
     }
 
+    @GetMapping("/")
+    public String appleLoginPage(ModelMap model) {
+        Map<String, String> metaInfo = appleAPIService.getLoginMetaInfo();
+
+        model.addAttribute("client_id", metaInfo.get("CLIENT_ID"));
+        log.info("client_id : " + metaInfo.get("CLIENT_ID"));
+        model.addAttribute("redirect_uri", metaInfo.get("REDIRECT_URI"));
+        log.info("redirect_uri : " + metaInfo.get("REDIRECT_URI"));
+        model.addAttribute("nonce", metaInfo.get("NONCE"));
+        model.addAttribute("response_type", "code id_token");
+        model.addAttribute("scope", "name email");
+        model.addAttribute("response_mode", "form_post");
+        return "index";
+    }
+
     @ApiOperation("애플 로그인")
     @PostMapping("/users/login/apple")
-    public String appleLogin(ServicesResponse servicesResponse) {
+    public TokenResponse appleLogin(ServicesResponse servicesResponse) {
         if(servicesResponse == null)
             return null;
 
         String code = servicesResponse.getCode();
         String client_secret = appleAPIService.getAppleClientSecret(servicesResponse.getId_token());
 
-        log.info("code "  + code);
-        log.info("client_secret : " + client_secret);
+        log.info("================================");
+        log.info("id_token ‣ " + servicesResponse.getId_token());
+        log.info("payload ‣ " + appleAPIService.getPayload(servicesResponse.getId_token()));
+        log.info("client_secret ‣ " + client_secret);
+        log.info("================================");
 
-        return code;
-//        String accessToken = request.getHeader("accessToken");
-//        JsonNode json = naverAPIService.getNaverUserInfo(accessToken);
-//
-//        String result = null;
-//        JsonObject data = new JsonObject();
-//        try {
-//            result = naverAPIService.redirectToken(json);
-//        } catch (Exception e) {
-//            data.addProperty("jwt", result);
-//            data.addProperty("status", String.valueOf(HttpStatus.BAD_REQUEST));
-//            return data.toString();
-//        }
-//        data.addProperty("jwt", result);
-//        data.addProperty("status", String.valueOf(HttpStatus.OK));
-//        return data.toString();
+        return appleAPIService.requestCodeValidations(client_secret, code, null);
     }
 
     @ApiOperation("토큰 검증")
@@ -124,6 +126,7 @@ public class UserController {
 
         if (jwtService.isUsable(request.getHeader("jwt"))) {
             result = jwtService.get("user");
+            result = userService.findById(Long.parseLong(result.toString()));
         }
 
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -219,6 +222,7 @@ public class UserController {
     @GetMapping(value = "/users/login/kakao")
     public String getKakaoCode(@RequestParam("code") String code) {
         ResponseEntity<String> AccessToken = kakaoAPIService.getAccessToken(code);
+        log.info("AccessToken : " + AccessToken);
         return "index";
     }
 

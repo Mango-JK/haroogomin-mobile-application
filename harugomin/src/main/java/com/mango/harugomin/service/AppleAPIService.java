@@ -2,9 +2,11 @@ package com.mango.harugomin.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mango.harugomin.domain.entity.TokenResponse;
 import com.mango.harugomin.domain.entity.User;
 import com.mango.harugomin.dto.UserRequestDto;
 import com.mango.harugomin.jwt.JwtService;
+import com.mango.harugomin.utils.AppleUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
@@ -12,12 +14,11 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,6 +26,7 @@ import java.io.IOException;
 public class AppleAPIService {
     private final UserService userService;
     private final JwtService jwtService;
+    private final AppleUtils appleUtils;
 
     public JsonNode getAppleUserInfo(String accessToken) {
         String requestURL = "https://openapi.naver.com/v1/nid/me";
@@ -77,11 +79,32 @@ public class AppleAPIService {
         return jwt;
     }
 
+    public Map<String, String> getLoginMetaInfo() {
+        return appleUtils.getMetaInfo();
+    }
+
     public String getAppleClientSecret(String id_token) {
         if (appleUtils.verifyIdentityToken(id_token)) {
             return appleUtils.createClientSecret();
         }
 
         return null;
+    }
+
+    public String getPayload(String id_token) {
+        return appleUtils.decodeFromIdToken(id_token).toString();
+    }
+
+    public TokenResponse requestCodeValidations(String client_secret, String code, String refresh_token) {
+
+        TokenResponse tokenResponse = new TokenResponse();
+
+        if (client_secret != null && code != null && refresh_token == null) {
+            tokenResponse = appleUtils.validateAuthorizationGrantCode(client_secret, code);
+        } else if (client_secret != null && code == null && refresh_token != null) {
+            tokenResponse = appleUtils.validateAnExistingRefreshToken(client_secret, refresh_token);
+        }
+
+        return tokenResponse;
     }
 }

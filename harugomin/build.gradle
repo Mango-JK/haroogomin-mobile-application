@@ -41,6 +41,9 @@ dependencies {
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
 
+	// https://mvnrepository.com/artifact/com.nimbusds/nimbus-jose-jwt
+	compile group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '3.10'
+
 	// Test
 	testCompile 'org.springframework.boot:spring-boot-starter-test'
 
