@@ -242,7 +242,7 @@ public class AppleUtils {
      * @return
      */
     private TokenResponse getTokenResponse(Map<String, String> tokenRequest) throws IOException {
-
+        log.info("::: START getTokenResponse !! :::");
         try {
             String response = HttpClientUtils.doPost(AUTH_TOKEN_URL, tokenRequest);
             ObjectMapper objectMapper = new ObjectMapper();
@@ -284,13 +284,9 @@ public class AppleUtils {
         log.info("########### START DECODE ############");
         try {
             SignedJWT signedJWT = SignedJWT.parse(id_token);
-            log.info("signedJWT : " + signedJWT);
             ReadOnlyJWTClaimsSet getPayload = signedJWT.getJWTClaimsSet();
-            log.info("getPayload : " + getPayload);
             ObjectMapper objectMapper = new ObjectMapper();
-            log.info("!!! getPayload : " + getPayload.toJSONObject().toJSONString());
             Payload payload = objectMapper.readValue(getPayload.toJSONObject().toJSONString(), Payload.class);
-            log.info("payload !  " + payload);
             if (payload != null) {
                 return payload;
             }

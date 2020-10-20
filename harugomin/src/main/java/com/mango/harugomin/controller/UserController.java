@@ -99,8 +99,11 @@ public class UserController {
         log.info("CLIENT SECRET : " + client_secret);
 
         log.info("=========== GET PAYLOAD START ======================");
-        log.info("payload ‣ " + appleAPIService.getPayload(servicesResponse.getId_token()));
+        appleAPIService.getPayload(servicesResponse.getId_token());
         log.info("============= GOOD ===================");
+
+        String userId = appleAPIService.getUserId(servicesResponse.getId_token());
+        log.info("USER ID : " + userId);
 
         return appleAPIService.requestCodeValidations(client_secret, code, null);
     }
@@ -159,9 +162,6 @@ public class UserController {
         return new ResponseEntity<>(data.toString(), HttpStatus.OK);
     }
 
-    /**
-     * 8. 유저 삭제
-     */
     @ApiOperation("유저 삭제")
     @DeleteMapping(value = "/users/{userId}")
     public ResponseEntity<Long> deleteUser(@PathVariable("userId") Long userId) {

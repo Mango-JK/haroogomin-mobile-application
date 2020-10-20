@@ -94,17 +94,23 @@ public class AppleAPIService {
     }
 
     public String getPayload(String id_token) {
-        log.info("ID TOKEN : " + id_token);
+        log.info("ID값 : " + appleUtils.decodeFromIdToken(id_token).getSub());
         return appleUtils.decodeFromIdToken(id_token).toString();
     }
 
-    public TokenResponse requestCodeValidations(String client_secret, String code, String refresh_token) throws IOException {
+    public String getUserId(String id_token) {
+        return appleUtils.decodeFromIdToken(id_token).getSub();
+    }
 
+    public TokenResponse requestCodeValidations(String client_secret, String code, String refresh_token) throws IOException {
+        log.info(":: START requestCodeValidations :: ");
         TokenResponse tokenResponse = new TokenResponse();
 
         if (client_secret != null && code != null && refresh_token == null) {
+            log.info("====== validateAuthorizationGrantCode =========");
             tokenResponse = appleUtils.validateAuthorizationGrantCode(client_secret, code);
         } else if (client_secret != null && code == null && refresh_token != null) {
+            log.info("========= validateAnExistingRefreshToken ============");
             tokenResponse = appleUtils.validateAnExistingRefreshToken(client_secret, refresh_token);
         }
 
