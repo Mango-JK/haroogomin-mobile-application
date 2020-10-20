@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.JsonObject;
 import com.mango.harugomin.domain.entity.*;
 import com.mango.harugomin.dto.UserResponseDto;
+import com.mango.harugomin.dto.UserTokenResponseDto;
 import com.mango.harugomin.dto.UserUpdateRequestDto;
 import com.mango.harugomin.jwt.JwtService;
 import com.mango.harugomin.service.*;
@@ -106,13 +107,14 @@ public class UserController {
 
     @ApiOperation("토큰 검증")
     @PostMapping("/users/check")
-    public Object checkToken(HttpServletRequest request) {
-        Object result = null;
-
+    public ResponseEntity checkToken(HttpServletRequest request) {
+        User user = null;
         if (jwtService.isUsable(request.getHeader("jwt"))) {
-            result = jwtService.get("user");
-            result = userService.findById(Long.parseLong(result.toString()));
+            Object obj = jwtService.get("user");
+            user = userService.findById(Long.parseLong(obj.toString())).get();
         }
+
+        UserTokenResponseDto result = new UserTokenResponseDto(user);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
