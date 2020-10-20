@@ -86,35 +86,20 @@ public class UserController {
         return data.toString();
     }
 
-    @GetMapping("/")
-    public String appleLoginPage(ModelMap model) {
-        Map<String, String> metaInfo = appleAPIService.getLoginMetaInfo();
-
-        model.addAttribute("client_id", metaInfo.get("CLIENT_ID"));
-        log.info("client_id : " + metaInfo.get("CLIENT_ID"));
-        model.addAttribute("redirect_uri", metaInfo.get("REDIRECT_URI"));
-        log.info("redirect_uri : " + metaInfo.get("REDIRECT_URI"));
-        model.addAttribute("nonce", metaInfo.get("NONCE"));
-        model.addAttribute("response_type", "code id_token");
-        model.addAttribute("scope", "name email");
-        model.addAttribute("response_mode", "form_post");
-        return "index";
-    }
-
     @ApiOperation("애플 로그인")
     @PostMapping("/users/login/apple")
-    public TokenResponse appleLogin(ServicesResponse servicesResponse) {
+    public TokenResponse appleLogin(ServicesResponse servicesResponse) throws IOException {
         if(servicesResponse == null)
             return null;
 
         String code = servicesResponse.getCode();
+        log.info(" CODE : " + code);
         String client_secret = appleAPIService.getAppleClientSecret(servicesResponse.getId_token());
+        log.info("CLIENT SECRET : " + client_secret);
 
-        log.info("================================");
-        log.info("id_token ‣ " + servicesResponse.getId_token());
+        log.info("=========== GET PAYLOAD START ======================");
         log.info("payload ‣ " + appleAPIService.getPayload(servicesResponse.getId_token()));
-        log.info("client_secret ‣ " + client_secret);
-        log.info("================================");
+        log.info("============= GOOD ===================");
 
         return appleAPIService.requestCodeValidations(client_secret, code, null);
     }

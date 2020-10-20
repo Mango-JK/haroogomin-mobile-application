@@ -79,12 +79,14 @@ public class AppleAPIService {
         return jwt;
     }
 
-    public Map<String, String> getLoginMetaInfo() {
-        return appleUtils.getMetaInfo();
-    }
+    //
+    //
+    //
 
     public String getAppleClientSecret(String id_token) {
+        log.info("##### getAppleClientSecret START #####");
         if (appleUtils.verifyIdentityToken(id_token)) {
+            log.info("????????????????");
             return appleUtils.createClientSecret();
         }
 
@@ -92,10 +94,11 @@ public class AppleAPIService {
     }
 
     public String getPayload(String id_token) {
+        log.info("ID TOKEN : " + id_token);
         return appleUtils.decodeFromIdToken(id_token).toString();
     }
 
-    public TokenResponse requestCodeValidations(String client_secret, String code, String refresh_token) {
+    public TokenResponse requestCodeValidations(String client_secret, String code, String refresh_token) throws IOException {
 
         TokenResponse tokenResponse = new TokenResponse();
 
@@ -107,4 +110,5 @@ public class AppleAPIService {
 
         return tokenResponse;
     }
+
 }

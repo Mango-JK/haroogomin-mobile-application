@@ -1,9 +1,11 @@
 package com.mango.harugomin.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mango.harugomin.domain.entity.Key;
 import com.mango.harugomin.domain.entity.Keys;
 import com.mango.harugomin.domain.entity.TokenResponse;
+import com.mango.harugomin.domain.entity.Payload;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.ECDSASigner;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
@@ -12,9 +14,15 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.ReadOnlyJWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import lombok.extern.slf4j.Slf4j;
+import org.bouncycastle.util.io.pem.PemObject;
+import org.bouncycastle.util.io.pem.PemReader;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
+import java.io.FileReader;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.interfaces.ECPrivateKey;
@@ -24,6 +32,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class AppleUtils {
 
@@ -51,36 +60,45 @@ public class AppleUtils {
     @Value("${APPLE.WEBSITE.URL}")
     private String APPLE_WEBSITE_URL;
 
-    public Map<String, String> getMetaInfo() {
-
-        Map<String, String> metaInfo = new HashMap<>();
-
-        metaInfo.put("CLIENT_ID", AUD);
-        metaInfo.put("REDIRECT_URI", APPLE_WEBSITE_URL);
-        metaInfo.put("NONCE", "20B20D-0S8-1K8"); // Test value
-
-        return metaInfo;
-    }
-
+    /**
+     * User가 Sign in with Apple 요청(https://appleid.apple.com/auth/authorize)으로 전달받은 id_token을 이용한 최초 검증
+     * Apple Document URL ‣ https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_rest_api/verifying_a_user
+     *
+     * @param id_token
+     * @return boolean
+     */
     public boolean verifyIdentityToken(String id_token) {
+        log.info("@@@@@@ verifyIdentityToken @@@@@@@@@@@@@");
 
         try {
             SignedJWT signedJWT = SignedJWT.parse(id_token);
+            log.info(" signedJWT : " + signedJWT);
             ReadOnlyJWTClaimsSet payload = signedJWT.getJWTClaimsSet();
-
+            log.info("payload : " + payload);
             // EXP
             Date currentTime = new Date(System.currentTimeMillis());
+            log.info(" BEFORE DATE :: ");
             if (!currentTime.before(payload.getExpirationTime())) {
+                log.info(" DATE FALSE !!");
                 return false;
             }
 
+            log.info(" BEFORE NONCE :: " + payload.getClaim("nonce"));
+            log.info("ISS : " + ISS);
+            log.info("payload ISS : " + payload.getIssuer());
+            log.info("AUD : " + AUD);
+            log.info("payload.AUdience " + payload.getAudience().get(0));
             // NONCE(Test value), ISS, AUD
-            if (!"20B20D-0S8-1K8".equals(payload.getClaim("nonce")) || !ISS.equals(payload.getIssuer()) || !AUD.equals(payload.getAudience().get(0))) {
+//            if (!"20B20D-0S8-1K8".equals(payload.getClaim("nonce")) || !ISS.equals(payload.getIssuer()) || !AUD.equals(payload.getAudience().get(0))) {
+            if (!ISS.equals(payload.getIssuer())) {
+                log.info(" NONCE FALSE !!");
                 return false;
             }
 
             // RSA
+            log.info("  verifyPublicKey ! BEFORE ");
             if (verifyPublicKey(signedJWT)) {
+                log.info("return TRUE!TRUE!TRUE!TRUE!TRUE!TRUE!");
                 return true;
             }
         } catch (ParseException e) {
@@ -90,6 +108,12 @@ public class AppleUtils {
         return false;
     }
 
+    /**
+     * Apple Server에서 공개 키를 받아서 서명 확인
+     *
+     * @param signedJWT
+     * @return
+     */
     private boolean verifyPublicKey(SignedJWT signedJWT) {
 
         try {
@@ -112,10 +136,18 @@ public class AppleUtils {
         return false;
     }
 
+    /**
+     * client_secret 생성
+     * Apple Document URL ‣ https://developer.apple.com/documentation/sign_in_with_apple/generate_and_validate_tokens
+     *
+     * @return client_secret(jwt)
+     */
     public String createClientSecret() {
+        log.info("START createClientSecret  ! ");
         JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.ES256).keyID(KEY_ID).build();
         JWTClaimsSet claimsSet = new JWTClaimsSet();
         Date now = new Date();
+        log.info("now : " + now);
 
         claimsSet.setIssuer(TEAM_ID);
         claimsSet.setIssueTime(now);
@@ -125,40 +157,52 @@ public class AppleUtils {
 
         SignedJWT jwt = new SignedJWT(header, claimsSet);
 
-//        try {
-//            ECPrivateKey ecPrivateKey = new ECPrivateKeyImpl(readPrivateKey());
-//            JWSSigner jwsSigner = new ECDSASigner(ecPrivateKey.getS());
-//
-//            jwt.sign(jwsSigner);
-//
-//        } catch (InvalidKeyException e) {
-//            e.printStackTrace();
-//        } catch (JOSEException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            ECPrivateKey ecPrivateKey = new ECPrivateKeyImpl(readPrivateKey());
+            JWSSigner jwsSigner = new ECDSASigner(ecPrivateKey.getS());
+            log.info("jws Signer : " + jwsSigner);
+
+            jwt.sign(jwsSigner);
+
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (JOSEException e) {
+            e.printStackTrace();
+        }
 
         return jwt.serialize();
     }
 
-    public Payload decodeFromIdToken(String id_token) {
+    /**
+     * 파일에서 private key 획득
+     *
+     * @return Private Key
+     */
+    private byte[] readPrivateKey() {
 
-        try {
-            SignedJWT signedJWT = SignedJWT.parse(id_token);
-            ReadOnlyJWTClaimsSet getPayload = signedJWT.getJWTClaimsSet();
-            ObjectMapper objectMapper = new ObjectMapper();
-            Payload payload = objectMapper.readValue(getPayload.toJSONObject().toJSONString(), Payload.class);
+        Resource resource = new ClassPathResource(KEY_PATH);
+        byte[] content = null;
 
-            if (payload != null) {
-                return payload;
+        try (FileReader keyReader = new FileReader(resource.getURI().getPath());
+             PemReader pemReader = new PemReader(keyReader)) {
+            {
+                PemObject pemObject = pemReader.readPemObject();
+                content = pemObject.getContent();
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return content;
     }
 
-    public TokenResponse validateAuthorizationGrantCode(String client_secret, String code) {
+    /**
+     * 유효한 code 인지 Apple Server에 확인 요청
+     * Apple Document URL ‣ https://developer.apple.com/documentation/sign_in_with_apple/generate_and_validate_tokens
+     *
+     * @return
+     */
+    public TokenResponse validateAuthorizationGrantCode(String client_secret, String code) throws IOException {
 
         Map<String, String> tokenRequest = new HashMap<>();
 
@@ -171,7 +215,15 @@ public class AppleUtils {
         return getTokenResponse(tokenRequest);
     }
 
-    public TokenResponse validateAnExistingRefreshToken(String client_secret, String refresh_token) {
+    /**
+     * 유효한 refresh_token 인지 Apple Server에 확인 요청
+     * Apple Document URL ‣ https://developer.apple.com/documentation/sign_in_with_apple/generate_and_validate_tokens
+     *
+     * @param client_secret
+     * @param refresh_token
+     * @return
+     */
+    public TokenResponse validateAnExistingRefreshToken(String client_secret, String refresh_token) throws IOException {
 
         Map<String, String> tokenRequest = new HashMap<>();
 
@@ -183,7 +235,13 @@ public class AppleUtils {
         return getTokenResponse(tokenRequest);
     }
 
-    private TokenResponse getTokenResponse(Map<String, String> tokenRequest) {
+    /**
+     * POST https://appleid.apple.com/auth/token
+     *
+     * @param tokenRequest
+     * @return
+     */
+    private TokenResponse getTokenResponse(Map<String, String> tokenRequest) throws IOException {
 
         try {
             String response = HttpClientUtils.doPost(AUTH_TOKEN_URL, tokenRequest);
@@ -193,10 +251,54 @@ public class AppleUtils {
             if (tokenRequest != null) {
                 return tokenResponse;
             }
-        } catch (IOException e) {
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
         return null;
     }
+
+    /**
+     * Apple Meta Value
+     *
+     * @return
+     */
+    public Map<String, String> getMetaInfo() {
+
+        Map<String, String> metaInfo = new HashMap<>();
+
+        metaInfo.put("CLIENT_ID", AUD);
+        metaInfo.put("REDIRECT_URI", APPLE_WEBSITE_URL);
+        metaInfo.put("NONCE", "20B20D-0S8-1K8"); // Test value
+
+        return metaInfo;
+    }
+
+    /**
+     * id_token을 decode해서 payload 값 가져오기
+     *
+     * @param id_token
+     * @return
+     */
+    public Payload decodeFromIdToken(String id_token) {
+        log.info("########### START DECODE ############");
+        try {
+            SignedJWT signedJWT = SignedJWT.parse(id_token);
+            log.info("signedJWT : " + signedJWT);
+            ReadOnlyJWTClaimsSet getPayload = signedJWT.getJWTClaimsSet();
+            log.info("getPayload : " + getPayload);
+            ObjectMapper objectMapper = new ObjectMapper();
+            log.info("!!! getPayload : " + getPayload.toJSONObject().toJSONString());
+            Payload payload = objectMapper.readValue(getPayload.toJSONObject().toJSONString(), Payload.class);
+            log.info("payload !  " + payload);
+            if (payload != null) {
+                return payload;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 }

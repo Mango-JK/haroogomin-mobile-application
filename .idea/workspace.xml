@@ -34,18 +34,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0dc6c3b9-2347-4119-844a-83a7481f4166" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/Key.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/Keys.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/TokenResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/utils/HttpClientUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/Payload.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/utils/ECPrivateKeyImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/jwt/JwtService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/jwt/JwtService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/AppleAPIService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/AppleAPIService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/utils/AppleUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/utils/AppleUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/keystore.p12" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,7 +133,7 @@
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit3" value="junit.framework.TestCase" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
     <property name="ignore_missing_gitignore" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/daou/daou-2020" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/harugomin/src/main/resources/templates" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -150,7 +147,11 @@
       <recent name="com.mango.harugomin.controller" />
     </key>
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.mango.harugomin.utils" />
       <recent name="com.mango.harugomin.domain.entity" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\git\harugomin-mobile-application\harugomin\src\main\resources\templates" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="junit.framework.TestCase" />
@@ -346,6 +347,9 @@
       <workItem from="1602912655654" duration="3053000" />
       <workItem from="1603023062669" duration="7611000" />
       <workItem from="1603095923301" duration="3949000" />
+      <workItem from="1603177464438" duration="580000" />
+      <workItem from="1603178058336" duration="169000" />
+      <workItem from="1603178238169" duration="16053000" />
     </task>
     <servers />
   </component>
@@ -404,54 +408,54 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="392" y="322" key="#com.intellij.fileTypes.FileTypeChooser/0.0.2560.1040@0.0.2560.1040" timestamp="1603026358662" />
-    <state x="1231" y="234" key="#com.intellij.ide.util.MemberChooser" timestamp="1601535215986">
+    <state x="1231" y="234" key="#com.intellij.ide.util.MemberChooser" timestamp="1603177908309">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="1231" y="234" key="#com.intellij.ide.util.MemberChooser/0.0.2560.1040@0.0.2560.1040" timestamp="1601535215986" />
+    <state x="1231" y="234" key="#com.intellij.ide.util.MemberChooser/0.0.2560.1040@0.0.2560.1040" timestamp="1603177908309" />
     <state x="1216" y="452" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1600957232222">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="1216" y="452" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1600957232222" />
-    <state x="1010" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1601806337366">
+    <state x="1010" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1603177773582">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="1010" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1601806337366" />
+    <state x="1010" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1603177773582" />
     <state x="478" y="278" key="FileChooserDialogImpl" timestamp="1600956278676">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="478" y="278" key="FileChooserDialogImpl/0.0.2560.1040@0.0.2560.1040" timestamp="1600956278676" />
-    <state width="1670" height="366" key="GridCell.Tab.0.bottom" timestamp="1603105323609">
+    <state width="2517" height="465" key="GridCell.Tab.0.bottom" timestamp="1603198981037">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1670" height="366" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1603105323609" />
-    <state width="1670" height="366" key="GridCell.Tab.0.center" timestamp="1603105323608">
+    <state width="2517" height="465" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1603198981037" />
+    <state width="2517" height="465" key="GridCell.Tab.0.center" timestamp="1603198981037">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1670" height="366" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1603105323608" />
-    <state width="1670" height="366" key="GridCell.Tab.0.left" timestamp="1603105323608">
+    <state width="2517" height="465" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1603198981037" />
+    <state width="2517" height="465" key="GridCell.Tab.0.left" timestamp="1603198981036">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1670" height="366" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1603105323608" />
-    <state width="1670" height="366" key="GridCell.Tab.0.right" timestamp="1603105323608">
+    <state width="2517" height="465" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1603198981036" />
+    <state width="2517" height="465" key="GridCell.Tab.0.right" timestamp="1603198981037">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1670" height="366" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1603105323608" />
-    <state width="1670" height="366" key="GridCell.Tab.1.bottom" timestamp="1603105323609">
+    <state width="2517" height="465" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1603198981037" />
+    <state width="2517" height="465" key="GridCell.Tab.1.bottom" timestamp="1603198981037">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1670" height="366" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1603105323609" />
-    <state width="1670" height="366" key="GridCell.Tab.1.center" timestamp="1603105323609">
+    <state width="2517" height="465" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1603198981037" />
+    <state width="2517" height="465" key="GridCell.Tab.1.center" timestamp="1603198981037">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1670" height="366" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1603105323609" />
-    <state width="1670" height="366" key="GridCell.Tab.1.left" timestamp="1603105323609">
+    <state width="2517" height="465" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1603198981037" />
+    <state width="2517" height="465" key="GridCell.Tab.1.left" timestamp="1603198981037">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1670" height="366" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1603105323609" />
-    <state width="1670" height="366" key="GridCell.Tab.1.right" timestamp="1603105323609">
+    <state width="2517" height="465" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1603198981037" />
+    <state width="2517" height="465" key="GridCell.Tab.1.right" timestamp="1603198981037">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1670" height="366" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1603105323609" />
+    <state width="2517" height="465" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1603198981037" />
     <state width="2517" height="411" key="GridCell.Tab.2.bottom" timestamp="1600476244875">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
@@ -480,10 +484,10 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="1461" y="267" key="com.intellij.testIntegration.createTest.CreateTestDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1600869596758" />
-    <state x="474" y="256" width="584" height="630" key="find.popup" timestamp="1602383145688">
+    <state x="474" y="256" width="584" height="630" key="find.popup" timestamp="1603186986286">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="474" y="256" width="584" height="630" key="find.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1602383145688" />
+    <state x="474" y="256" width="584" height="630" key="find.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1603186986286" />
     <state x="936" y="240" key="run.anything.popup" timestamp="1599552736925">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
