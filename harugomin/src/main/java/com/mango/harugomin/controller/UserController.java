@@ -2,10 +2,9 @@ package com.mango.harugomin.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.JsonObject;
-import com.mango.harugomin.domain.entity.History;
-import com.mango.harugomin.domain.entity.Post;
-import com.mango.harugomin.domain.entity.User;
+import com.mango.harugomin.domain.entity.*;
 import com.mango.harugomin.dto.UserResponseDto;
+import com.mango.harugomin.dto.UserTokenResponseDto;
 import com.mango.harugomin.dto.UserUpdateRequestDto;
 import com.mango.harugomin.jwt.JwtService;
 import com.mango.harugomin.service.*;
@@ -18,11 +17,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @Slf4j
@@ -42,6 +43,7 @@ public class UserController {
     private final CommentService commentService;
     private final LikerService likerService;
     private final UserHashtagService userHashtagService;
+    private final AppleAPIService appleAPIService;
 
     @ApiOperation("카카오 로그인")
     @PostMapping("/users/login/kakao")
@@ -85,14 +87,37 @@ public class UserController {
         return data.toString();
     }
 
+    @ApiOperation("애플 로그인")
+    @PostMapping("/users/login/apple")
+    public TokenResponse appleLogin(ServicesResponse servicesResponse) throws IOException {
+        if(servicesResponse == null)
+            return null;
+
+        String code = servicesResponse.getCode();
+        log.info(" CODE : " + code);
+        String client_secret = appleAPIService.getAppleClientSecret(servicesResponse.getId_token());
+        log.info("CLIENT SECRET : " + client_secret);
+
+        log.info("=========== GET PAYLOAD START ======================");
+        appleAPIService.getPayload(servicesResponse.getId_token());
+        log.info("============= GOOD ===================");
+
+        String userId = appleAPIService.getUserId(servicesResponse.getId_token());
+        log.info("USER ID : " + userId);
+
+        return appleAPIService.requestCodeValidations(client_secret, code, null);
+    }
+
     @ApiOperation("토큰 검증")
     @PostMapping("/users/check")
-    public Object checkToken(HttpServletRequest request) {
-        Object result = null;
-
+    public ResponseEntity checkToken(HttpServletRequest request) {
+        User user = null;
         if (jwtService.isUsable(request.getHeader("jwt"))) {
-            result = jwtService.get("user");
+            Object obj = jwtService.get("user");
+            user = userService.findById(Long.parseLong(obj.toString())).get();
         }
+
+        UserTokenResponseDto result = new UserTokenResponseDto(user);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -137,16 +162,13 @@ public class UserController {
         return new ResponseEntity<>(data.toString(), HttpStatus.OK);
     }
 
-    /**
-     * 8. 유저 삭제
-     */
     @ApiOperation("유저 삭제")
     @DeleteMapping(value = "/users/{userId}")
     public ResponseEntity<Long> deleteUser(@PathVariable("userId") Long userId) {
         try{
             historyService.deleteUserHistories(userId);
             postService.deleteUserPosts(userId);
-            commentService.deleteByUserId(userId);
+//            commentService.deleteByUserId(userId);
             likerService.deleteAllByUsers(userId);
             userHashtagService.deleteAllByUsers(userId);
             userService.deleteById(userId);
@@ -187,6 +209,7 @@ public class UserController {
     @GetMapping(value = "/users/login/kakao")
     public String getKakaoCode(@RequestParam("code") String code) {
         ResponseEntity<String> AccessToken = kakaoAPIService.getAccessToken(code);
+        log.info("AccessToken : " + AccessToken);
         return "index";
     }
 

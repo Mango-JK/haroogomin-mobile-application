@@ -55,7 +55,7 @@ public class JwtService {
         }
     }
 
-    public Map<String, Object> get(String key) {
+    public Object get(String key) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getRequest();
         String jwt = request.getHeader("jwt");
@@ -67,6 +67,6 @@ public class JwtService {
         }
         @SuppressWarnings("unchecked")
         Map<String, Object> value = (LinkedHashMap<String, Object>) claims.getBody().get(key);
-        return value;
+        return value.get("userId");
     }
 }
