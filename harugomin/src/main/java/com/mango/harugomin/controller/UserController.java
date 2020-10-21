@@ -168,7 +168,7 @@ public class UserController {
         try{
             historyService.deleteUserHistories(userId);
             postService.deleteUserPosts(userId);
-            commentService.deleteByUserId(userId);
+//            commentService.deleteByUserId(userId);
             likerService.deleteAllByUsers(userId);
             userHashtagService.deleteAllByUsers(userId);
             userService.deleteById(userId);

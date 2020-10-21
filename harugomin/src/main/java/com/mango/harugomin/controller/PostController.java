@@ -169,7 +169,7 @@ public class PostController {
 
     @ApiOperation("고민글 사진 업로드")
     @PostMapping(value = "/posts/image")
-    public String uploadPostImage(MultipartFile file) throws IOException {
+    public String uploadPostImage(@RequestParam MultipartFile file) throws IOException {
         try {
             String imgPath = S3Service.CLOUD_FRONT_DOMAIN_NAME + s3Service.upload(null, file);
             JsonObject data = new JsonObject();
