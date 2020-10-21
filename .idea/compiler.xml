@@ -15,4 +15,9 @@
       <module name="harugomin-mobile-application" target="11" />
     </bytecodeTargetLevel>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="harugomin.main" options="--add-exports jdk.crypto.ec/sun.security.ec=ALL-UNNAMED --add-exports java.base/sun.security.x509=ALL-UNNAMED --add-exports java.base/sun.security.util=ALL-UNNAMED --add-exports java.base/sun.security.pkcs=ALL-UNNAMED" />
+    </option>
+  </component>
 </project>

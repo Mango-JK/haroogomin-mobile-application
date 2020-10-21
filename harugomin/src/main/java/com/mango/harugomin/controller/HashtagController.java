@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.*;
 public class HashtagController {
     private final HashtagService hashtagService;
 
-    /**
-     * 해시 태그 추가
-     */
     @PostMapping(value = "/hashtag")
     public long addUserHashtag(@RequestParam("tagName") String tagName){
         Hashtag hashtag = new Hashtag(tagName, 0);

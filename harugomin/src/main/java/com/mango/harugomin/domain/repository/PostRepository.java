@@ -29,6 +29,7 @@ public interface PostRepository extends JpaRepository<Post, Long>{
     Page<Post> findAllByUserUserId(Long userId, Pageable pageable);
 
     @Modifying(clearAutomatically = true)
-    void deleteByUserUserId(Long userId);
+    @Query(value = "delete from post where user_id = ?1 ", nativeQuery = true)
+    void deleteAllByUserUserId(Long userId);
 
 }

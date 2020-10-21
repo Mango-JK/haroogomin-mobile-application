@@ -2,9 +2,11 @@ package com.mango.harugomin.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mango.harugomin.domain.entity.TokenResponse;
 import com.mango.harugomin.domain.entity.User;
 import com.mango.harugomin.dto.UserRequestDto;
 import com.mango.harugomin.jwt.JwtService;
+import com.mango.harugomin.utils.AppleUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
@@ -12,61 +14,21 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.StringTokenizer;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class NaverAPIService {
-
+public class AppleAPIService {
     private final UserService userService;
     private final JwtService jwtService;
+    private final AppleUtils appleUtils;
 
-    public ResponseEntity<String> getAccessToken(String code, String state) {
-        String clientId = "k9f8GUK0cmsRiCPbJeoc";
-        String naverClientSecret = "pgFF2izLEz";
-
-        String apiURL;
-        apiURL = "https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&";
-        apiURL += "client_id=" + clientId;
-        apiURL += "&client_secret=" + naverClientSecret;
-        apiURL += "&code=" + code;
-        apiURL += "&state=" + state;
-        StringBuffer res = new StringBuffer();
-        try {
-            URL url = new URL(apiURL);
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-            final int responseCode = con.getResponseCode();
-            BufferedReader br;
-
-            if (responseCode == 200) { // 정상 호출
-                br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            } else {  // 에러 발생
-                br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-            }
-            String inputLine;
-            while ((inputLine = br.readLine()) != null) {
-                res.append(inputLine);
-            }
-            br.close();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return new ResponseEntity<>(res.toString(), HttpStatus.OK);
-    }
-
-    public JsonNode getNaverUserInfo(String accessToken) {
+    public JsonNode getAppleUserInfo(String accessToken) {
         String requestURL = "https://openapi.naver.com/v1/nid/me";
 
         final HttpClient client = HttpClientBuilder.create().build();
@@ -95,11 +57,6 @@ public class NaverAPIService {
         String nickname = json.get("response").get("nickname").toString();
         nickname = nickname.substring(1, nickname.length() - 1);
         String ageRange = "0";
-//        String profileImage = "https://ssl.pstatic.net/static/pwe/address/img_profile.png";
-//        String age = json.get("response").get("age").toString();
-//        age = age.substring(1, age.length() - 1);
-//        StringTokenizer stringTokenizer = new StringTokenizer(age, "-");
-//        String ageRange = stringTokenizer.nextToken();
 
         User user = null;
         int random = (int) Math.round(Math.random() * 4) + 1;
@@ -121,4 +78,43 @@ public class NaverAPIService {
 
         return jwt;
     }
+
+    //
+    //
+    //
+
+    public String getAppleClientSecret(String id_token) {
+        log.info("##### getAppleClientSecret START #####");
+        if (appleUtils.verifyIdentityToken(id_token)) {
+            log.info("????????????????");
+            return appleUtils.createClientSecret();
+        }
+
+        return null;
+    }
+
+    public String getPayload(String id_token) {
+        log.info("ID값 : " + appleUtils.decodeFromIdToken(id_token).getSub());
+        return appleUtils.decodeFromIdToken(id_token).toString();
+    }
+
+    public String getUserId(String id_token) {
+        return appleUtils.decodeFromIdToken(id_token).getSub();
+    }
+
+    public TokenResponse requestCodeValidations(String client_secret, String code, String refresh_token) throws IOException {
+        log.info(":: START requestCodeValidations :: ");
+        TokenResponse tokenResponse = new TokenResponse();
+
+        if (client_secret != null && code != null && refresh_token == null) {
+            log.info("====== validateAuthorizationGrantCode =========");
+            tokenResponse = appleUtils.validateAuthorizationGrantCode(client_secret, code);
+        } else if (client_secret != null && code == null && refresh_token != null) {
+            log.info("========= validateAnExistingRefreshToken ============");
+            tokenResponse = appleUtils.validateAnExistingRefreshToken(client_secret, refresh_token);
+        }
+
+        return tokenResponse;
+    }
+
 }

@@ -36,10 +36,7 @@
     <list default="true" id="0dc6c3b9-2347-4119-844a-83a7481f4166" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/PostController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/PostRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/KakaoAPIService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/KakaoAPIService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/NaverAPIService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/NaverAPIService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/PostService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/UserController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,10 +108,10 @@
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
-    <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="ExpandSpringBootJavaOptionsPanel" value="true" />
     <property name="RequestMappingsPanelOrder0" value="0" />
@@ -124,13 +121,13 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="add_unversioned_files" value="true" />
+    <property name="add_unversioned_files" value="$PROJECT_DIR$/harugomin/src/main/resources/application.yml&#10;true" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit3" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit3" value="junit.framework.TestCase" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
     <property name="ignore_missing_gitignore" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/daou/daou-2020" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/harugomin/src/main/resources/templates" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -143,26 +140,22 @@
       <recent name="com.mango.harugomin.service" />
       <recent name="com.mango.harugomin.controller" />
     </key>
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.mango.harugomin.utils" />
+      <recent name="com.mango.harugomin.domain.entity" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\git\harugomin-mobile-application\harugomin\src\main\resources\templates" />
+    </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="junit.framework.TestCase" />
       <recent name="" />
     </key>
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="com.mango.harugomin.domain.entity" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\git\harugomin-mobile-application\harugomin\src\main\resources\static" />
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.HarugominApplication">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="harugomin [bootJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -331,6 +324,16 @@
       <workItem from="1601695746481" duration="6927000" />
       <workItem from="1601800837678" duration="6081000" />
       <workItem from="1601813626031" duration="8258000" />
+      <workItem from="1602169783900" duration="5574000" />
+      <workItem from="1602224112176" duration="5719000" />
+      <workItem from="1602250810026" duration="6633000" />
+      <workItem from="1602912655654" duration="3053000" />
+      <workItem from="1603023062669" duration="7611000" />
+      <workItem from="1603095923301" duration="3949000" />
+      <workItem from="1603177464438" duration="580000" />
+      <workItem from="1603178058336" duration="169000" />
+      <workItem from="1603178238169" duration="17083000" />
+      <workItem from="1603266129165" duration="322000" />
     </task>
     <servers />
   </component>
@@ -348,6 +351,9 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="1327" y="99" width="817" height="883" key="#&lt;template&gt;_of_JUnit" timestamp="1600393847755">
@@ -382,54 +388,58 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="92" y="92" width="2376" height="856" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1599553904954" />
-    <state x="1231" y="234" key="#com.intellij.ide.util.MemberChooser" timestamp="1601535215986">
+    <state x="392" y="322" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1603026358662">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="1231" y="234" key="#com.intellij.ide.util.MemberChooser/0.0.2560.1040@0.0.2560.1040" timestamp="1601535215986" />
+    <state x="392" y="322" key="#com.intellij.fileTypes.FileTypeChooser/0.0.2560.1040@0.0.2560.1040" timestamp="1603026358662" />
+    <state x="1231" y="234" key="#com.intellij.ide.util.MemberChooser" timestamp="1603177908309">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1231" y="234" key="#com.intellij.ide.util.MemberChooser/0.0.2560.1040@0.0.2560.1040" timestamp="1603177908309" />
     <state x="1216" y="452" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1600957232222">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="1216" y="452" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1600957232222" />
-    <state x="1010" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1601806337366">
+    <state x="1010" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1603177773582">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="1010" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1601806337366" />
+    <state x="1010" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1603177773582" />
     <state x="478" y="278" key="FileChooserDialogImpl" timestamp="1600956278676">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="478" y="278" key="FileChooserDialogImpl/0.0.2560.1040@0.0.2560.1040" timestamp="1600956278676" />
-    <state width="1331" height="325" key="GridCell.Tab.0.bottom" timestamp="1601821626060">
+    <state width="1672" height="446" key="GridCell.Tab.0.bottom" timestamp="1603216807330">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1331" height="325" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1601821626060" />
-    <state width="1331" height="325" key="GridCell.Tab.0.center" timestamp="1601821626060">
+    <state width="1672" height="446" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1603216807330" />
+    <state width="1672" height="446" key="GridCell.Tab.0.center" timestamp="1603216807330">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1331" height="325" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1601821626060" />
-    <state width="1331" height="325" key="GridCell.Tab.0.left" timestamp="1601821626060">
+    <state width="1672" height="446" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1603216807330" />
+    <state width="1672" height="446" key="GridCell.Tab.0.left" timestamp="1603216807330">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1331" height="325" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1601821626060" />
-    <state width="1331" height="325" key="GridCell.Tab.0.right" timestamp="1601821626060">
+    <state width="1672" height="446" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1603216807330" />
+    <state width="1672" height="446" key="GridCell.Tab.0.right" timestamp="1603216807330">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1331" height="325" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1601821626060" />
-    <state width="1331" height="325" key="GridCell.Tab.1.bottom" timestamp="1601821477228">
+    <state width="1672" height="446" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1603216807330" />
+    <state width="1672" height="446" key="GridCell.Tab.1.bottom" timestamp="1603216807330">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1331" height="325" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1601821477228" />
-    <state width="1331" height="325" key="GridCell.Tab.1.center" timestamp="1601821477228">
+    <state width="1672" height="446" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1603216807330" />
+    <state width="1672" height="446" key="GridCell.Tab.1.center" timestamp="1603216807330">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1331" height="325" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1601821477228" />
-    <state width="1331" height="325" key="GridCell.Tab.1.left" timestamp="1601821477228">
+    <state width="1672" height="446" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1603216807330" />
+    <state width="1672" height="446" key="GridCell.Tab.1.left" timestamp="1603216807330">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1331" height="325" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1601821477228" />
-    <state width="1331" height="325" key="GridCell.Tab.1.right" timestamp="1601821477228">
+    <state width="1672" height="446" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1603216807330" />
+    <state width="1672" height="446" key="GridCell.Tab.1.right" timestamp="1603216807330">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1331" height="325" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1601821477228" />
+    <state width="1672" height="446" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1603216807330" />
     <state width="2517" height="411" key="GridCell.Tab.2.bottom" timestamp="1600476244875">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
@@ -458,17 +468,17 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="1461" y="267" key="com.intellij.testIntegration.createTest.CreateTestDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1600869596758" />
-    <state x="474" y="256" width="584" height="630" key="find.popup" timestamp="1601792763760">
+    <state x="474" y="256" width="584" height="630" key="find.popup" timestamp="1603186986286">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="474" y="256" width="584" height="630" key="find.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1601792763760" />
+    <state x="474" y="256" width="584" height="630" key="find.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1603186986286" />
     <state x="936" y="240" key="run.anything.popup" timestamp="1599552736925">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="936" y="240" key="run.anything.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1599552736925" />
-    <state x="472" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1601483585936">
+    <state x="472" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1603200726473">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="472" y="235" width="672" height="678" key="search.everywhere.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1601483585936" />
+    <state x="472" y="235" width="672" height="678" key="search.everywhere.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1603200726473" />
   </component>
 </project>
