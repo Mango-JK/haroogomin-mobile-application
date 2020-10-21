@@ -3,6 +3,7 @@ package com.mango.harugomin.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.JsonObject;
 import com.mango.harugomin.domain.entity.*;
+import com.mango.harugomin.domain.repository.AppleUserRepository;
 import com.mango.harugomin.dto.UserRequestDto;
 import com.mango.harugomin.dto.UserResponseDto;
 import com.mango.harugomin.dto.UserTokenResponseDto;
@@ -43,8 +44,8 @@ public class UserController {
     private final CommentService commentService;
     private final LikerService likerService;
     private final UserHashtagService userHashtagService;
-    private final AppleAPIService appleAPIService;
-    private static Long STATIC_USER_ID = 14L;
+    private final AppleUserService appleUserService;
+    private static Long STATIC_USER_ID = 1L;
 
     @ApiOperation("카카오 로그인")
     @PostMapping("/users/login/kakao")
@@ -90,47 +91,47 @@ public class UserController {
 
     @ApiOperation("애플 로그인")
     @PostMapping("/users/login/apple")
-    public ResponseEntity appleLogin(ServicesResponse servicesResponse) {
+    public String appleLogin(ServicesResponse servicesResponse) {
         log.info("START APPLE LOGIN !");
         if (servicesResponse.getId_token() == null || servicesResponse.getCode() == null)
             return null;
 
         User user = null;
         boolean flag = true;
-        while (flag) {
-            log.info("### WHILE USER_ID : " + STATIC_USER_ID + "   ########");
-            if (userService.findById(STATIC_USER_ID).isEmpty()) {
-                flag = false;
-                String image = "https://hago-storage-bucket.s3.ap-northeast-2.amazonaws.com/default01.jpg";
-                User newUser = User.builder()
-                        .userId(STATIC_USER_ID++)
-                        .nickname("Apple_User")
-                        .profileImage(image)
-                        .ageRange(0)
-                        .userHashtags(new ArrayList<>())
-                        .build();
-                user = userService.saveUser(newUser);
-            } else {
-                STATIC_USER_ID++;
+        String userCode = servicesResponse.getUser();
+
+        if (appleUserService.findByCode(userCode).isEmpty()) {
+            while (flag) {
+                if (userService.findById(STATIC_USER_ID).isEmpty()) {
+                    flag = false;
+                    String image = "https://hago-storage-bucket.s3.ap-northeast-2.amazonaws.com/default01.jpg";
+                    User newUser = User.builder()
+                            .userId(STATIC_USER_ID++)
+                            .nickname("Apple_User")
+                            .profileImage(image)
+                            .ageRange(0)
+                            .userHashtags(new ArrayList<>())
+                            .build();
+                    user = userService.saveUser(newUser);
+                    AppleUser appleUser = new AppleUser(userCode, STATIC_USER_ID - 1);
+                    appleUserService.saveAppleUserKey(appleUser);
+                } else {
+                    STATIC_USER_ID++;
+                }
             }
+        } else {
+            AppleUser appleUser = appleUserService.findByCode(userCode).get();
+            Long userId = appleUser.getUserId();
+            user = userService.findById(userId).get();
         }
 
-        UserTokenResponseDto response = new UserTokenResponseDto(user);
+        UserRequestDto userResponseDto = new UserRequestDto(user);
+        String result = jwtService.create("user", userResponseDto, "user");
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
-//        String code = servicesResponse.getCode();
-//        log.info(" CODE : " + code);
-//        String client_secret = appleAPIService.getAppleClientSecret(servicesResponse.getId_token());
-//        log.info("CLIENT SECRET : " + client_secret);
-//
-//        log.info("=========== GET PAYLOAD START ======================");
-//        appleAPIService.getPayload(servicesResponse.getId_token());
-//        log.info("============= GOOD ===================");
-//
-//        String userId = appleAPIService.getUserId(servicesResponse.getId_token());
-//        log.info("USER ID : " + userId);
-//
-//        return appleAPIService.requestCodeValidations(client_secret, code, null);
+        JsonObject data = new JsonObject();
+        data.addProperty("jwt", result);
+        data.addProperty("status", String.valueOf(HttpStatus.OK));
+        return data.toString();
     }
 
     @ApiOperation("토큰 검증")
