@@ -3,6 +3,7 @@ package com.mango.harugomin.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.JsonObject;
 import com.mango.harugomin.domain.entity.*;
+import com.mango.harugomin.dto.UserRequestDto;
 import com.mango.harugomin.dto.UserResponseDto;
 import com.mango.harugomin.dto.UserTokenResponseDto;
 import com.mango.harugomin.dto.UserUpdateRequestDto;
@@ -17,13 +18,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Map;
+import java.util.ArrayList;
 
 @CrossOrigin(origins = "*")
 @Slf4j
@@ -44,6 +44,7 @@ public class UserController {
     private final LikerService likerService;
     private final UserHashtagService userHashtagService;
     private final AppleAPIService appleAPIService;
+    private static Long STATIC_USER_ID = 14L;
 
     @ApiOperation("카카오 로그인")
     @PostMapping("/users/login/kakao")
@@ -89,23 +90,47 @@ public class UserController {
 
     @ApiOperation("애플 로그인")
     @PostMapping("/users/login/apple")
-    public TokenResponse appleLogin(ServicesResponse servicesResponse) throws IOException {
-        if(servicesResponse == null)
+    public ResponseEntity appleLogin(ServicesResponse servicesResponse) {
+        log.info("START APPLE LOGIN !");
+        if (servicesResponse.getId_token() == null || servicesResponse.getCode() == null)
             return null;
 
-        String code = servicesResponse.getCode();
-        log.info(" CODE : " + code);
-        String client_secret = appleAPIService.getAppleClientSecret(servicesResponse.getId_token());
-        log.info("CLIENT SECRET : " + client_secret);
+        User user = null;
+        boolean flag = true;
+        while (flag) {
+            log.info("### WHILE USER_ID : " + STATIC_USER_ID + "   ########");
+            if (userService.findById(STATIC_USER_ID).isEmpty()) {
+                flag = false;
+                String image = "https://hago-storage-bucket.s3.ap-northeast-2.amazonaws.com/default01.jpg";
+                User newUser = User.builder()
+                        .userId(STATIC_USER_ID++)
+                        .nickname("Apple_User")
+                        .profileImage(image)
+                        .ageRange(0)
+                        .userHashtags(new ArrayList<>())
+                        .build();
+                user = userService.saveUser(newUser);
+            } else {
+                STATIC_USER_ID++;
+            }
+        }
 
-        log.info("=========== GET PAYLOAD START ======================");
-        appleAPIService.getPayload(servicesResponse.getId_token());
-        log.info("============= GOOD ===================");
+        UserTokenResponseDto response = new UserTokenResponseDto(user);
 
-        String userId = appleAPIService.getUserId(servicesResponse.getId_token());
-        log.info("USER ID : " + userId);
-
-        return appleAPIService.requestCodeValidations(client_secret, code, null);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+//        String code = servicesResponse.getCode();
+//        log.info(" CODE : " + code);
+//        String client_secret = appleAPIService.getAppleClientSecret(servicesResponse.getId_token());
+//        log.info("CLIENT SECRET : " + client_secret);
+//
+//        log.info("=========== GET PAYLOAD START ======================");
+//        appleAPIService.getPayload(servicesResponse.getId_token());
+//        log.info("============= GOOD ===================");
+//
+//        String userId = appleAPIService.getUserId(servicesResponse.getId_token());
+//        log.info("USER ID : " + userId);
+//
+//        return appleAPIService.requestCodeValidations(client_secret, code, null);
     }
 
     @ApiOperation("토큰 검증")
@@ -165,13 +190,15 @@ public class UserController {
     @ApiOperation("유저 삭제")
     @DeleteMapping(value = "/users/{userId}")
     public ResponseEntity<Long> deleteUser(@PathVariable("userId") Long userId) {
-        try{
+        try {
+            postService.foreignkeyOpen();
             historyService.deleteUserHistories(userId);
-            postService.deleteUserPosts(userId);
-//            commentService.deleteByUserId(userId);
+            commentService.deleteByUserId(userId);
             likerService.deleteAllByUsers(userId);
             userHashtagService.deleteAllByUsers(userId);
+            postService.deleteUserPosts(userId);
             userService.deleteById(userId);
+            postService.foreignkeyClose();
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -180,7 +207,7 @@ public class UserController {
 
     @ApiOperation("현재 게시중인 고민글")
     @GetMapping(value = "/users/posts/{userId}")
-    public ResponseEntity myCurrentPosting(@PathVariable("userId") Long userId, @RequestParam int pageNum) throws Exception{
+    public ResponseEntity myCurrentPosting(@PathVariable("userId") Long userId, @RequestParam int pageNum) throws Exception {
         PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
         Page<Post> result = null;
 

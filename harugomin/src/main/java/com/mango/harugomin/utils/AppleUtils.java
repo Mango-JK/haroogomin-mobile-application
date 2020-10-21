@@ -157,18 +157,18 @@ public class AppleUtils {
 
         SignedJWT jwt = new SignedJWT(header, claimsSet);
 
-        try {
-            ECPrivateKey ecPrivateKey = new ECPrivateKeyImpl(readPrivateKey());
-            JWSSigner jwsSigner = new ECDSASigner(ecPrivateKey.getS());
-            log.info("jws Signer : " + jwsSigner);
-
-            jwt.sign(jwsSigner);
-
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (JOSEException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            ECPrivateKey ecPrivateKey = new ECPrivateKeyImpl(readPrivateKey());
+//            JWSSigner jwsSigner = new ECDSASigner(ecPrivateKey.getS());
+//            log.info("jws Signer : " + jwsSigner);
+//
+//            jwt.sign(jwsSigner);
+//
+//        } catch (InvalidKeyException e) {
+//            e.printStackTrace();
+//        } catch (JOSEException e) {
+//            e.printStackTrace();
+//        }
 
         return jwt.serialize();
     }
