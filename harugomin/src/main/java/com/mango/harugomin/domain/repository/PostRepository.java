@@ -32,4 +32,11 @@ public interface PostRepository extends JpaRepository<Post, Long>{
     @Query(value = "delete from post where user_id = ?1 ", nativeQuery = true)
     void deleteAllByUserUserId(Long userId);
 
+    @Modifying(clearAutomatically = true)
+    @Query(value = "SET foreign_key_checks = 0 ", nativeQuery = true)
+    void foreignkeyOpen();
+
+    @Modifying(clearAutomatically = true)
+    @Query(value = "SET foreign_key_checks = 1 ", nativeQuery = true)
+    void foreignkeyClose();
 }
