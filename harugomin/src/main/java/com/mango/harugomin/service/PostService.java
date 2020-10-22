@@ -98,4 +98,14 @@ public class PostService {
     public void deleteUserPosts(Long userId) {
         postRepository.deleteAllByUserUserId(userId);
     }
+
+    @Transactional
+    public void foreignkeyOpen() {
+        postRepository.foreignkeyOpen();
+    }
+
+    @Transactional
+    public void foreignkeyClose() {
+        postRepository.foreignkeyClose();
+    }
 }
