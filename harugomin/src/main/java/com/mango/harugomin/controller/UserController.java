@@ -3,7 +3,6 @@ package com.mango.harugomin.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.JsonObject;
 import com.mango.harugomin.domain.entity.*;
-import com.mango.harugomin.domain.repository.AppleUserRepository;
 import com.mango.harugomin.dto.UserRequestDto;
 import com.mango.harugomin.dto.UserResponseDto;
 import com.mango.harugomin.dto.UserTokenResponseDto;

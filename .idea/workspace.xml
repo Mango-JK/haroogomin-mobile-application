@@ -34,11 +34,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0dc6c3b9-2347-4119-844a-83a7481f4166" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/entity/AppleUser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/domain/repository/AppleUserRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/AppleUserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/CommentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/CommentController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/AppleAPIService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/AppleAPIService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/HashtagService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/HashtagService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/KakaoAPIService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/KakaoAPIService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/LikerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/LikerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/NaverAPIService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/NaverAPIService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,16 +160,14 @@
       <recent name="C:\git\harugomin-mobile-application\harugomin\src\main\resources\static" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.harugomin [bootJar]">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+  <component name="RunManager" selected="Spring Boot.HarugominApplication">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -353,6 +354,8 @@
       <workItem from="1603268656450" duration="303000" />
       <workItem from="1603268970783" duration="615000" />
       <workItem from="1603279095796" duration="8837000" />
+      <workItem from="1603342640320" duration="2508000" />
+      <workItem from="1603349923017" duration="160000" />
     </task>
     <servers />
   </component>
@@ -427,38 +430,38 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="478" y="278" key="FileChooserDialogImpl/0.0.2560.1040@0.0.2560.1040" timestamp="1603269214247" />
-    <state width="1288" height="340" key="GridCell.Tab.0.bottom" timestamp="1603299103365">
+    <state width="1572" height="478" key="GridCell.Tab.0.bottom" timestamp="1603350084224">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1288" height="340" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1603299103365" />
-    <state width="1288" height="340" key="GridCell.Tab.0.center" timestamp="1603299103365">
+    <state width="1572" height="478" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1603350084224" />
+    <state width="1572" height="478" key="GridCell.Tab.0.center" timestamp="1603350084224">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1288" height="340" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1603299103365" />
-    <state width="1288" height="340" key="GridCell.Tab.0.left" timestamp="1603299103365">
+    <state width="1572" height="478" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1603350084224" />
+    <state width="1572" height="478" key="GridCell.Tab.0.left" timestamp="1603350084224">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1288" height="340" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1603299103365" />
-    <state width="1288" height="340" key="GridCell.Tab.0.right" timestamp="1603299103365">
+    <state width="1572" height="478" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1603350084224" />
+    <state width="1572" height="478" key="GridCell.Tab.0.right" timestamp="1603350084224">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1288" height="340" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1603299103365" />
-    <state width="1288" height="340" key="GridCell.Tab.1.bottom" timestamp="1603299103365">
+    <state width="1572" height="478" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1603350084224" />
+    <state width="1572" height="478" key="GridCell.Tab.1.bottom" timestamp="1603350084225">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1288" height="340" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1603299103365" />
-    <state width="1288" height="340" key="GridCell.Tab.1.center" timestamp="1603299103365">
+    <state width="1572" height="478" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1603350084225" />
+    <state width="1572" height="478" key="GridCell.Tab.1.center" timestamp="1603350084225">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1288" height="340" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1603299103365" />
-    <state width="1288" height="340" key="GridCell.Tab.1.left" timestamp="1603299103365">
+    <state width="1572" height="478" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1603350084225" />
+    <state width="1572" height="478" key="GridCell.Tab.1.left" timestamp="1603350084224">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1288" height="340" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1603299103365" />
-    <state width="1288" height="340" key="GridCell.Tab.1.right" timestamp="1603299103365">
+    <state width="1572" height="478" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1603350084224" />
+    <state width="1572" height="478" key="GridCell.Tab.1.right" timestamp="1603350084225">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1288" height="340" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1603299103365" />
+    <state width="1572" height="478" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1603350084225" />
     <state width="1288" height="340" key="GridCell.Tab.2.bottom" timestamp="1603299103365">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>

@@ -20,10 +20,6 @@ public class HashtagService {
         return hashtagRepository.save(hashtag);
     }
 
-    public Optional<Hashtag> findByTagId(Long tagId){
-        return hashtagRepository.findById(tagId);
-    };
-
     public Hashtag findByTagName(String tagName) {
         return hashtagRepository.findByTagName(tagName);
     }

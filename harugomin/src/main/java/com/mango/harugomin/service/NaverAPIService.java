@@ -95,11 +95,6 @@ public class NaverAPIService {
         String nickname = json.get("response").get("nickname").toString();
         nickname = nickname.substring(1, nickname.length() - 1);
         String ageRange = "0";
-//        String profileImage = "https://ssl.pstatic.net/static/pwe/address/img_profile.png";
-//        String age = json.get("response").get("age").toString();
-//        age = age.substring(1, age.length() - 1);
-//        StringTokenizer stringTokenizer = new StringTokenizer(age, "-");
-//        String ageRange = stringTokenizer.nextToken();
 
         User user = null;
         int random = (int) Math.round(Math.random() * 4) + 1;

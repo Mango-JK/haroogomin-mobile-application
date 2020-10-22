@@ -125,15 +125,6 @@ public class KakaoAPIService {
         nickname = nickname.substring(1, nickname.length() - 1);
         String ageRange = "0";
 
-//        String profile_needs_agreement = json.get("kakao_account").get("profile_needs_agreement").toString();
-//        String picture = null;
-//        if (json.get("kakao_account").get("profile").has("thumbnail_image_url")) {
-//            picture = json.get("kakao_account").get("profile").get("thumbnail_image_url").toString();
-//            picture = picture.substring(1, picture.length() - 1);
-//            String temp = picture.substring(0, 4);
-//            String temp2 = picture.substring(4, picture.length());
-//            picture = temp + "s" + temp2;
-//        }
         int random = (int) Math.round(Math.random() * 4) + 1;
         String image = "https://hago-storage-bucket.s3.ap-northeast-2.amazonaws.com/default0" + random + ".jpg";
         User user = null;
@@ -148,7 +139,6 @@ public class KakaoAPIService {
         } else {
             user = userService.findById(id).get();
         }
-//        user.update(picture);
         UserRequestDto userRequestDto = new UserRequestDto(user);
         String jwt = jwtService.create("user", userRequestDto, "user");
 
