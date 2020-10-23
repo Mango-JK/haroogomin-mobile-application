@@ -110,11 +110,11 @@ public class PostController {
     @ApiOperation("(HOME) - 태그별 새 고민글")
     @GetMapping(value = "/posts/home/{tagName}")
     public ResponseEntity homePosting(@PathVariable("tagName") String tagName, @RequestParam int pageNum) throws Exception {
-        PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
+        PageRequest pageRequest = null;
         Page<Post> result = null;
 
         if (tagName.equals("전체")) {
-            pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
+            pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").ascending());
             result = postService.findAllPosts(pageRequest);
             LocalDateTime currentTime = LocalDateTime.now();
             for (Post post : result) {
@@ -134,6 +134,7 @@ public class PostController {
         }
 
         try {
+            pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
             result = postService.findAllByHashtag(tagName, pageRequest);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
