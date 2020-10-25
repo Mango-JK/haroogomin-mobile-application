@@ -86,7 +86,7 @@ public class CommentController {
     @ApiOperation("댓글 조회 (페이징)")
     @GetMapping(value = "/comments/{postId}")
     public ResponseEntity findOne(@PathVariable("postId") Long postId, @RequestParam("userId") long userId, @RequestParam("pageNum") int pageNum) {
-        PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
+        PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").ascending());
         List<Comment> result = commentService.findAllByPostPostId(postId, pageRequest).getContent();
 
         if (result == null) {
