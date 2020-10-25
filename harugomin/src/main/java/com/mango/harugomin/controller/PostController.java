@@ -121,16 +121,16 @@ public class PostController {
                 Duration duration = Duration.between(post.getCreatedDate(), currentTime);
                 long minute = duration.getSeconds();
 
-                if (duration.getSeconds() >= 86400) {
+                if (duration.getSeconds() >= 86300) {
                     postService.postToHistory(post.getPostId());
                 } else
                     break;
-
-                pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
-                result = postService.findAllPosts(pageRequest);
-
             }
-            return new ResponseEntity(result.getContent(), HttpStatus.OK);
+
+            pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
+            Page<Post> list = postService.findAllPosts(pageRequest);
+
+            return new ResponseEntity(list.getContent(), HttpStatus.OK);
         }
 
         try {
