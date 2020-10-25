@@ -68,10 +68,19 @@ public class PostController {
     @GetMapping(value = "/posts/{postId}")
     public ResponseEntity findOne(@PathVariable("postId") Long postId) {
         Post post = postService.findById(postId).get();
+        PostResponseDto result = new PostResponseDto(post);
+
         if (post == null) {
             return new ResponseEntity(post, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(new PostResponseDto(post), HttpStatus.OK);
+
+        LocalDateTime currentTime = LocalDateTime.now();
+        Duration duration = Duration.between(post.getCreatedDate(), currentTime);
+        if (duration.getSeconds() >= 86300) {
+            postService.postToHistory(post.getPostId());
+        }
+
+        return new ResponseEntity(result, HttpStatus.OK);
     }
 
     @ApiOperation("(Home) - 인기순 해시태그 리스트")
@@ -91,13 +100,19 @@ public class PostController {
     @GetMapping(value = "/posts/home/story")
     public ResponseEntity homeStory() throws Exception {
         List<Post> story = null;
-
+        LocalDateTime currentTime = LocalDateTime.now();
         try {
             PageRequest storyRequest = PageRequest.of(0, 13, Sort.by("createdDate"));
             List<Post> data = postService.findAllPosts(storyRequest).getContent();
             story = new ArrayList<>();
             for (Post post : data) {
-                story.add(post);
+                Duration duration = Duration.between(post.getCreatedDate(), currentTime);
+                if (duration.getSeconds() >= 86300) {
+                    postService.postToHistory(post.getPostId());
+                    continue;
+                } else {
+                    story.add(post);
+                }
                 if (story.size() > 9)
                     break;
             }
@@ -109,42 +124,28 @@ public class PostController {
 
     @ApiOperation("(HOME) - 태그별 새 고민글")
     @GetMapping(value = "/posts/home/{tagName}")
-    public ResponseEntity homePosting(@PathVariable("tagName") String tagName, @RequestParam int pageNum) throws Exception {
-        PageRequest pageRequest = null;
+    public ResponseEntity homePosting(@PathVariable("tagName") String tagName, @RequestParam int pageNum) throws
+            Exception {
         Page<Post> result = null;
-
+        PageRequest pageRequest = null;
         if (tagName.equals("전체")) {
-            pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").ascending());
-            result = postService.findAllPosts(pageRequest);
-            LocalDateTime currentTime = LocalDateTime.now();
-            for (Post post : result) {
-                Duration duration = Duration.between(post.getCreatedDate(), currentTime);
-                long minute = duration.getSeconds();
-
-                if (duration.getSeconds() >= 86300) {
-                    postService.postToHistory(post.getPostId());
-                } else
-                    break;
-            }
-
             pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
             Page<Post> list = postService.findAllPosts(pageRequest);
-
             return new ResponseEntity(list.getContent(), HttpStatus.OK);
         }
-
         try {
             pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
             result = postService.findAllByHashtag(tagName, pageRequest);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(result.getContent(), HttpStatus.OK);
+        return new ResponseEntity(result.getContent(), HttpStatus.OK);
     }
 
     @ApiOperation("고민글 통합 검색")
     @GetMapping(value = "/posts/search/{keyword}")
-    public ResponseEntity searchAllPosts(@PathVariable("keyword") String keyword, @RequestParam int pageNum) throws Exception {
+    public ResponseEntity searchAllPosts(@PathVariable("keyword") String keyword, @RequestParam int pageNum) throws
+            Exception {
         PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("created_date").descending());
         Page<Post> result = null;
         try {
