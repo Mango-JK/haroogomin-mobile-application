@@ -110,30 +110,31 @@ public class PostController {
     @ApiOperation("(HOME) - 태그별 새 고민글")
     @GetMapping(value = "/posts/home/{tagName}")
     public ResponseEntity homePosting(@PathVariable("tagName") String tagName, @RequestParam int pageNum) throws Exception {
-        PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
+        PageRequest pageRequest = null;
         Page<Post> result = null;
 
         if (tagName.equals("전체")) {
-            pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
+            pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").ascending());
             result = postService.findAllPosts(pageRequest);
             LocalDateTime currentTime = LocalDateTime.now();
             for (Post post : result) {
                 Duration duration = Duration.between(post.getCreatedDate(), currentTime);
                 long minute = duration.getSeconds();
 
-                if (duration.getSeconds() >= 86400) {
+                if (duration.getSeconds() >= 86300) {
                     postService.postToHistory(post.getPostId());
                 } else
                     break;
-
-                pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
-                result = postService.findAllPosts(pageRequest);
-
             }
-            return new ResponseEntity(result.getContent(), HttpStatus.OK);
+
+            pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
+            Page<Post> list = postService.findAllPosts(pageRequest);
+
+            return new ResponseEntity(list.getContent(), HttpStatus.OK);
         }
 
         try {
+            pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
             result = postService.findAllByHashtag(tagName, pageRequest);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);

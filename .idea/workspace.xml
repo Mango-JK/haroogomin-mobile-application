@@ -36,12 +36,7 @@
     <list default="true" id="0dc6c3b9-2347-4119-844a-83a7481f4166" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/CommentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/CommentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/AppleAPIService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/AppleAPIService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/HashtagService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/HashtagService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/KakaoAPIService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/KakaoAPIService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/LikerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/LikerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/NaverAPIService.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/service/NaverAPIService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harugomin/src/main/java/com/mango/harugomin/controller/PostController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,6 +119,7 @@
     <property name="RequestMappingsPanelWidth0" value="75" />
     <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="add_unversioned_files" value="$PROJECT_DIR$/harugomin/src/main/resources/application.yml&#10;true" />
@@ -132,12 +128,12 @@
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit3" value="junit.framework.TestCase" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
     <property name="ignore_missing_gitignore" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/harugomin/src/main/resources/templates" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -145,9 +141,9 @@
       <recent name="com.mango.harugomin.service" />
       <recent name="com.mango.harugomin.controller" />
     </key>
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="com.mango.harugomin.utils" />
-      <recent name="com.mango.harugomin.domain.entity" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\user\Desktop\harugomin\harugomin-mobile-application\harugomin\src\main\resources" />
+      <recent name="C:\git\harugomin-mobile-application\harugomin\src\main\resources\static" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\git\harugomin-mobile-application\harugomin\src\main\resources\templates" />
@@ -156,22 +152,12 @@
       <recent name="junit.framework.TestCase" />
       <recent name="" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\git\harugomin-mobile-application\harugomin\src\main\resources\static" />
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.mango.harugomin.utils" />
+      <recent name="com.mango.harugomin.domain.entity" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.HarugominApplication">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="Gradle.harugomin [bootJar]">
     <configuration name="harugomin [bootJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -306,6 +292,9 @@
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="0dc6c3b9-2347-4119-844a-83a7481f4166" name="Default Changelist" comment="" />
@@ -356,6 +345,9 @@
       <workItem from="1603279095796" duration="8837000" />
       <workItem from="1603342640320" duration="2508000" />
       <workItem from="1603349923017" duration="160000" />
+      <workItem from="1603436722444" duration="1130000" />
+      <workItem from="1603437937558" duration="3504000" />
+      <workItem from="1603623662826" duration="1001000" />
     </task>
     <servers />
   </component>
@@ -386,9 +378,10 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="1116" y="0" width="722" height="1040" key="#&lt;template&gt;_of_Spring_Boot/0.0.2560.1040@0.0.2560.1040" timestamp="1599988769088" />
-    <state x="1116" y="0" width="722" height="1040" key="#HarugominApplication" timestamp="1599989116976">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state x="670" y="0" width="719" height="824" key="#HarugominApplication" timestamp="1603438150489">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state x="670" y="0" width="719" height="824" key="#HarugominApplication/0.0.1536.824@0.0.1536.824" timestamp="1603438150489" />
     <state x="1116" y="0" width="722" height="1040" key="#HarugominApplication/0.0.2560.1040@0.0.2560.1040" timestamp="1599989116976" />
     <state x="1018" y="176" width="816" height="730" key="#Intentions" timestamp="1600781240479">
       <screen x="0" y="0" width="2560" height="1040" />
@@ -418,6 +411,10 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="1231" y="234" key="#com.intellij.ide.util.MemberChooser/0.0.2560.1040@0.0.2560.1040" timestamp="1603177908309" />
+    <state x="760" y="202" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1603438134887">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="760" y="202" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1536.824@0.0.1536.824" timestamp="1603438134887" />
     <state x="1216" y="452" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1600957232222">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
@@ -426,41 +423,50 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="1010" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1603177773582" />
-    <state x="478" y="278" key="FileChooserDialogImpl" timestamp="1603269214247">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state x="287" y="220" key="FileChooserDialogImpl" timestamp="1603437764238">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state x="287" y="220" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1603437764238" />
     <state x="478" y="278" key="FileChooserDialogImpl/0.0.2560.1040@0.0.2560.1040" timestamp="1603269214247" />
-    <state width="1572" height="478" key="GridCell.Tab.0.bottom" timestamp="1603350084224">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state width="1493" height="145" key="GridCell.Tab.0.bottom" timestamp="1603440893085">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="145" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1603440893085" />
     <state width="1572" height="478" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1603350084224" />
-    <state width="1572" height="478" key="GridCell.Tab.0.center" timestamp="1603350084224">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state width="1493" height="145" key="GridCell.Tab.0.center" timestamp="1603440893085">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="145" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1603440893085" />
     <state width="1572" height="478" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1603350084224" />
-    <state width="1572" height="478" key="GridCell.Tab.0.left" timestamp="1603350084224">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state width="1493" height="145" key="GridCell.Tab.0.left" timestamp="1603440893084">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="145" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1603440893084" />
     <state width="1572" height="478" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1603350084224" />
-    <state width="1572" height="478" key="GridCell.Tab.0.right" timestamp="1603350084224">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state width="1493" height="145" key="GridCell.Tab.0.right" timestamp="1603440893085">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="145" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1603440893085" />
     <state width="1572" height="478" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1603350084224" />
-    <state width="1572" height="478" key="GridCell.Tab.1.bottom" timestamp="1603350084225">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state width="1493" height="145" key="GridCell.Tab.1.bottom" timestamp="1603440893087">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="145" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1603440893087" />
     <state width="1572" height="478" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1603350084225" />
-    <state width="1572" height="478" key="GridCell.Tab.1.center" timestamp="1603350084225">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state width="1493" height="145" key="GridCell.Tab.1.center" timestamp="1603440893086">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="145" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1603440893086" />
     <state width="1572" height="478" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1603350084225" />
-    <state width="1572" height="478" key="GridCell.Tab.1.left" timestamp="1603350084224">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state width="1493" height="145" key="GridCell.Tab.1.left" timestamp="1603440893086">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="145" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1603440893086" />
     <state width="1572" height="478" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1603350084224" />
-    <state width="1572" height="478" key="GridCell.Tab.1.right" timestamp="1603350084225">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state width="1493" height="145" key="GridCell.Tab.1.right" timestamp="1603440893086">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="145" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1603440893086" />
     <state width="1572" height="478" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1603350084225" />
     <state width="1288" height="340" key="GridCell.Tab.2.bottom" timestamp="1603299103365">
       <screen x="0" y="0" width="2560" height="1040" />
@@ -478,9 +484,10 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state width="1288" height="340" key="GridCell.Tab.2.right/0.0.2560.1040@0.0.2560.1040" timestamp="1603299103365" />
-    <state x="1256" y="177" key="SettingsEditor" timestamp="1603269232731">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state x="498" y="0" key="SettingsEditor" timestamp="1603438183947">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state x="498" y="0" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1603438183947" />
     <state x="1256" y="177" key="SettingsEditor/0.0.2560.1040@0.0.2560.1040" timestamp="1603269232731" />
     <state x="910" y="130" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1600870372806">
       <screen x="0" y="0" width="2560" height="1040" />
