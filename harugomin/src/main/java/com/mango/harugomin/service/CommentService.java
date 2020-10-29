@@ -74,6 +74,11 @@ public class CommentService {
 
     @Transactional
     public void deleteByUserId(Long userId) {
+        List<Comment> comments = commentRepository.findAllByUserId(userId);
+        for(Comment comment : comments) {
+            Post post = postService.findById(comment.getPost().getPostId()).get();
+            post.downCommentCount();
+        }
         commentRepository.deleteAllByUserId(userId);
     }
 
