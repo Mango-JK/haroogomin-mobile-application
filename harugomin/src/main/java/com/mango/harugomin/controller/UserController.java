@@ -59,7 +59,6 @@ public class UserController {
             result = kakaoAPIService.redirectToken(json); // 토큰 발행
         } catch (Exception e) {
             log.error(e + "");
-            data.addProperty("jwt", result);
             data.addProperty("status", String.valueOf(HttpStatus.BAD_REQUEST));
             return data.toString();
         }
@@ -79,7 +78,6 @@ public class UserController {
         try {
             result = naverAPIService.redirectToken(json);
         } catch (Exception e) {
-            data.addProperty("jwt", result);
             data.addProperty("status", String.valueOf(HttpStatus.BAD_REQUEST));
             return data.toString();
         }

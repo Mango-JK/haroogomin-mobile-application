@@ -92,8 +92,7 @@ public class NaverAPIService {
     @Transactional
     public String redirectToken(JsonNode json) {
         long id = json.get("response").get("id").asLong();
-        String nickname = json.get("response").get("nickname").toString();
-        nickname = nickname.substring(1, nickname.length() - 1);
+        String nickname = "naverUser";
         String ageRange = "0";
 
         User user = null;

@@ -3,11 +3,14 @@ package com.mango.harugomin.controller;
 import com.google.gson.JsonObject;
 import com.mango.harugomin.domain.entity.Hashtag;
 import com.mango.harugomin.domain.entity.Post;
+import com.mango.harugomin.domain.entity.User;
+import com.mango.harugomin.domain.entity.UserHashtag;
 import com.mango.harugomin.dto.PostResponseDto;
 import com.mango.harugomin.dto.PostSaveRequestDto;
 import com.mango.harugomin.service.HashtagService;
 import com.mango.harugomin.service.PostService;
 import com.mango.harugomin.service.S3Service;
+import com.mango.harugomin.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +38,7 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final UserService userService;
     private final HashtagService hashtagService;
     private final S3Service s3Service;
 
@@ -158,15 +162,45 @@ public class PostController {
 
     @ApiOperation("메인 고민글 3개 출력")
     @GetMapping(value = "/posts/main")
-    public ResponseEntity mainView() throws Exception {
-        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by("hits").descending());
-        Page<Post> result = null;
+    public ResponseEntity mainView(Long userId) throws Exception {
+        PageRequest pageRequest = PageRequest.of(0, 15, Sort.by("hits").descending());
+        Page<Post> data = null;
+        List<Post> result = null;
+
         try {
-            result = postService.findAllPosts(pageRequest);
+            data = postService.findAllPosts(pageRequest);
+
+            User user = userService.findById(userId).get();
+            String userHashString = "";
+            List<UserHashtag> userHashtags = user.getUserHashtags();
+
+            if (userHashtags.size() > 0) {
+                for (UserHashtag userHashtag : userHashtags) {
+                    String tag = userHashtag.getHashtag().getTagName();
+                    userHashString += tag;
+                }
+            }
+
+            for (Post post : data) {
+                if (result.size() > 2)
+                    break;
+                if (userHashString.contains(post.getTagName())) {
+                    result.add(post);
+                }
+            }
+
+            if (result.size() < 3) {
+                result = null;
+                for (Post post : data) {
+                    if (result.size() > 2)
+                        break;
+                    result.add(post);
+                }
+            }
         } catch (Exception e) {
-            return new ResponseEntity(result.getContent(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(result, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(result.getContent(), HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @ApiOperation("고민글 사진 업로드")
