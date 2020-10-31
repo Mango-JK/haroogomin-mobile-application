@@ -96,7 +96,6 @@ public class UserController {
         User user = null;
         boolean flag = true;
         String userCode = servicesResponse.getUser();
-
         if (appleUserService.findByCode(userCode).isEmpty()) {
             while (flag) {
                 if (userService.findById(STATIC_USER_ID).isEmpty()) {
