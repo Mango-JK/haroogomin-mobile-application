@@ -165,38 +165,48 @@ public class PostController {
     public ResponseEntity mainView(Long userId) throws Exception {
         PageRequest pageRequest = PageRequest.of(0, 15, Sort.by("hits").descending());
         Page<Post> data = null;
-        List<Post> result = null;
+        List<Post> result = new ArrayList<>();
+        int i = 0;
 
         try {
             data = postService.findAllPosts(pageRequest);
+            if (userId == -1) {
+                while (result.size() < 3) {
+                    result.add(data.getContent().get(i));
+                    i++;
+                }
+                return new ResponseEntity<>(result, HttpStatus.OK);
+            }
 
             User user = userService.findById(userId).get();
             String userHashString = "";
             List<UserHashtag> userHashtags = user.getUserHashtags();
-
-            if (userHashtags.size() > 0) {
-                for (UserHashtag userHashtag : userHashtags) {
-                    String tag = userHashtag.getHashtag().getTagName();
-                    userHashString += tag;
+            if (userHashtags.size() < 1) {
+                while (result.size() < 3) {
+                    result.add(data.getContent().get(i));
+                    i++;
                 }
+                return new ResponseEntity<>(result, HttpStatus.OK);
             }
 
-            for (Post post : data) {
+            for (UserHashtag userHashtag : userHashtags) {
+                userHashString += userHashtag.getHashtag().getTagName();
+            }
+            for (Post post : data.getContent()) {
                 if (result.size() > 2)
                     break;
                 if (userHashString.contains(post.getTagName())) {
                     result.add(post);
                 }
             }
-
-            if (result.size() < 3) {
-                result = null;
-                for (Post post : data) {
-                    if (result.size() > 2)
-                        break;
+            for (Post post : data.getContent()) {
+                if (result.size() > 2)
+                    break;
+                if (!result.contains(post)) {
                     result.add(post);
                 }
             }
+
         } catch (Exception e) {
             return new ResponseEntity(result, HttpStatus.NOT_FOUND);
         }
