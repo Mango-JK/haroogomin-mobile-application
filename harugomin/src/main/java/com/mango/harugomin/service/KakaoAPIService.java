@@ -121,8 +121,7 @@ public class KakaoAPIService {
     @Transactional
     public String redirectToken(JsonNode json) {
         long id = json.get("id").asLong();
-        String nickname = json.get("kakao_account").get("profile").get("nickname").toString();
-        nickname = nickname.substring(1, nickname.length() - 1);
+        String nickname = "kakaoUser";
         String ageRange = "0";
 
         int random = (int) Math.round(Math.random() * 4) + 1;

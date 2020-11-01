@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @Slf4j
@@ -59,7 +60,6 @@ public class UserController {
             result = kakaoAPIService.redirectToken(json); // 토큰 발행
         } catch (Exception e) {
             log.error(e + "");
-            data.addProperty("jwt", result);
             data.addProperty("status", String.valueOf(HttpStatus.BAD_REQUEST));
             return data.toString();
         }
@@ -79,7 +79,6 @@ public class UserController {
         try {
             result = naverAPIService.redirectToken(json);
         } catch (Exception e) {
-            data.addProperty("jwt", result);
             data.addProperty("status", String.valueOf(HttpStatus.BAD_REQUEST));
             return data.toString();
         }
@@ -95,42 +94,48 @@ public class UserController {
         if (servicesResponse.getId_token() == null || servicesResponse.getCode() == null)
             return null;
 
-        User user = null;
-        boolean flag = true;
         String userCode = servicesResponse.getUser();
-
-        if (appleUserService.findByCode(userCode).isEmpty()) {
-            while (flag) {
-                if (userService.findById(STATIC_USER_ID).isEmpty()) {
-                    flag = false;
-                    String image = "https://hago-storage-bucket.s3.ap-northeast-2.amazonaws.com/default01.jpg";
-                    User newUser = User.builder()
-                            .userId(STATIC_USER_ID++)
-                            .nickname("Apple_User")
-                            .profileImage(image)
-                            .ageRange(0)
-                            .userHashtags(new ArrayList<>())
-                            .build();
-                    user = userService.saveUser(newUser);
-                    AppleUser appleUser = new AppleUser(userCode, STATIC_USER_ID - 1);
-                    appleUserService.saveAppleUserKey(appleUser);
-                } else {
-                    STATIC_USER_ID++;
-                }
-            }
-        } else {
-            AppleUser appleUser = appleUserService.findByCode(userCode).get();
-            Long userId = appleUser.getUserId();
-            user = userService.findById(userId).get();
-        }
-
-        UserRequestDto userResponseDto = new UserRequestDto(user);
-        String result = jwtService.create("user", userResponseDto, "user");
+        String result = jwtService.create("user", userCode, "user");
 
         JsonObject data = new JsonObject();
         data.addProperty("jwt", result);
         data.addProperty("status", String.valueOf(HttpStatus.OK));
         return data.toString();
+    }
+
+    @ApiOperation("Apple 토큰 검증")
+    @PostMapping("/users/check/apple")
+    public ResponseEntity checkAppleUser(HttpServletRequest request) {
+        User user = null;
+        Object obj = jwtService.getAppleId("user");
+        Optional<AppleUser> appleUser = appleUserService.findByCode(obj.toString());
+        if (!appleUser.isEmpty()) {
+            user = userService.findById(appleUser.get().getUserId()).get();
+            UserTokenResponseDto result = new UserTokenResponseDto(user);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        boolean flag = true;
+        while (flag) {
+            if (userService.findById(STATIC_USER_ID).isEmpty()) {
+                flag = false;
+                String image = "https://hago-storage-bucket.s3.ap-northeast-2.amazonaws.com/default01.jpg";
+                user = User.builder()
+                        .userId(STATIC_USER_ID++)
+                        .nickname("Apple_User")
+                        .profileImage(image)
+                        .ageRange(0)
+                        .userHashtags(new ArrayList<>())
+                        .build();
+                userService.saveUser(user);
+                AppleUser newAppleUser = new AppleUser(obj.toString(), STATIC_USER_ID - 1);
+                appleUserService.saveAppleUserKey(newAppleUser);
+            } else {
+                STATIC_USER_ID++;
+            }
+        }
+
+        UserTokenResponseDto result = new UserTokenResponseDto(user);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @ApiOperation("토큰 검증")
