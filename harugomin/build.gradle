@@ -41,6 +41,7 @@ dependencies {
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
 
+
 	compile group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '3.10'
 	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'
 
