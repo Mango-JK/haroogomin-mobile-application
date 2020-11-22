@@ -168,6 +168,7 @@ public class UserController {
             userHashtagService.deleteAllByUsers(userId);
             postService.deleteUserPosts(userId);
             userService.deleteById(userId);
+            tokenService.remove(userId);
             postService.foreignkeyClose();
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
