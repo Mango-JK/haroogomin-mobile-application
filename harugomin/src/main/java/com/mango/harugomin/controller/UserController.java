@@ -1,10 +1,9 @@
 package com.mango.harugomin.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.JsonObject;
 import com.mango.harugomin.domain.entity.*;
-import com.mango.harugomin.dto.UserRequestDto;
 import com.mango.harugomin.dto.UserResponseDto;
+import com.mango.harugomin.dto.UserSignUpRequestDto;
 import com.mango.harugomin.dto.UserTokenResponseDto;
 import com.mango.harugomin.dto.UserUpdateRequestDto;
 import com.mango.harugomin.jwt.JwtService;
@@ -23,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*")
@@ -35,8 +33,6 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-    private final KakaoAPIService kakaoAPIService;
-    private final NaverAPIService naverAPIService;
     private final JwtService jwtService;
     private final S3Service s3Service;
     private final HistoryService historyService;
@@ -44,112 +40,72 @@ public class UserController {
     private final CommentService commentService;
     private final LikerService likerService;
     private final UserHashtagService userHashtagService;
-    private final AppleUserService appleUserService;
-    private static Long STATIC_USER_ID = 1L;
+    private final TokenService tokenService;
 
-    @ApiOperation("카카오 로그인")
-    @PostMapping("/users/login/kakao")
+    @ApiOperation("회원가입")
+    @PostMapping("/users/singup")
     @ResponseBody
-    public String kakaoLogin(HttpServletRequest request) {
-        String accessToken = request.getHeader("accessToken");
-        JsonNode json = kakaoAPIService.getKaKaoUserInfo(accessToken);
+    public ResponseEntity signUp(UserSignUpRequestDto requestDto) {
+        log.info(":: /users/signup API ::");
+        User newUser = User.builder()
+                .userLoginId(requestDto.getUserLoginId())
+                .password(requestDto.getPassword())
+                .nickname(requestDto.getNickname())
+                .profileImage(requestDto.getProfileImage())
+                .ageRange(requestDto.getAgeRange())
+                .build();
 
-        String result = null;
-        JsonObject data = new JsonObject();
+        Long userId = userService.save(newUser).getUserId();
+        userService.updateUserHashtag(userId, requestDto.getUserhashtags());
+
         try {
-            result = kakaoAPIService.redirectToken(json); // 토큰 발행
+            User user = userService.findById(userId).get();
+            String jwt = jwtService.create("user", user, "user");
+            tokenService.save(userId, jwt);
+            return new ResponseEntity(jwt, HttpStatus.OK);
         } catch (Exception e) {
-            log.error(e + "");
-            data.addProperty("status", String.valueOf(HttpStatus.BAD_REQUEST));
-            return data.toString();
+            log.error("JWT Create Token Error : " + e);
+            return new ResponseEntity("FAIL", HttpStatus.BAD_REQUEST);
         }
-        data.addProperty("jwt", result);
-        data.addProperty("status", String.valueOf(HttpStatus.OK));
-        return data.toString();
     }
 
-    @ApiOperation("네이버 로그인")
-    @PostMapping("/users/login/naver")
-    public String naverLogin(HttpServletRequest request) {
-        String accessToken = request.getHeader("accessToken");
-        JsonNode json = naverAPIService.getNaverUserInfo(accessToken);
-
-        String result = null;
-        JsonObject data = new JsonObject();
-        try {
-            result = naverAPIService.redirectToken(json);
-        } catch (Exception e) {
-            data.addProperty("status", String.valueOf(HttpStatus.BAD_REQUEST));
-            return data.toString();
-        }
-        data.addProperty("jwt", result);
-        data.addProperty("status", String.valueOf(HttpStatus.OK));
-        return data.toString();
-    }
-
-    @ApiOperation("애플 로그인")
-    @PostMapping("/users/login/apple")
-    public String appleLogin(ServicesResponse servicesResponse) {
-        log.info("START APPLE LOGIN !");
-        if (servicesResponse.getId_token() == null || servicesResponse.getCode() == null)
-            return null;
-
-        String userCode = servicesResponse.getUser();
-        String result = jwtService.create("user", userCode, "user");
-
-        JsonObject data = new JsonObject();
-        data.addProperty("jwt", result);
-        data.addProperty("status", String.valueOf(HttpStatus.OK));
-        return data.toString();
-    }
-
-    @ApiOperation("Apple 토큰 검증")
-    @PostMapping("/users/check/apple")
-    public ResponseEntity checkAppleUser(HttpServletRequest request) {
-        User user = null;
-        Object obj = jwtService.getAppleId("user");
-        Optional<AppleUser> appleUser = appleUserService.findByCode(obj.toString());
-        if (!appleUser.isEmpty()) {
-            user = userService.findById(appleUser.get().getUserId()).get();
-            UserTokenResponseDto result = new UserTokenResponseDto(user);
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        }
-        boolean flag = true;
-        while (flag) {
-            if (userService.findById(STATIC_USER_ID).isEmpty()) {
-                flag = false;
-                String image = "https://hago-storage-bucket.s3.ap-northeast-2.amazonaws.com/default01.jpg";
-                user = User.builder()
-                        .userId(STATIC_USER_ID++)
-                        .nickname("Apple_User")
-                        .profileImage(image)
-                        .ageRange(0)
-                        .userHashtags(new ArrayList<>())
-                        .build();
-                userService.saveUser(user);
-                AppleUser newAppleUser = new AppleUser(obj.toString(), STATIC_USER_ID - 1);
-                appleUserService.saveAppleUserKey(newAppleUser);
-            } else {
-                STATIC_USER_ID++;
+    @ApiOperation("로그인")
+    @PostMapping("/users/login")
+    @ResponseBody
+    public ResponseEntity login(@RequestParam("id") String id, @RequestParam("password") String password){
+        log.info(":: /users/login ::");
+        Optional<User> user = userService.findByUserLoginId(id);
+        if(!user.isEmpty()){
+            User loginUser = user.get();
+            if(!password.equals(loginUser.getPassword())){
+                return new ResponseEntity("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
             }
+        } else {
+            return new ResponseEntity("ID가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
+        Long userId = user.get().getUserId();
+        String jwt = tokenService.findById(userId).get().getJwt();
 
-        UserTokenResponseDto result = new UserTokenResponseDto(user);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity(jwt, HttpStatus.OK);
     }
 
     @ApiOperation("토큰 검증")
     @PostMapping("/users/check")
     public ResponseEntity checkToken(HttpServletRequest request) {
+        log.info(":: /users/check ::");
         User user = null;
         if (jwtService.isUsable(request.getHeader("jwt"))) {
             Object obj = jwtService.get("user");
+            log.info("obj : " + obj.toString());
             user = userService.findById(Long.parseLong(obj.toString())).get();
+        } else {
+            return new ResponseEntity("유효하지 않은 토큰입니다.", HttpStatus.NOT_FOUND);
         }
 
+        log.info("before result");
         UserTokenResponseDto result = new UserTokenResponseDto(user);
-
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        log.info("result : " + result);
+        return new ResponseEntity(result, HttpStatus.OK);
     }
 
     @ApiOperation("유저 프로필 사진 업데이트")
@@ -158,7 +114,7 @@ public class UserController {
         User user = userService.findById(userId).get();
         String imgPath = S3Service.CLOUD_FRONT_DOMAIN_NAME + s3Service.upload(user.getProfileImage(), file);
         user.updateUserImage(imgPath);
-        userService.saveUser(user);
+        userService.save(user);
         JsonObject data = new JsonObject();
         data.addProperty("imgPath", imgPath);
         data.addProperty("status", String.valueOf(HttpStatus.OK));
@@ -183,9 +139,18 @@ public class UserController {
         return new ResponseEntity<>(new UserResponseDto(user), HttpStatus.OK);
     }
 
+    @ApiOperation("유저 ID 중복검사")
+    @GetMapping(value = "/users/check/id")
+    public ResponseEntity<String> duplicationCheckId(@RequestParam("id") String id) {
+        JsonObject data = new JsonObject();
+        data.addProperty("flag", userService.duplicationCheckId(id));
+
+        return new ResponseEntity<>(data.toString(), HttpStatus.OK);
+    }
+
     @ApiOperation("유저 닉네임 중복검사")
-    @GetMapping(value = "/users/check/{nickname}")
-    public ResponseEntity<String> duplicationCheck(@PathVariable("nickname") String nickname) {
+    @GetMapping(value = "/users/check/nickname")
+    public ResponseEntity<String> duplicationCheck(@RequestParam("nickname") String nickname) {
         JsonObject data = new JsonObject();
         data.addProperty("flag", userService.duplicationCheck(nickname));
 
@@ -203,6 +168,7 @@ public class UserController {
             userHashtagService.deleteAllByUsers(userId);
             postService.deleteUserPosts(userId);
             userService.deleteById(userId);
+            tokenService.remove(userId);
             postService.foreignkeyClose();
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -235,21 +201,5 @@ public class UserController {
             return new ResponseEntity(result.getContent(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(result.getContent(), HttpStatus.OK);
-    }
-
-    @ApiOperation("(SERVER_TEST용)카카오 AccessToken 발급받기")
-    @GetMapping(value = "/users/login/kakao")
-    public String getKakaoCode(@RequestParam("code") String code) {
-        ResponseEntity<String> AccessToken = kakaoAPIService.getAccessToken(code);
-        log.info("AccessToken : " + AccessToken);
-        return "index";
-    }
-
-    @ApiOperation("(SERVER_TEST용)네이버 AccessToken 발급받기")
-    @GetMapping(value = "/users/login/naver")
-    public String getNaverCode(@RequestParam(value = "code") String code,
-                               @RequestParam(value = "state") String state) {
-        ResponseEntity<String> AccessToken = naverAPIService.getAccessToken(code, state);
-        return "index";
     }
 }

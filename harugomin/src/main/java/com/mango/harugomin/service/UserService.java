@@ -25,14 +25,29 @@ public class UserService {
     private final UserHashtagRepository userHashtagRepository;
 
     @Transactional
-    public User saveUser(User user){
+    public User save(User user){
         return userRepository.save(user);
     }
 
+    @Transactional(readOnly = true)
     public Optional<User> findById(long userId) {
         return userRepository.findById(userId);
     }
 
+    @Transactional(readOnly = true)
+    public Optional<User> findByUserLoginId(String id) {
+        return userRepository.findByUserLoginId(id);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean duplicationCheckId(String id) {
+        if(userRepository.countByUserLoginId(id) > 0){
+            return false;
+        }
+        return true;
+    }
+
+    @Transactional(readOnly = true)
     public boolean duplicationCheck(String nickname) {
         if(userRepository.countByNickname(nickname) > 0) {
             return false;

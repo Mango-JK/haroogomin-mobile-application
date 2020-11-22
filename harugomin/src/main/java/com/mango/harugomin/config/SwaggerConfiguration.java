@@ -19,7 +19,6 @@ import java.util.List;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfiguration {
-
     @Bean
     public Docket apiV1() {
         List<ResponseMessage> responseMessages = new ArrayList<>();
