@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class UserTokenResponseDto {
     private Long userId;
+    private String userLoginId;
     private String nickname;
     private String profileImage;
     private int ageRange;
@@ -21,6 +22,7 @@ public class UserTokenResponseDto {
 
     public UserTokenResponseDto(User entity) {
         this.userId = entity.getUserId();
+        this.userLoginId = entity.getUserLoginId();
         this.nickname = entity.getNickname();
         this.profileImage = entity.getProfileImage();
         this.ageRange = entity.getAgeRange();
