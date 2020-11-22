@@ -38,6 +38,7 @@ public class PostService {
                 .tagName(requestDto.getTagName())
                 .postImage(requestDto.getPostImage())
                 .hits(0)
+                .commentNum(0)
                 .build()
         );
     }

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @NoArgsConstructor
 @Getter
@@ -21,7 +22,14 @@ public class User extends BaseTimeEntity {
 
     @Id
     @Column(name = "user_id")
+    @GeneratedValue(strategy = IDENTITY)
     private Long userId;
+
+    @Column(name = "user_login_id")
+    private String userLoginId;
+
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "nickname")
     private String nickname;
@@ -37,18 +45,14 @@ public class User extends BaseTimeEntity {
     private List<UserHashtag> userHashtags = new ArrayList<>();
 
     @Builder
-    public User(long userId, String nickname, String profileImage, int ageRange, List<UserHashtag> userHashtags) {
+    public User(long userId, String userLoginId, String password, String nickname, String profileImage, int ageRange) {
+        this.userLoginId = userLoginId;
+        this.password = password;
         this.userId = userId;
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.ageRange = ageRange;
-        this.userHashtags = userHashtags;
-    }
-
-    @Builder
-    public User(long userId, int ageRange) {
-        this.userId = userId;
-        this.ageRange = ageRange;
+        this.userHashtags = new ArrayList<UserHashtag>();
     }
 
     public void updateUserImage(String imagePath) {

@@ -69,17 +69,4 @@ public class JwtService {
         Map<String, Object> value = (LinkedHashMap<String, Object>) claims.getBody().get(key);
         return value.get("userId");
     }
-
-    public Object getAppleId(String key) {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-                .getRequest();
-        String jwt = request.getHeader("jwt");
-        Jws<Claims> claims = null;
-        try {
-            claims = Jwts.parser().setSigningKey(SALT.getBytes("UTF-8")).parseClaimsJws(jwt);
-        } catch (Exception e) {
-            throw new UnauthorizedException();
-        }
-        return claims.getBody().get("user");
-    }
 }

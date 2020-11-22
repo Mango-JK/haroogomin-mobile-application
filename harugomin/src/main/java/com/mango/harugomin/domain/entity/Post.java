@@ -54,14 +54,14 @@ public class Post extends BaseTimeEntity {
     private int commentNum;
 
     @Builder
-    public Post(User user, String title, String content, String tagName, String postImage, int hits) {
+    public Post(User user, String title, String content, String tagName, String postImage, int hits, int commentNum) {
         this.user = user;
         this.title = title;
         this.content = content;
         this.tagName = tagName;
         this.postImage = postImage;
         this.hits = hits;
-        this.commentNum = 0;
+        this.commentNum = commentNum;
     }
 
     public void update(String title, String content, String tagName, String postImage) {
@@ -70,18 +70,6 @@ public class Post extends BaseTimeEntity {
         this.tagName = tagName;
         this.postImage = postImage;
         this.setModifiedDate(LocalDateTime.now());
-    }
-
-    @Builder
-    public Post(User user, String title, String content, String tagName, String postImage) {
-        this.user = user;
-        this.title = title;
-        this.content = content;
-        this.tagName = tagName;
-        this.postImage = postImage;
-        this.comments = new ArrayList<>();
-        this.hits = 0;
-        this.commentNum = 0;
     }
 
     public void addComment(Comment comment){
