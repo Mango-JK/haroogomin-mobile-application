@@ -1,5 +1,6 @@
 package com.mango.harugomin.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.JsonObject;
 import com.mango.harugomin.domain.entity.*;
 import com.mango.harugomin.dto.UserResponseDto;
@@ -41,6 +42,7 @@ public class UserController {
     private final LikerService likerService;
     private final UserHashtagService userHashtagService;
     private final TokenService tokenService;
+    private final NaverAPIService naverAPIService;
 
     @ApiOperation("회원가입")
     @PostMapping("/users/singup")
@@ -89,6 +91,25 @@ public class UserController {
         return new ResponseEntity(jwt, HttpStatus.OK);
     }
 
+    @ApiOperation("네이버 로그인")
+    @PostMapping("/users/login/naver")
+    public String naverLogin(HttpServletRequest request) {
+        String accessToken = request.getHeader("accessToken");
+        JsonNode json = naverAPIService.getNaverUserInfo(accessToken);
+
+        String result = null;
+        JsonObject data = new JsonObject();
+        try {
+            result = naverAPIService.redirectToken(json);
+        } catch (Exception e) {
+            data.addProperty("status", String.valueOf(HttpStatus.BAD_REQUEST));
+            return data.toString();
+        }
+        data.addProperty("jwt", result);
+        data.addProperty("status", String.valueOf(HttpStatus.OK));
+        return data.toString();
+    }
+
     @ApiOperation("토큰 검증")
     @PostMapping("/users/check")
     public ResponseEntity checkToken(HttpServletRequest request) {
@@ -106,6 +127,20 @@ public class UserController {
         UserTokenResponseDto result = new UserTokenResponseDto(user);
         log.info("result : " + result);
         return new ResponseEntity(result, HttpStatus.OK);
+    }
+
+    @ApiOperation("SNS 토큰 검증")
+    @PostMapping("/users/check/sns")
+    public ResponseEntity checkSNSToken(HttpServletRequest request) {
+        User user = null;
+        if (jwtService.isUsable(request.getHeader("jwt"))) {
+            Object obj = jwtService.get("user");
+            user = userService.findById(Long.parseLong(obj.toString())).get();
+        }
+
+        UserTokenResponseDto result = new UserTokenResponseDto(user);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @ApiOperation("유저 프로필 사진 업데이트")
