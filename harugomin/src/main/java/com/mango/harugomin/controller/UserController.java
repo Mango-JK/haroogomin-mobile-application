@@ -13,6 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -22,7 +23,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*")
@@ -35,14 +39,13 @@ public class UserController {
 
     private final UserService userService;
     private final JwtService jwtService;
-    private final S3Service s3Service;
     private final HistoryService historyService;
     private final PostService postService;
     private final CommentService commentService;
     private final LikerService likerService;
     private final UserHashtagService userHashtagService;
     private final TokenService tokenService;
-    private final NaverAPIService naverAPIService;
+    private final NaverApiService naverAPIService;
 
     @ApiOperation("회원가입")
     @PostMapping("/users/singup")
@@ -145,13 +148,34 @@ public class UserController {
 
     @ApiOperation("유저 프로필 사진 업데이트")
     @PutMapping(value = "/users/profileImage/{id}")
-    public String updateUserProfile(@PathVariable(value = "id") Long userId, @RequestParam MultipartFile file) throws IOException {
-        User user = userService.findById(userId).get();
-        String imgPath = S3Service.CLOUD_FRONT_DOMAIN_NAME + s3Service.upload(user.getProfileImage(), file);
-        user.updateUserImage(imgPath);
-        userService.save(user);
+    public String updateUserProfile(@PathVariable(value = "id") Long userId, @RequestParam MultipartFile files) throws IOException {
+        String targetFilePath = "/home/ubuntu/images/profile";
         JsonObject data = new JsonObject();
-        data.addProperty("imgPath", imgPath);
+        User user = userService.findById(userId).get();
+        String imagePath = "";
+
+        if(files.isEmpty()) {
+            data.addProperty("imgPath", "");
+            data.addProperty("status", String.valueOf(HttpStatus.OK));
+            return data.toString();
+        } else {
+            String fileName = files.getOriginalFilename();
+            String fileNameExtension = FilenameUtils.getExtension(fileName).toLowerCase();
+            File targetFile;
+            String TF_Name;
+
+            SimpleDateFormat timeFormat = new SimpleDateFormat("yyMMddHHmmss");
+            TF_Name = timeFormat.format(new Date()) + "." + fileNameExtension;
+            imagePath = targetFilePath+TF_Name;
+            targetFile = new File(imagePath);
+            log.info("Image uploaded : {}", targetFile);
+            files.transferTo(targetFile);
+        }
+
+        user.updateUserImage(imagePath);
+        userService.save(user);
+
+        data.addProperty("imgPath", imagePath);
         data.addProperty("status", String.valueOf(HttpStatus.OK));
 
         return data.toString();
