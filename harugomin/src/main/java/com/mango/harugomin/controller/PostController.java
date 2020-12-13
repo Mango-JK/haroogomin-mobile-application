@@ -219,7 +219,7 @@ public class PostController {
     @PostMapping(value = "/posts/image")
     public String uploadPostImage(@RequestParam MultipartFile files) throws IOException {
         try {
-            String targetFilePath = "/home/ubuntu/images/post/";
+            String targetFilePath = "http://15.165.183.122/";
             JsonObject data = new JsonObject();
             String imagePath = "";
 

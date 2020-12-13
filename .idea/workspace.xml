@@ -146,7 +146,7 @@
       <recent name="com.mango.harugomin.domain.entity" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.HarugominApplication">
+  <component name="RunManager" selected="Gradle.harugomin [bootJar]">
     <configuration name="harugomin [bootJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -359,6 +359,7 @@
       <workItem from="1607700597193" duration="27000" />
       <workItem from="1607700693369" duration="82000" />
       <workItem from="1607745094923" duration="2481000" />
+      <workItem from="1607855890859" duration="610000" />
     </task>
     <servers />
   </component>

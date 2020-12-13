@@ -149,7 +149,7 @@ public class UserController {
     @ApiOperation("유저 프로필 사진 업데이트")
     @PutMapping(value = "/users/profileImage/{id}")
     public String updateUserProfile(@PathVariable(value = "id") Long userId, @RequestParam MultipartFile files) throws IOException {
-        String targetFilePath = "/home/ubuntu/images/profile/";
+        String targetFilePath = "http://15.165.183.122/";
         JsonObject data = new JsonObject();
         User user = userService.findById(userId).get();
         String imagePath = "";
