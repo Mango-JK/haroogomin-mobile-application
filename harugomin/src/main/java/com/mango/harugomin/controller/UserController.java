@@ -149,10 +149,10 @@ public class UserController {
     @ApiOperation("유저 프로필 사진 업데이트")
     @PutMapping(value = "/users/profileImage/{id}")
     public String updateUserProfile(@PathVariable(value = "id") Long userId, @RequestParam MultipartFile files) throws IOException {
-        String targetFilePath = "http://15.165.183.122/";
         JsonObject data = new JsonObject();
         User user = userService.findById(userId).get();
-        String imagePath = "";
+        String TARGET_DIR = "/home/ubuntu/hago/files/";
+        String imagePath = FilenameUtils.getBaseName(files.getOriginalFilename());
 
         if(files.isEmpty()) {
             data.addProperty("imgPath", "");
@@ -162,13 +162,11 @@ public class UserController {
             String fileName = files.getOriginalFilename();
             String fileNameExtension = FilenameUtils.getExtension(fileName).toLowerCase();
             File targetFile;
-            String TF_Name;
 
             SimpleDateFormat timeFormat = new SimpleDateFormat("yyMMddHHmmss");
-            TF_Name = timeFormat.format(new Date()) + "." + fileNameExtension;
-            imagePath = targetFilePath+TF_Name;
-            targetFile = new File(imagePath);
-            log.info("Image uploaded : {}", targetFile);
+            imagePath += timeFormat.format(new Date()) + "." + fileNameExtension;
+            targetFile = new File(TARGET_DIR + imagePath);
+            log.info("Image uploaded : {}", imagePath);
             files.transferTo(targetFile);
         }
 
