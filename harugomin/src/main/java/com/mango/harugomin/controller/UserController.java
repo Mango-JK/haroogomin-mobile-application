@@ -45,12 +45,10 @@ public class UserController {
     private final LikerService likerService;
     private final UserHashtagService userHashtagService;
     private final TokenService tokenService;
-    private final NaverApiService naverAPIService;
 
     @ApiOperation("회원가입")
-    @PostMapping("/users/singup")
-    @ResponseBody
-    public ResponseEntity signUp(UserSignUpRequestDto requestDto) {
+    @PostMapping("/users/signup")
+    public String signUp(UserSignUpRequestDto requestDto) {
         log.info(":: /users/signup API ::");
         User newUser = User.builder()
                 .userLoginId(requestDto.getUserLoginId())
@@ -67,51 +65,53 @@ public class UserController {
             User user = userService.findById(userId).get();
             String jwt = jwtService.create("user", user, "user");
             tokenService.save(userId, jwt);
-            return new ResponseEntity(jwt, HttpStatus.OK);
+            JsonObject jsonJwt = new JsonObject();
+            jsonJwt.addProperty("jwt", jwt);
+            return jsonJwt.toString();
         } catch (Exception e) {
             log.error("JWT Create Token Error : " + e);
-            return new ResponseEntity("FAIL", HttpStatus.BAD_REQUEST);
+            return "FAIL";
         }
     }
 
     @ApiOperation("로그인")
     @PostMapping("/users/login")
-    @ResponseBody
-    public ResponseEntity login(@RequestParam("id") String id, @RequestParam("password") String password){
+    public String login(@RequestParam("id") String id, @RequestParam("password") String password){
         log.info(":: /users/login ::");
         Optional<User> user = userService.findByUserLoginId(id);
         if(!user.isEmpty()){
             User loginUser = user.get();
             if(!password.equals(loginUser.getPassword())){
-                return new ResponseEntity("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+                return "비밀번호가 일치하지 않습니다.";
             }
         } else {
-            return new ResponseEntity("ID가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+            return "ID가 존재하지 않습니다.";
         }
         Long userId = user.get().getUserId();
         String jwt = tokenService.findById(userId).get().getJwt();
-
-        return new ResponseEntity(jwt, HttpStatus.OK);
+        JsonObject jsonJwt = new JsonObject();
+        jsonJwt.addProperty("jwt", jwt);
+        return jsonJwt.toString();
     }
 
-    @ApiOperation("네이버 로그인")
-    @PostMapping("/users/login/naver")
-    public String naverLogin(HttpServletRequest request) {
-        String accessToken = request.getHeader("accessToken");
-        JsonNode json = naverAPIService.getNaverUserInfo(accessToken);
-
-        String result = null;
-        JsonObject data = new JsonObject();
-        try {
-            result = naverAPIService.redirectToken(json);
-        } catch (Exception e) {
-            data.addProperty("status", String.valueOf(HttpStatus.BAD_REQUEST));
-            return data.toString();
-        }
-        data.addProperty("jwt", result);
-        data.addProperty("status", String.valueOf(HttpStatus.OK));
-        return data.toString();
-    }
+//    @ApiOperation("네이버 로그인")
+//    @PostMapping("/users/login/naver")
+//    public String naverLogin(HttpServletRequest request) {
+//        String accessToken = request.getHeader("accessToken");
+//        JsonNode json = naverAPIService.getNaverUserInfo(accessToken);
+//
+//        String result = null;
+//        JsonObject data = new JsonObject();
+//        try {
+//            result = naverAPIService.redirectToken(json);
+//        } catch (Exception e) {
+//            data.addProperty("status", String.valueOf(HttpStatus.BAD_REQUEST));
+//            return data.toString();
+//        }
+//        data.addProperty("jwt", result);
+//        data.addProperty("status", String.valueOf(HttpStatus.OK));
+//        return data.toString();
+//    }
 
     @ApiOperation("토큰 검증")
     @PostMapping("/users/check")
@@ -132,19 +132,19 @@ public class UserController {
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
-    @ApiOperation("SNS 토큰 검증")
-    @PostMapping("/users/check/sns")
-    public ResponseEntity checkSNSToken(HttpServletRequest request) {
-        User user = null;
-        if (jwtService.isUsable(request.getHeader("jwt"))) {
-            Object obj = jwtService.get("user");
-            user = userService.findById(Long.parseLong(obj.toString())).get();
-        }
-
-        UserTokenResponseDto result = new UserTokenResponseDto(user);
-
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
+//    @ApiOperation("SNS 토큰 검증")
+//    @PostMapping("/users/check/sns")
+//    public ResponseEntity checkSNSToken(HttpServletRequest request) {
+//        User user = null;
+//        if (jwtService.isUsable(request.getHeader("jwt"))) {
+//            Object obj = jwtService.get("user");
+//            user = userService.findById(Long.parseLong(obj.toString())).get();
+//        }
+//
+//        UserTokenResponseDto result = new UserTokenResponseDto(user);
+//
+//        return new ResponseEntity<>(result, HttpStatus.OK);
+//    }
 
     @ApiOperation("유저 프로필 사진 업데이트")
     @PutMapping(value = "/users/profileImage/{id}")
