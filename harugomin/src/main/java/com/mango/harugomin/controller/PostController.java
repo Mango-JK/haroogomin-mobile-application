@@ -1,13 +1,11 @@
 package com.mango.harugomin.controller;
 
 import com.google.gson.JsonObject;
-import com.mango.harugomin.domain.entity.Hashtag;
-import com.mango.harugomin.domain.entity.Post;
-import com.mango.harugomin.domain.entity.User;
-import com.mango.harugomin.domain.entity.UserHashtag;
+import com.mango.harugomin.domain.entity.*;
 import com.mango.harugomin.dto.PostResponseDto;
 import com.mango.harugomin.dto.PostSaveRequestDto;
 import com.mango.harugomin.service.HashtagService;
+import com.mango.harugomin.service.HistoryService;
 import com.mango.harugomin.service.PostService;
 import com.mango.harugomin.service.UserService;
 import io.swagger.annotations.Api;
@@ -43,6 +41,7 @@ public class PostController {
     private final PostService postService;
     private final UserService userService;
     private final HashtagService hashtagService;
+    private final HistoryService historyService;
 
     @ApiOperation("고민글 작성 or 수정")
     @PostMapping(value = "/posts")
@@ -77,7 +76,8 @@ public class PostController {
         PostResponseDto result = new PostResponseDto(post);
 
         if (post == null) {
-            return new ResponseEntity(post, HttpStatus.NOT_FOUND);
+            History history = historyService.findById(postId).get();
+            return new ResponseEntity(history, HttpStatus.NOT_FOUND);
         }
 
         LocalDateTime currentTime = LocalDateTime.now();
