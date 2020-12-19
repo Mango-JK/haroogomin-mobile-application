@@ -32,15 +32,8 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	compile 'com.google.code.gson:gson'
 	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
-
-	// AWS S3
-	compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.820'
-	compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.820'
-	compile group: 'commons-io', name: 'commons-io', version: '2.6'
-
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
-
 
 	compile group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '3.10'
 	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'

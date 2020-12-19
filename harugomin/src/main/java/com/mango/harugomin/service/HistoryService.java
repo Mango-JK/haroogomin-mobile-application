@@ -8,10 +8,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 public class HistoryService {
     private final HistoryRepository historyRepository;
+
+    public Optional<History> findById(Long historyId){
+        return historyRepository.findById(historyId);
+    }
 
     public Page<History> myHistoryPost(Long userId, PageRequest pageRequest) {
         return historyRepository.findAllByUserUserId(userId, pageRequest);

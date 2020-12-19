@@ -22,12 +22,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.StringTokenizer;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class NaverAPIService {
+public class NaverApiService {
 
     private final UserService userService;
     private final JwtService jwtService;

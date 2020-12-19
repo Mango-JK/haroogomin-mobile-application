@@ -1,20 +1,18 @@
 package com.mango.harugomin.controller;
 
 import com.google.gson.JsonObject;
-import com.mango.harugomin.domain.entity.Hashtag;
-import com.mango.harugomin.domain.entity.Post;
-import com.mango.harugomin.domain.entity.User;
-import com.mango.harugomin.domain.entity.UserHashtag;
+import com.mango.harugomin.domain.entity.*;
 import com.mango.harugomin.dto.PostResponseDto;
 import com.mango.harugomin.dto.PostSaveRequestDto;
 import com.mango.harugomin.service.HashtagService;
+import com.mango.harugomin.service.HistoryService;
 import com.mango.harugomin.service.PostService;
-import com.mango.harugomin.service.S3Service;
 import com.mango.harugomin.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -23,10 +21,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -40,7 +41,7 @@ public class PostController {
     private final PostService postService;
     private final UserService userService;
     private final HashtagService hashtagService;
-    private final S3Service s3Service;
+    private final HistoryService historyService;
 
     @ApiOperation("고민글 작성 or 수정")
     @PostMapping(value = "/posts")
@@ -75,7 +76,8 @@ public class PostController {
         PostResponseDto result = new PostResponseDto(post);
 
         if (post == null) {
-            return new ResponseEntity(post, HttpStatus.NOT_FOUND);
+            History history = historyService.findById(postId).get();
+            return new ResponseEntity(history, HttpStatus.NOT_FOUND);
         }
 
         LocalDateTime currentTime = LocalDateTime.now();
@@ -215,12 +217,31 @@ public class PostController {
 
     @ApiOperation("고민글 사진 업로드")
     @PostMapping(value = "/posts/image")
-    public String uploadPostImage(@RequestParam MultipartFile file) throws IOException {
+    public String uploadPostImage(@RequestParam MultipartFile files) throws IOException {
         try {
-            String imgPath = S3Service.CLOUD_FRONT_DOMAIN_NAME + s3Service.upload(null, file);
             JsonObject data = new JsonObject();
-            data.addProperty("imgPath", imgPath);
+            String TARGET_DIR = "/home/ubuntu/hago/files/";
+            String imagePath = FilenameUtils.getBaseName(files.getOriginalFilename());
+
+            if(files.isEmpty()) {
+                data.addProperty("imgPath", "");
+                data.addProperty("status", String.valueOf(HttpStatus.OK));
+                return data.toString();
+            } else {
+                String fileName = files.getOriginalFilename();
+                String fileNameExtension = FilenameUtils.getExtension(fileName).toLowerCase();
+                File targetFile;
+
+                SimpleDateFormat timeFormat = new SimpleDateFormat("yyMMddHHmmss");
+                imagePath += timeFormat.format(new Date()) + "." + fileNameExtension;
+                targetFile = new File(TARGET_DIR+imagePath);
+                log.info("Image uploaded : {}", targetFile);
+                files.transferTo(targetFile);
+            }
+
+            data.addProperty("imgPath", imagePath);
             data.addProperty("status", String.valueOf(HttpStatus.OK));
+
             return data.toString();
         } catch (Exception e) {
             return HttpStatus.FORBIDDEN.toString();
