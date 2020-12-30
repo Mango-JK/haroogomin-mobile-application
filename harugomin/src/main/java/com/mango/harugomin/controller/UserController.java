@@ -17,6 +17,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -114,21 +115,17 @@ public class UserController {
 //    }
 
     @ApiOperation("토큰 검증")
-    @PostMapping("/users/check")
-    public ResponseEntity checkToken(HttpServletRequest request) {
-        log.info(":: /users/check ::");
+    @GetMapping("/users/check")
+    public ResponseEntity checkToken(@RequestHeader HttpHeaders headers) {
         User user = null;
-        if (jwtService.isUsable(request.getHeader("jwt"))) {
+        if (jwtService.isUsable(headers.get("jwt").get(0))) {
             Object obj = jwtService.get("user");
-            log.info("obj : " + obj.toString());
             user = userService.findById(Long.parseLong(obj.toString())).get();
         } else {
             return new ResponseEntity("유효하지 않은 토큰입니다.", HttpStatus.NOT_FOUND);
         }
 
-        log.info("before result");
         UserTokenResponseDto result = new UserTokenResponseDto(user);
-        log.info("result : " + result);
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
