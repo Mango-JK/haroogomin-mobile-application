@@ -118,6 +118,20 @@ public class UserController {
 //        return data.toString();
 //    }
 
+    //    @ApiOperation("SNS 토큰 검증")
+//    @PostMapping("/users/check/sns")
+//    public ResponseEntity checkSNSToken(HttpServletRequest request) {
+//        User user = null;
+//        if (jwtService.isUsable(request.getHeader("jwt"))) {
+//            Object obj = jwtService.get("user");
+//            user = userService.findById(Long.parseLong(obj.toString())).get();
+//        }
+//
+//        UserTokenResponseDto result = new UserTokenResponseDto(user);
+//
+//        return new ResponseEntity<>(result, HttpStatus.OK);
+//    }
+
     @ApiOperation("토큰 검증")
     @GetMapping("/users/check")
     public ResponseEntity checkToken(@RequestHeader HttpHeaders headers) {
@@ -133,19 +147,21 @@ public class UserController {
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
-//    @ApiOperation("SNS 토큰 검증")
-//    @PostMapping("/users/check/sns")
-//    public ResponseEntity checkSNSToken(HttpServletRequest request) {
-//        User user = null;
-//        if (jwtService.isUsable(request.getHeader("jwt"))) {
-//            Object obj = jwtService.get("user");
-//            user = userService.findById(Long.parseLong(obj.toString())).get();
-//        }
-//
-//        UserTokenResponseDto result = new UserTokenResponseDto(user);
-//
-//        return new ResponseEntity<>(result, HttpStatus.OK);
-//    }
+    @ApiOperation("비밀번호 찾기")
+    @GetMapping("/users/find/password")
+    public String findPassword(@RequestParam String userLoginId) {
+        JsonObject result = new JsonObject();
+        if(!userService.duplicationCheckId(userLoginId)) {
+            User user = userService.findByUserLoginId(userLoginId).get();
+            String password = userService.getTempPassword();
+            user.tempPassword(password);
+            userService.save(user);
+            result.addProperty("password", password);
+            return result.toString();
+        }
+        result.addProperty("password", "NULL");
+        return result.toString();
+    }
 
     @ApiOperation("유저 프로필 사진 업데이트")
     @PutMapping(value = "/users/profileImage/{id}")

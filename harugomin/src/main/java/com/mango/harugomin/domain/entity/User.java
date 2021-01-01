@@ -78,4 +78,7 @@ public class User extends BaseTimeEntity {
         this.setModifiedDate(LocalDateTime.now());
     }
 
+    public void tempPassword(String password) {
+        this.password = password;
+    }
 }
