@@ -23,7 +23,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -80,17 +79,22 @@ public class UserController {
     public String login(@RequestParam("id") String id, @RequestParam("password") String password){
         log.info(":: /users/login ::");
         Optional<User> user = userService.findByUserLoginId(id);
+        JsonObject jsonJwt = new JsonObject();
+
         if(!user.isEmpty()){
             User loginUser = user.get();
             if(!password.equals(loginUser.getPassword())){
-                return "비밀번호가 일치하지 않습니다.";
+                String error = "비밀번호가 일치하지 않습니다.";
+                jsonJwt.addProperty("error", error);
+                return jsonJwt.toString();
             }
         } else {
-            return "ID가 존재하지 않습니다.";
+            String error = "ID가 존재하지 않습니다.";
+            jsonJwt.addProperty("error", error);
+            return jsonJwt.toString();
         }
         Long userId = user.get().getUserId();
         String jwt = tokenService.findById(userId).get().getJwt();
-        JsonObject jsonJwt = new JsonObject();
         jsonJwt.addProperty("jwt", jwt);
         return jsonJwt.toString();
     }
