@@ -1,6 +1,5 @@
 package com.mango.harugomin.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.JsonObject;
 import com.mango.harugomin.domain.entity.*;
 import com.mango.harugomin.dto.UserResponseDto;
@@ -9,22 +8,32 @@ import com.mango.harugomin.dto.UserTokenResponseDto;
 import com.mango.harugomin.dto.UserUpdateRequestDto;
 import com.mango.harugomin.jwt.JwtService;
 import com.mango.harugomin.service.*;
+import com.mango.harugomin.util.MailBodyUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
@@ -45,6 +54,12 @@ public class UserController {
     private final LikerService likerService;
     private final UserHashtagService userHashtagService;
     private final TokenService tokenService;
+    private final JavaMailSender javaMailSender;
+
+    MailBodyUtil mailBodyUtil = new MailBodyUtil();
+
+    @Value("${spring.mail.username}")
+    private String from;
 
     @ApiOperation("회원가입")
     @PostMapping("/users/signup")
@@ -76,14 +91,14 @@ public class UserController {
 
     @ApiOperation("로그인")
     @PostMapping("/users/login")
-    public String login(@RequestParam("id") String id, @RequestParam("password") String password){
+    public String login(@RequestParam("id") String id, @RequestParam("password") String password) {
         log.info(":: /users/login ::");
         Optional<User> user = userService.findByUserLoginId(id);
         JsonObject jsonJwt = new JsonObject();
 
-        if(!user.isEmpty()){
+        if (!user.isEmpty()) {
             User loginUser = user.get();
-            if(!password.equals(loginUser.getPassword())){
+            if (!password.equals(loginUser.getPassword())) {
                 String error = "비밀번호가 일치하지 않습니다.";
                 jsonJwt.addProperty("error", error);
                 return jsonJwt.toString();
@@ -149,17 +164,30 @@ public class UserController {
 
     @ApiOperation("비밀번호 찾기")
     @GetMapping("/users/find/password")
-    public String findPassword(@RequestParam String userLoginId) {
+    public String findPassword(@RequestParam String userLoginId) throws Exception {
         JsonObject result = new JsonObject();
-        if(!userService.duplicationCheckId(userLoginId)) {
+        if (!userService.duplicationCheckId(userLoginId)) {
             User user = userService.findByUserLoginId(userLoginId).get();
-            String password = userService.getTempPassword();
-            user.tempPassword(password);
-            userService.save(user);
-            result.addProperty("password", password);
-            return result.toString();
+            if (user.getEmail() != null && !user.getEmail().equals("")) {
+                String password = userService.getTempPassword();
+                user.tempPassword(password);
+                userService.save(user);
+                result.addProperty("result", "OK");
+
+                MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+                MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+                mimeMessageHelper.setFrom(from);
+                mimeMessageHelper.setTo(user.getEmail());
+                mimeMessageHelper.setSubject("[하루고민] 임시 비밀번호 안내");
+
+                StringBuilder body = new StringBuilder();
+                body.append(mailBodyUtil.getMailBody(user.getNickname(), password));
+                mimeMessageHelper.setText(body.toString(), true);
+                javaMailSender.send(mimeMessage);
+                return result.toString();
+            }
         }
-        result.addProperty("password", "NULL");
+        result.addProperty("result", "FAIL");
         return result.toString();
     }
 
@@ -171,7 +199,7 @@ public class UserController {
         String TARGET_DIR = "/home/ubuntu/hago/files/";
         String imagePath = FilenameUtils.getBaseName(files.getOriginalFilename());
 
-        if(files.isEmpty()) {
+        if (files.isEmpty()) {
             data.addProperty("imgPath", "");
             data.addProperty("status", String.valueOf(HttpStatus.OK));
             return data.toString();

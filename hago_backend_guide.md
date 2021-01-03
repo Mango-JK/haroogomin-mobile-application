@@ -292,7 +292,6 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 
 
 <center><image src="./images/jwt_use.PNG"></image></center>
-
 • 하나의 End Point가 아닌 Mobile/Web 등의 multiple endpoint 환경이라면 통합적인 인증/인가 환경을 제공하기위해선 반드시 JWT를 사용합니다.
 
 • 보편적인 예로, React로 client를 구성하고 REST API 서버를 따로 두는 경우에는 JWT를 사용합니다.
@@ -302,7 +301,6 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 <br/>
 
 <center><image src="./images/jwt.PNG"></image></center>
-
 > #### 이때 각각의 part는 다음과 같은 정보를 가집니다.
 
 • **Header** : token의 type과 JWT를 digitally sign할때 사용한 algorithm을 정의합니다.
@@ -360,13 +358,10 @@ git flow가 사용하는 branch는 크게 두가지로 나뉜다.
 ```
 
 <hr/>
-
 <center><image src="./images/naver_login.PNG"></image></center>
-
 <br/>
 
 <hr/>
-
 # AWS S3
 
 ### AWS S3 서비스 소개
@@ -552,7 +547,6 @@ public class S3Service {
 
 
 <hr/>
-
 # S3와 CloudFront
 
 참고 : https://victorydntmd.tistory.com/335
@@ -585,6 +579,13 @@ public class S3Service {
 
 
 
+
+
+# SMTP로 비밀번호 찾기
+
+### SMTP의 개념
+
+> SMTP 프로토콜은 Simple Mail Transfer Protocol의 약어로 인터넷상에서 이메일을 전송하기 위해서 사용되는 통신 규약 중에 하나입니다.
 
 
 

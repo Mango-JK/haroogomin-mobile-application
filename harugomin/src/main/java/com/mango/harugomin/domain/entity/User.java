@@ -34,6 +34,9 @@ public class User extends BaseTimeEntity {
     @Column(name = "nickname")
     private String nickname;
 
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "profile_image")
     private String profileImage;
 
@@ -45,11 +48,12 @@ public class User extends BaseTimeEntity {
     private List<UserHashtag> userHashtags = new ArrayList<>();
 
     @Builder
-    public User(long userId, String userLoginId, String password, String nickname, String profileImage, int ageRange) {
+    public User(long userId, String userLoginId, String password, String nickname, String email, String profileImage, int ageRange) {
         this.userLoginId = userLoginId;
         this.password = password;
         this.userId = userId;
         this.nickname = nickname;
+        this.email = email;
         this.profileImage = profileImage;
         this.ageRange = ageRange;
         this.userHashtags = new ArrayList<UserHashtag>();
