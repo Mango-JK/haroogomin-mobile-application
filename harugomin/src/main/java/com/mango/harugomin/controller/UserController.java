@@ -30,6 +30,7 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.activation.FileDataSource;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.io.IOException;
@@ -37,6 +38,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
+import java.util.Properties;
 
 @CrossOrigin(origins = "*")
 @Slf4j
@@ -183,6 +185,7 @@ public class UserController {
                 StringBuilder body = new StringBuilder();
                 body.append(mailBodyUtil.getMailBody(user.getNickname(), password));
                 mimeMessageHelper.setText(body.toString(), true);
+                mimeMessageHelper.addInline("hago", new FileDataSource("files/hago02210103115007.png"));
                 javaMailSender.send(mimeMessage);
                 return result.toString();
             }

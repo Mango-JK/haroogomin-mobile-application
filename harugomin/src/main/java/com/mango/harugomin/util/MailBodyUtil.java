@@ -16,7 +16,7 @@ public class MailBodyUtil {
                 "              font-size: 0;\n" +
                 "            \"\n" +
                 "          >\n" +
-                "            <img src=\"http://15.165.183.122/hago02210103115007.png\"\n" +
+                "            <img src=\"cid:hago\"\n" +
                 "            alt=\"HARUGOMIN MOBILE APPLICATION\" loading=\"lazy\" width=\"600px\"\n" +
                 "            height=\"300px\" display: block; margin: 0px auto; />\n" +
                 "          </td>\n" +
