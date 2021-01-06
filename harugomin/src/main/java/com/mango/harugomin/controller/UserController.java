@@ -56,6 +56,7 @@ public class UserController {
     private final LikerService likerService;
     private final UserHashtagService userHashtagService;
     private final TokenService tokenService;
+
     private final JavaMailSender javaMailSender;
 
     MailBodyUtil mailBodyUtil = new MailBodyUtil();
@@ -71,6 +72,7 @@ public class UserController {
                 .userLoginId(requestDto.getUserLoginId())
                 .password(requestDto.getPassword())
                 .nickname(requestDto.getNickname())
+                .email(requestDto.getEmail())
                 .profileImage(requestDto.getProfileImage())
                 .ageRange(requestDto.getAgeRange())
                 .build();
