@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.5678'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = '8'
 
 configurations {
 	compileOnly {
@@ -26,14 +26,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-devtools'
-	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'io.springfox:springfox-swagger2:2.9.2'
 	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
 	implementation 'org.apache.httpcomponents:httpclient:4.5.9'
 	compileOnly 'org.projectlombok:lombok'
 	compile 'com.google.code.gson:gson'
 	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
-	runtimeOnly 'mysql:mysql-connector-java'
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 	annotationProcessor 'org.projectlombok:lombok'
 
 	compile group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '3.10'

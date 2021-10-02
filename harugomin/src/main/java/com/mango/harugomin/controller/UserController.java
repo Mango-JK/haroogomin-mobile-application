@@ -1,5 +1,6 @@
 package com.mango.harugomin.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.JsonObject;
 import com.mango.harugomin.domain.entity.*;
 import com.mango.harugomin.dto.UserResponseDto;
@@ -8,43 +9,32 @@ import com.mango.harugomin.dto.UserTokenResponseDto;
 import com.mango.harugomin.dto.UserUpdateRequestDto;
 import com.mango.harugomin.jwt.JwtService;
 import com.mango.harugomin.service.*;
-import com.mango.harugomin.util.MailBodyUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.activation.FileDataSource;
-import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
-import java.util.Properties;
 
 @CrossOrigin(origins = "*")
 @Slf4j
 @Api(tags = "1. User")
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v2")
 @RestController
 public class UserController {
 
@@ -57,12 +47,7 @@ public class UserController {
     private final UserHashtagService userHashtagService;
     private final TokenService tokenService;
 
-    private final JavaMailSender javaMailSender;
-
-    MailBodyUtil mailBodyUtil = new MailBodyUtil();
-
-    @Value("${spring.mail.username}")
-    private String from;
+    private final NaverApiService naverApiService;
 
     @ApiOperation("회원가입")
     @PostMapping("/users/signup")
@@ -72,7 +57,6 @@ public class UserController {
                 .userLoginId(requestDto.getUserLoginId())
                 .password(requestDto.getPassword())
                 .nickname(requestDto.getNickname())
-                .email(requestDto.getEmail())
                 .profileImage(requestDto.getProfileImage())
                 .ageRange(requestDto.getAgeRange())
                 .build();
@@ -95,61 +79,42 @@ public class UserController {
 
     @ApiOperation("로그인")
     @PostMapping("/users/login")
-    public String login(@RequestParam("id") String id, @RequestParam("password") String password) {
+    public String login(@RequestParam("id") String id, @RequestParam("password") String password){
         log.info(":: /users/login ::");
         Optional<User> user = userService.findByUserLoginId(id);
-        JsonObject jsonJwt = new JsonObject();
-
-        if (!user.isEmpty()) {
+        if(!user.isEmpty()){
             User loginUser = user.get();
-            if (!password.equals(loginUser.getPassword())) {
-                String error = "비밀번호가 일치하지 않습니다.";
-                jsonJwt.addProperty("error", error);
-                return jsonJwt.toString();
+            if(!password.equals(loginUser.getPassword())){
+                return "비밀번호가 일치하지 않습니다.";
             }
         } else {
-            String error = "ID가 존재하지 않습니다.";
-            jsonJwt.addProperty("error", error);
-            return jsonJwt.toString();
+            return "ID가 존재하지 않습니다.";
         }
         Long userId = user.get().getUserId();
         String jwt = tokenService.findById(userId).get().getJwt();
+        JsonObject jsonJwt = new JsonObject();
         jsonJwt.addProperty("jwt", jwt);
         return jsonJwt.toString();
     }
 
-//    @ApiOperation("네이버 로그인")
-//    @PostMapping("/users/login/naver")
-//    public String naverLogin(HttpServletRequest request) {
-//        String accessToken = request.getHeader("accessToken");
-//        JsonNode json = naverAPIService.getNaverUserInfo(accessToken);
-//
-//        String result = null;
-//        JsonObject data = new JsonObject();
-//        try {
-//            result = naverAPIService.redirectToken(json);
-//        } catch (Exception e) {
-//            data.addProperty("status", String.valueOf(HttpStatus.BAD_REQUEST));
-//            return data.toString();
-//        }
-//        data.addProperty("jwt", result);
-//        data.addProperty("status", String.valueOf(HttpStatus.OK));
-//        return data.toString();
-//    }
+    @ApiOperation("네이버 로그인")
+    @PostMapping("/users/login/naver")
+    public String naverLogin(HttpServletRequest request) {
+        String accessToken = request.getHeader("accessToken");
+        JsonNode json = naverApiService.getNaverUserInfo(accessToken);
 
-    //    @ApiOperation("SNS 토큰 검증")
-//    @PostMapping("/users/check/sns")
-//    public ResponseEntity checkSNSToken(HttpServletRequest request) {
-//        User user = null;
-//        if (jwtService.isUsable(request.getHeader("jwt"))) {
-//            Object obj = jwtService.get("user");
-//            user = userService.findById(Long.parseLong(obj.toString())).get();
-//        }
-//
-//        UserTokenResponseDto result = new UserTokenResponseDto(user);
-//
-//        return new ResponseEntity<>(result, HttpStatus.OK);
-//    }
+        String result = null;
+        JsonObject data = new JsonObject();
+        try {
+            result = naverApiService.redirectToken(json);
+        } catch (Exception e) {
+            data.addProperty("status", String.valueOf(HttpStatus.BAD_REQUEST));
+            return data.toString();
+        }
+        data.addProperty("jwt", result);
+        data.addProperty("status", String.valueOf(HttpStatus.OK));
+        return data.toString();
+    }
 
     @ApiOperation("토큰 검증")
     @GetMapping("/users/check")
@@ -166,34 +131,18 @@ public class UserController {
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
-    @ApiOperation("비밀번호 찾기")
-    @GetMapping("/users/find/password")
-    public String findPassword(@RequestParam String userLoginId) throws Exception {
-        JsonObject result = new JsonObject();
-        if (!userService.duplicationCheckId(userLoginId)) {
-            User user = userService.findByUserLoginId(userLoginId).get();
-            if (user.getEmail() != null && !user.getEmail().equals("")) {
-                String password = userService.getTempPassword();
-                user.tempPassword(password);
-                userService.save(user);
-                result.addProperty("result", "OK");
-
-                MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-                MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-                mimeMessageHelper.setFrom(from);
-                mimeMessageHelper.setTo(user.getEmail());
-                mimeMessageHelper.setSubject("[하루고민] 임시 비밀번호 안내");
-
-                StringBuilder body = new StringBuilder();
-                body.append(mailBodyUtil.getMailBody(user.getNickname(), password));
-                mimeMessageHelper.setText(body.toString(), true);
-                mimeMessageHelper.addInline("hago", new FileDataSource("files/hago02210103115007.png"));
-                javaMailSender.send(mimeMessage);
-                return result.toString();
-            }
+    @ApiOperation("SNS 토큰 검증")
+    @PostMapping("/users/check/sns")
+    public ResponseEntity checkSNSToken(HttpServletRequest request) {
+        User user = null;
+        if (jwtService.isUsable(request.getHeader("jwt"))) {
+            Object obj = jwtService.get("user");
+            user = userService.findById(Long.parseLong(obj.toString())).get();
         }
-        result.addProperty("result", "FAIL");
-        return result.toString();
+
+        UserTokenResponseDto result = new UserTokenResponseDto(user);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @ApiOperation("유저 프로필 사진 업데이트")
@@ -204,7 +153,7 @@ public class UserController {
         String TARGET_DIR = "/home/ubuntu/hago/files/";
         String imagePath = FilenameUtils.getBaseName(files.getOriginalFilename());
 
-        if (files.isEmpty()) {
+        if(files.isEmpty()) {
             data.addProperty("imgPath", "");
             data.addProperty("status", String.valueOf(HttpStatus.OK));
             return data.toString();

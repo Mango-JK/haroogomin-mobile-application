@@ -14,13 +14,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Override
     Optional<User> findById(Long userId);
 
-    Optional<User> findByUserLoginId(String userLoginId);
+    Optional<User> findByUserLoginId(String id);
 
     Long countByNickname(String nickname);
+
+    Long countByUserLoginId(String id);
 
     @Modifying(clearAutomatically = true)
     @Query(value = "delete from user where user_id = ?1 ", nativeQuery = true)
     void deleteUser(Long userId);
-
-    Long countByUserLoginId(String userId);
 }

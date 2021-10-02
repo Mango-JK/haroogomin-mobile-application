@@ -26,6 +26,10 @@ public class SwaggerConfiguration {
                 .code(200)
                 .message("OK 200!")
                 .build());
+		responseMessages.add(new ResponseMessageBuilder()
+			.code(400)
+			.message("Bad Request!")
+			.build());
         responseMessages.add(new ResponseMessageBuilder()
                 .code(404)
                 .message("Not Found Error!")

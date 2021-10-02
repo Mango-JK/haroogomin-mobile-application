@@ -21,5 +21,4 @@ public class HashtagController {
         Hashtag hashtag = new Hashtag(tagName, 0);
         return hashtagService.saveHashtag(hashtag).getTagId();
     }
-
 }
