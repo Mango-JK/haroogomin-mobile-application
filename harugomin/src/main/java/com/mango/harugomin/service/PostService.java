@@ -29,7 +29,7 @@ public class PostService {
     public Post save(PostSaveRequestDto requestDto) {
         User user = userService.findById(requestDto.getUserId()).get();
         Hashtag hashtag = hashtagService.findByTagName(requestDto.getTagName());
-        hashtagService.countUp(hashtag.getTagId());
+        hashtagService.userHashtagCountPlusOne(hashtag.getTagId());
 
         return postRepository.save(Post.builder()
                 .user(user)

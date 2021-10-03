@@ -60,7 +60,7 @@ public class User extends BaseTimeEntity {
         this.setModifiedDate(LocalDateTime.now());
     }
 
-    public void updateUserProfile(UserUpdateRequestDto updateRequestDto) {
+    public void updateUserInfo(UserUpdateRequestDto updateRequestDto) {
         this.ageRange = updateRequestDto.getAgeRange();
         this.nickname = updateRequestDto.getNickname();
         this.ageRange = updateRequestDto.getAgeRange();
@@ -68,12 +68,12 @@ public class User extends BaseTimeEntity {
         this.setModifiedDate(LocalDateTime.now());
     }
 
-    public void initHashtag(){
+    public void initHashtagInfo(){
         this.userHashtags = new ArrayList<>();
         this.setModifiedDate(LocalDateTime.now());
     }
 
-    public void userAddTag(UserHashtag userHashtag) {
+    public void addHashtag(UserHashtag userHashtag) {
         this.userHashtags.add(userHashtag);
         this.setModifiedDate(LocalDateTime.now());
     }

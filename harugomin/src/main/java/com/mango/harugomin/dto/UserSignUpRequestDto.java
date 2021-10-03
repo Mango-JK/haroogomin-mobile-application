@@ -10,15 +10,15 @@ public class UserSignUpRequestDto {
     private String nickname;
     private String profileImage;
     private int ageRange;
-    private String[] userhashtags;
+    private String[] userHashtags;
 
     @Builder
-    public UserSignUpRequestDto(String userLoginId, String password, String nickname, String profileImage, int ageRange, String[] userhashtags) {
+    public UserSignUpRequestDto(String userLoginId, String password, String nickname, String profileImage, int ageRange, String[] userHashtags) {
         this.userLoginId = userLoginId;
         this.password = password;
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.ageRange = ageRange;
-        this.userhashtags = userhashtags;
+        this.userHashtags = userHashtags;
     }
 }

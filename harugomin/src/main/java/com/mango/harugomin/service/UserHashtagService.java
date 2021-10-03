@@ -12,10 +12,6 @@ public class UserHashtagService {
 
     private final UserHashtagRepository userHashtagRepository;
 
-    public void addUserHashtag(UserHashtag newUserHashtag) {
-        userHashtagRepository.save(newUserHashtag);
-    }
-
     @Transactional
     public void deleteAllByUsers(Long userId) {
         userHashtagRepository.deleteByUserId(userId);
