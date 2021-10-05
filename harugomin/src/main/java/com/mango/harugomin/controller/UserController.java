@@ -1,20 +1,14 @@
 package com.mango.harugomin.controller;
 
-import com.mango.harugomin.domain.entity.History;
-import com.mango.harugomin.domain.entity.Post;
 import com.mango.harugomin.dto.UserResponseDto;
 import com.mango.harugomin.dto.UserSignUpRequestDto;
 import com.mango.harugomin.dto.UserUpdateRequestDto;
-import com.mango.harugomin.service.*;
+import com.mango.harugomin.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,8 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
 	private final UserService userService;
-	private final HistoryService historyService;
-	private final PostService postService;
 
 	@ApiOperation("회원가입")
 	@PostMapping("/users/signup")
@@ -68,8 +60,8 @@ public class UserController {
 //	@PostMapping("/users/login/naver")
 //	public String naverLogin(HttpServletRequest request) {
 //		return userService.naverLogin(request);
-
 //	}
+
 	// TODO SNS 토큰 검증
 //	@ApiOperation("SNS 토큰 검증")
 //	@PostMapping("/users/check/sns")

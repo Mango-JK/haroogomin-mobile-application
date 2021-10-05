@@ -31,4 +31,10 @@ public class HashtagService {
     public Page<Hashtag> findAllTags(Pageable pageable) {
         return hashtagRepository.findAll(pageable);
     }
+
+    @Transactional
+	public long addUserHashtag(String tagName) {
+		Hashtag hashtag = new Hashtag(tagName, 0);
+		return saveHashtag(hashtag).getTagId();
+	}
 }

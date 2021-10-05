@@ -40,7 +40,6 @@ public class UserService {
 	private final UserHashtagService userHashtagService;
 	private final PostService postService;
 
-
 	private final UserRepository userRepository;
 
 	@Transactional

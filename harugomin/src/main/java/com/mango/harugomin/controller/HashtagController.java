@@ -1,6 +1,5 @@
 package com.mango.harugomin.controller;
 
-import com.mango.harugomin.domain.entity.Hashtag;
 import com.mango.harugomin.service.HashtagService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,6 @@ public class HashtagController {
 
     @PostMapping(value = "/hashtag")
     public long addUserHashtag(@RequestParam("tagName") String tagName){
-        Hashtag hashtag = new Hashtag(tagName, 0);
-        return hashtagService.saveHashtag(hashtag).getTagId();
+    	return hashtagService.addUserHashtag(tagName);
     }
 }
