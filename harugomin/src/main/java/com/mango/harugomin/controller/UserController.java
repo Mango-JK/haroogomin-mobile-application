@@ -76,7 +76,7 @@ public class UserController {
 //		return ResponseEntity.badRequest().body("유효하지 않은 토큰입니다.");
 //	}
 
-	@ApiOperation("유저 프로필 사진 업데이트")
+	@ApiOperation("유저 프로필 사진 업로드")
 	@PutMapping(value = "/users/profileImage/{id}")
 	public String updateUserProfile(@PathVariable(value = "id") Long userId, @RequestParam MultipartFile files) {
 		return userService.updateUserProfile(userId, files);
