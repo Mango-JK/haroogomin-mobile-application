@@ -2,7 +2,7 @@ package com.mango.harugomin.service;
 
 import com.google.gson.JsonObject;
 import com.mango.harugomin.domain.entity.*;
-import com.mango.harugomin.domain.repository.UserRepository;
+import com.mango.harugomin.domain.repository.*;
 import com.mango.harugomin.dto.UserResponseDto;
 import com.mango.harugomin.dto.UserSignUpRequestDto;
 import com.mango.harugomin.dto.UserTokenResponseDto;
@@ -10,7 +10,6 @@ import com.mango.harugomin.dto.UserUpdateRequestDto;
 import com.mango.harugomin.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -20,10 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -31,15 +29,16 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-	private final HashtagService hashtagService;
 	private final JwtService jwtService;
-	private final TokenService tokenService;
-	private final CommentService commentService;
-	private final HistoryService historyService;
-	private final LikerService likerService;
-	private final UserHashtagService userHashtagService;
-	private final PostService postService;
+	private final S3Service s3Service;
 
+	private final TokenRepository tokenRepository;
+	private final HashtagRepository hashtagRepository;
+	private final CommentRepository commentRepository;
+	private final HistoryRepository historyRepository;
+	private final LikerRepository likerRepository;
+	private final UserHashtagRepository userHashtagRepository;
+	private final PostRepository postRepository;
 	private final UserRepository userRepository;
 
 	@Transactional
@@ -66,13 +65,15 @@ public class UserService {
 			.profileImage(requestDto.getProfileImage())
 			.ageRange(requestDto.getAgeRange())
 			.build();
+		if(user.getProfileImage() == null)
+			user.setDefaultProfile("https://hago-bucket.s3.ap-northeast-2.amazonaws.com/default01.png");
 		User newUser = userRepository.save(user);
-
-		updateUserHashtag(newUser, requestDto.getUserHashtags());
+		updateUserHashtag(newUser, requestDto.getUserhashtags());
 
 		try {
 			String jwt = jwtService.create("user", newUser, "user");
-			tokenService.save(newUser.getUserId(), jwt);
+			Token token = new Token(newUser.getUserId(), jwt);
+			tokenRepository.save(token);
 			JsonObject jsonJwt = new JsonObject();
 			jsonJwt.addProperty("jwt", jwt);
 			return jsonJwt.toString();
@@ -84,7 +85,7 @@ public class UserService {
 
 	public String login(String id, String password) {
 		Optional<User> user = findByUserLoginId(id);
-		if (!user.isEmpty()) {
+		if (user.isPresent()) {
 			User loginUser = user.get();
 			if (!password.equals(loginUser.getPassword())) {
 				return "비밀번호가 일치하지 않습니다.";
@@ -93,7 +94,7 @@ public class UserService {
 			return "ID가 존재하지 않습니다.";
 		}
 		Long userId = user.get().getUserId();
-		String jwt = tokenService.findById(userId).get().getJwt();
+		String jwt = tokenRepository.findById(userId).get().getJwt();
 		JsonObject jsonJwt = new JsonObject();
 		jsonJwt.addProperty("jwt", jwt);
 		return jsonJwt.toString();
@@ -158,38 +159,13 @@ public class UserService {
 
 	// TODO 업로드 & 다운로드 구현
 	@Transactional
-	public String updateUserProfile(Long userId, MultipartFile files) {
+	public String updateUserProfile(Long userId, MultipartFile file) throws IOException {
+		User user = userRepository.findById(userId).get();
+		String imgPath = S3Service.CLOUD_FRONT_DOMAIN_NAME + s3Service.upload(user.getProfileImage(), file);
+		user.updateUserImage(imgPath);
+		userRepository.save(user);
 		JsonObject data = new JsonObject();
-		Optional<User> user = findById(userId);
-
-		if (!user.isPresent())
-			return "User Not Found";
-
-		String TARGET_DIR = "/home/ec2-user/images/profile/";
-		String imagePath = FilenameUtils.getBaseName(files.getOriginalFilename());
-
-		if (files.isEmpty()) {
-			data.addProperty("imgPath", "");
-			data.addProperty("status", String.valueOf(HttpStatus.OK));
-			return data.toString();
-		} else {
-			String fileName = files.getOriginalFilename();
-			String fileNameExtension = FilenameUtils.getExtension(fileName).toLowerCase();
-			File targetFile;
-
-			SimpleDateFormat timeFormat = new SimpleDateFormat("yyMMddHHmmss");
-			imagePath += timeFormat.format(new Date()) + "." + fileNameExtension;
-			targetFile = new File(TARGET_DIR + imagePath);
-			log.info("Image uploaded : {}", imagePath);
-			try {
-				files.transferTo(targetFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		user.get().updateUserImage(imagePath);
-		data.addProperty("imgPath", imagePath);
+		data.addProperty("imgPath", imgPath);
 		data.addProperty("status", String.valueOf(HttpStatus.OK));
 
 		return data.toString();
@@ -199,7 +175,7 @@ public class UserService {
 	public ResponseEntity<UserResponseDto> updateUserInfo(UserUpdateRequestDto requestDto) {
 		Optional<User> user = findById(requestDto.getUserId());
 		if (!user.isPresent())
-			return ResponseEntity.notFound().build();
+			return new ResponseEntity(Collections.EMPTY_LIST, HttpStatus.OK);
 		updateUser(user.get(), requestDto);
 		return new ResponseEntity<>(new UserResponseDto(user.get()), HttpStatus.OK);
 	}
@@ -211,53 +187,57 @@ public class UserService {
 	}
 
 	@Transactional
-	public void updateUserHashtag(User user, String[] hashtags) {
+	public void updateUserHashtag(User user, List<String> hashtags) {
 		user.initHashtagInfo();
 
+		if(hashtags == null || hashtags.size() < 1)
+			return;
+
 		for (String tagName : hashtags) {
-			Hashtag hashtag = hashtagService.findByTagName(tagName);
+			Hashtag hashtag = hashtagRepository.findByTagName(tagName);
 			UserHashtag newUserHashtag = new UserHashtag(user, hashtag);
-			hashtagService.userHashtagCountPlusOne(hashtag.getTagId());
+			hashtagRepository.countUp(hashtag.getTagId());
 			user.addHashtag(newUserHashtag);
+			userHashtagRepository.save(newUserHashtag).toString();
 		}
 	}
 
 	@Transactional
-	public ResponseEntity<UserResponseDto> updateUserHashtagInfo(Long userId, String[] hashtags) {
+	public ResponseEntity<UserResponseDto> updateUserHashtagInfo(Long userId, List<String> hashtags) {
 		Optional<User> user = findById(userId);
 		if (!user.isPresent())
-			return ResponseEntity.notFound().build();
+			return new ResponseEntity(Collections.EMPTY_LIST, HttpStatus.OK);
 		updateUserHashtag(user.get(), hashtags);
 		return new ResponseEntity<>(new UserResponseDto(user.get()), HttpStatus.OK);
 	}
 
 	@Transactional
 	public ResponseEntity<Long> deleteUser(Long userId) {
-		postService.foreignkeyOpen();
-		historyService.deleteUserHistories(userId);
-		commentService.deleteByUserId(userId);
-		likerService.deleteAllByUsers(userId);
-		userHashtagService.deleteAllByUsers(userId);
-		postService.deleteUserPosts(userId);
+		postRepository.foreignkeyOpen();
+		historyRepository.deleteAllByUsers(userId);
+		commentRepository.deleteAllByUserId(userId);
+		likerRepository.deleteAllbyUserId(userId);
+		userHashtagRepository.deleteAllByUserId(userId);
+		postRepository.deleteAllByUserUserId(userId);
 		deleteById(userId);
-		tokenService.remove(userId);
-		postService.foreignkeyClose();
+		tokenRepository.delete(tokenRepository.findById(userId).get());
+		postRepository.foreignkeyClose();
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	public ResponseEntity userAnnouncingPosts(Long userId, int pageNum) {
 		PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
-		Page<Post> result = postService.findAllByUserId(userId, pageRequest);
+		Page<Post> result = postRepository.findAllByUserUserId(userId, pageRequest);
 		if (result.isEmpty())
-			return new ResponseEntity(result.getContent(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity(Collections.EMPTY_LIST, HttpStatus.OK);
 		return new ResponseEntity(result.getContent(), HttpStatus.OK);
 	}
 
 	public ResponseEntity userHistoryPosts(Long userId, int pageNum) {
 		PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
-		Page<History> result = historyService.myHistoryPost(userId, pageRequest);
+		Page<History> result = historyRepository.findAllByUserUserId(userId, pageRequest);
 		if (result.isEmpty())
-			return new ResponseEntity(result.getContent(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity(Collections.EMPTY_LIST, HttpStatus.OK);
 		return new ResponseEntity<>(result.getContent(), HttpStatus.OK);
 	}
 }

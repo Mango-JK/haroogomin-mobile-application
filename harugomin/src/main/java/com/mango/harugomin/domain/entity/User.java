@@ -78,4 +78,7 @@ public class User extends BaseTimeEntity {
         this.setModifiedDate(LocalDateTime.now());
     }
 
+	public void setDefaultProfile(String defaultImagePath) {
+    	this.profileImage = defaultImagePath;
+	}
 }

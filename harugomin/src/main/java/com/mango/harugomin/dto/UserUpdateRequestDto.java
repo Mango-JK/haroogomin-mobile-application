@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor
 @Getter
 public class UserUpdateRequestDto {
@@ -11,10 +13,10 @@ public class UserUpdateRequestDto {
     private String nickname;
     private String profileImage;
     private int ageRange;
-    private String[] userHashtags;
+    private List<String> userHashtags;
 
     @Builder
-    public UserUpdateRequestDto(Long userId, String nickname, String profileImage, int ageRange, String[] userHashtags) {
+    public UserUpdateRequestDto(Long userId, String nickname, String profileImage, int ageRange, List<String> userHashtags) {
         this.userId = userId;
         this.nickname = nickname;
         this.profileImage = profileImage;

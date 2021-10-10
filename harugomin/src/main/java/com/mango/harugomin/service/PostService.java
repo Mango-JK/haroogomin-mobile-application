@@ -1,9 +1,7 @@
 package com.mango.harugomin.service;
 
 import com.mango.harugomin.domain.entity.*;
-import com.mango.harugomin.domain.repository.HistoryRepository;
-import com.mango.harugomin.domain.repository.LikerRepository;
-import com.mango.harugomin.domain.repository.PostRepository;
+import com.mango.harugomin.domain.repository.*;
 import com.mango.harugomin.dto.PostResponseDto;
 import com.mango.harugomin.dto.PostSaveRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,18 +24,17 @@ import java.util.Optional;
 @Service
 public class PostService {
 
-	private final UserService userService;
-	private final HashtagService hashtagService;
-	private final HistoryService historyService;
-	private final PostRepository postRepository;
+	private final UserRepository userRepository;
+	private final HashtagRepository hashtagRepository;
 	private final HistoryRepository historyRepository;
+	private final PostRepository postRepository;
 	private final LikerRepository likerRepository;
 
 	@Transactional
 	public Post save(PostSaveRequestDto requestDto) {
-		User user = userService.findById(requestDto.getUserId()).get();
-		Hashtag hashtag = hashtagService.findByTagName(requestDto.getTagName());
-		hashtagService.userHashtagCountPlusOne(hashtag.getTagId());
+		User user = userRepository.findById(requestDto.getUserId()).get();
+		Hashtag hashtag = hashtagRepository.findByTagName(requestDto.getTagName());
+		hashtagRepository.countUp(hashtag.getTagId());
 
 		return postRepository.save(Post.builder()
 			.user(user)
@@ -71,7 +69,7 @@ public class PostService {
 	public ResponseEntity deletePost(Long postId) {
 		Optional<Post> post = postRepository.findById(postId);
 		if (!post.isPresent())
-			return ResponseEntity.notFound().build();
+			return new ResponseEntity(Collections.EMPTY_LIST, HttpStatus.OK);
 		postRepository.delete(post.get());
 		return new ResponseEntity(HttpStatus.OK);
 	}
@@ -90,9 +88,9 @@ public class PostService {
 	public ResponseEntity getPostDetails(Long postId) {
 		Optional<Post> post = findById(postId);
 		if (!post.isPresent()) {
-			Optional<History> history = historyService.findById(postId);
+			Optional<History> history = historyRepository.findById(postId);
 			if (!history.isPresent())
-				return ResponseEntity.notFound().build();
+				return new ResponseEntity(Collections.EMPTY_LIST, HttpStatus.OK);
 			return new ResponseEntity(history.get(), HttpStatus.OK);
 		}
 		PostResponseDto result = new PostResponseDto(post.get());
@@ -111,23 +109,18 @@ public class PostService {
 	}
 
 	@Transactional
-	public void postHits(Long postId) {
-		postRepository.postHits(postId);
-	}
-
-	@Transactional
 	public void postToHistory(Long postId) {
 		Post post = postRepository.findById(postId).get();
 		History history = new History(post);
 		historyRepository.save(history);
-		likerRepository.deleteAllByPostId(postId);
+		likerRepository.deleteByComment_Post_PostId(postId);
 		postRepository.deleteById(post.getPostId());
 	}
 
 	public ResponseEntity getHashtagByPostingCount() {
 		PageRequest tagRequest = PageRequest.of(0, 12, Sort.by("postingCount").descending());
 		List<Hashtag> topTags = null;
-		topTags = hashtagService.findAllTags(tagRequest).getContent();
+		topTags = hashtagRepository.findAll(tagRequest).getContent();
 		return new ResponseEntity(topTags, HttpStatus.OK);
 	}
 
@@ -136,7 +129,7 @@ public class PostService {
 		PageRequest storyRequest = PageRequest.of(0, 13, Sort.by("createdDate"));
 		List<Post> data = findAllPosts(storyRequest).getContent();
 		if (data == null)
-			return ResponseEntity.notFound().build();
+			return new ResponseEntity(Collections.EMPTY_LIST, HttpStatus.OK);
 
 		List<Post> story = new ArrayList<>();
 		for (Post post : data) {
@@ -160,13 +153,13 @@ public class PostService {
 			pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
 			Page<Post> list = findAllPosts(pageRequest);
 			if (list.isEmpty())
-				return ResponseEntity.notFound().build();
+				return new ResponseEntity(Collections.EMPTY_LIST, HttpStatus.OK);
 			return new ResponseEntity(list.getContent(), HttpStatus.OK);
 		}
 		pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
 		result = findAllByHashtag(tagName, pageRequest);
 		if (result.isEmpty())
-			return ResponseEntity.notFound().build();
+			return new ResponseEntity(Collections.EMPTY_LIST, HttpStatus.OK);
 		return new ResponseEntity(result.getContent(), HttpStatus.OK);
 	}
 
@@ -175,23 +168,36 @@ public class PostService {
 		Page<Post> result = null;
 		result = postRepository.searchAllPosts(keyword, pageRequest);
 		if (result.isEmpty())
-			return ResponseEntity.notFound().build();
+			return new ResponseEntity(Collections.EMPTY_LIST, HttpStatus.OK);
 		return new ResponseEntity(result.getContent(), HttpStatus.OK);
 	}
 
 	public ResponseEntity getMainPosts(Long userId) {
-		Optional<User> user = userService.findById(userId);
-		if (user.isEmpty())
-			return ResponseEntity.notFound().build();
-		String userHashString = "";
-		List<UserHashtag> userHashtags = user.get().getUserHashtags();
-
 		// 1. hit 많은 고민글 15개 조회
 		PageRequest pageRequest = PageRequest.of(0, 15, Sort.by("hits").descending());
 		Page<Post> data = null;
 		List<Post> result = new ArrayList<>();
 		int i = 0;
 		data = findAllPosts(pageRequest);
+
+		if(userId == null) {
+			while (result.size() < 3) {
+				result.add(data.getContent().get(i));
+				i++;
+			}
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		}
+
+		Optional<User> user = userRepository.findById(userId);
+		if (!user.isPresent()){
+			while (result.size() < 3) {
+				result.add(data.getContent().get(i));
+				i++;
+			}
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		}
+		String userHashString = "";
+		List<UserHashtag> userHashtags = user.get().getUserHashtags();
 
 		// 비로그인 사용자 또는 해시태그가 없는 사용자에게는 hit수 높은 고민글 3개 출력
 		if (userId == -1 || userHashtags.size() < 1) {
@@ -223,24 +229,5 @@ public class PostService {
 		}
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
-	}
-
-	public Page<Post> findAllByUserId(Long userId, PageRequest pageRequest) {
-		return postRepository.findAllByUserUserId(userId, pageRequest);
-	}
-
-	@Transactional
-	public void deleteUserPosts(Long userId) {
-		postRepository.deleteAllByUserUserId(userId);
-	}
-
-	@Transactional
-	public void foreignkeyOpen() {
-		postRepository.foreignkeyOpen();
-	}
-
-	@Transactional
-	public void foreignkeyClose() {
-		postRepository.foreignkeyClose();
 	}
 }

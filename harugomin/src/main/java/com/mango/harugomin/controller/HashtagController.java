@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @Api(tags = "4. HashTag")
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v2")
 @RestController
 public class HashtagController {
     private final HashtagService hashtagService;

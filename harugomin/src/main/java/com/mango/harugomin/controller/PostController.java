@@ -1,20 +1,13 @@
 package com.mango.harugomin.controller;
 
 import com.google.gson.JsonObject;
-import com.mango.harugomin.domain.entity.*;
 import com.mango.harugomin.dto.PostSaveRequestDto;
-import com.mango.harugomin.service.HashtagService;
-import com.mango.harugomin.service.HistoryService;
 import com.mango.harugomin.service.PostService;
-import com.mango.harugomin.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,24 +16,17 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @CrossOrigin(origins = "*")
 @Slf4j
 @Api(tags = "2. Post")
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v2")
 @RestController
 public class PostController {
 
 	private final PostService postService;
-	private final UserService userService;
-	private final HashtagService hashtagService;
-	private final HistoryService historyService;
 
 	@ApiOperation("고민글 작성 or 수정")
 	@PostMapping(value = "/posts")

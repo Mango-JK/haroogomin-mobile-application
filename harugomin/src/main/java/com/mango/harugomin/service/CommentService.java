@@ -4,6 +4,8 @@ import com.mango.harugomin.domain.entity.Comment;
 import com.mango.harugomin.domain.entity.Liker;
 import com.mango.harugomin.domain.entity.Post;
 import com.mango.harugomin.domain.repository.CommentRepository;
+import com.mango.harugomin.domain.repository.LikerRepository;
+import com.mango.harugomin.domain.repository.PostRepository;
 import com.mango.harugomin.dto.CommentResponseDto;
 import com.mango.harugomin.dto.CommentSaveRequestDto;
 import com.mango.harugomin.dto.CommentUpdateRequestDto;
@@ -24,8 +26,8 @@ import java.util.Optional;
 @Service
 public class CommentService {
 	private final CommentRepository commentRepository;
-	private final PostService postService;
-	private final LikerService likerService;
+	private final PostRepository postRepository;
+	private final LikerRepository likerRepository;
 
 	public Optional<Comment> findById(Long commentId) {
 		return commentRepository.findById(commentId);
@@ -44,7 +46,7 @@ public class CommentService {
 
 	@Transactional
 	public Comment save(CommentSaveRequestDto requestDto) {
-		Post post = postService.findById(requestDto.getPostId()).get();
+		Post post = postRepository.findById(requestDto.getPostId()).get();
 		Comment comment = commentRepository.save(Comment.builder()
 			.userId(requestDto.getUserId())
 			.nickname(requestDto.getNickname())
@@ -65,7 +67,7 @@ public class CommentService {
 	public ResponseEntity updateComment(Long commentId, CommentUpdateRequestDto requestDto) {
 		try {
 			Comment comment = commentRepository.findById(commentId).get();
-			Post post = postService.findById(requestDto.getPostId()).get();
+			Post post = postRepository.findById(requestDto.getPostId()).get();
 			post.getComments().remove(comment);
 			comment.update(requestDto.getContent());
 			post.getComments().add(comment);
@@ -79,7 +81,7 @@ public class CommentService {
 	public ResponseEntity deleteComment(Long commentId) {
 		try {
 			Comment comment = commentRepository.findById(commentId).get();
-			Post post = postService.findById(comment.getPost().getPostId()).get();
+			Post post = postRepository.findById(comment.getPost().getPostId()).get();
 			post.getComments().remove(comment);
 			post.downCommentCount();
 			commentRepository.delete(comment);
@@ -100,25 +102,16 @@ public class CommentService {
 	}
 
 	@Transactional
-	public void deleteByUserId(Long userId) {
-		List<Comment> comments = commentRepository.findAllByUserId(userId);
-		for (Comment comment : comments) {
-			Post post = postService.findById(comment.getPost().getPostId()).get();
-			post.downCommentCount();
-		}
-		commentRepository.deleteAllByUserId(userId);
-	}
-
-	@Transactional
 	public ResponseEntity likeComment(Long commentId, Long userId) {
 		Comment comment = findById(commentId).get();
 		try {
-			if (likerService.findLiker(commentId, userId) > 0) {
-				likerService.deteleLike(commentId, userId);
+			if (likerRepository.findLiker(commentId, userId) > 0) {
+				Liker liker = likerRepository.findByComment_CommentIdAndUserId(commentId, userId).get();
+				likerRepository.delete(liker);
 				likeUpdate(commentId, -1);
 			} else {
 				Liker liker = new Liker(userId, comment);
-				likerService.save(liker);
+				likerRepository.save(liker);
 				likeUpdate(commentId, 1);
 			}
 		} catch (Exception e) {
@@ -134,7 +127,7 @@ public class CommentService {
 			new ResponseEntity(HttpStatus.OK);
 		}
 
-		List<Long> likers = likerService.findAllByUserId(userId);
+		List<Long> likers = likerRepository.findAllByUserId(userId);
 		if(likers.isEmpty())
 			return new ResponseEntity(result, HttpStatus.OK);
 		else {

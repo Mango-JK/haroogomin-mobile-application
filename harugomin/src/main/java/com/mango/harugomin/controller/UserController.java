@@ -13,6 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.List;
+
 @CrossOrigin(origins = "*")
 @Slf4j
 @Api(tags = "1. User")
@@ -26,7 +29,7 @@ public class UserController {
 	@ApiOperation("회원가입")
 	@PostMapping("/users/signup")
 	public String signup(UserSignUpRequestDto requestDto) {
-		log.info(":: /users/signup API ::");
+		log.info(":: /users/signup API :: ");
 		return userService.signup(requestDto);
 	}
 
@@ -78,7 +81,7 @@ public class UserController {
 
 	@ApiOperation("유저 프로필 사진 업로드")
 	@PutMapping(value = "/users/profileImage/{id}")
-	public String updateUserProfile(@PathVariable(value = "id") Long userId, @RequestParam MultipartFile files) {
+	public String updateUserProfile(@PathVariable(value = "id") Long userId, @RequestParam MultipartFile files) throws IOException {
 		return userService.updateUserProfile(userId, files);
 	}
 
@@ -90,7 +93,7 @@ public class UserController {
 
 	@ApiOperation("유저 해시태그 업데이트")
 	@PutMapping(value = "/users/hashtag/{id}")
-	public ResponseEntity<UserResponseDto> updateUserHashtag(@PathVariable(value = "id") Long userId, @RequestParam String[] hashtags) {
+	public ResponseEntity<UserResponseDto> updateUserHashtag(@PathVariable(value = "id") Long userId, @RequestParam List<String> hashtags) {
 		return userService.updateUserHashtagInfo(userId, hashtags);
 	}
 
