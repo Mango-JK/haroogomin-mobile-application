@@ -157,7 +157,6 @@ public class UserService {
 		userRepository.deleteUser(userId);
 	}
 
-	// TODO 업로드 & 다운로드 구현
 	@Transactional
 	public String updateUserProfile(Long userId, MultipartFile file) throws IOException {
 		User user = userRepository.findById(userId).get();
@@ -196,7 +195,6 @@ public class UserService {
 		for (String tagName : hashtags) {
 			Hashtag hashtag = hashtagRepository.findByTagName(tagName);
 			UserHashtag newUserHashtag = new UserHashtag(user, hashtag);
-			hashtagRepository.countUp(hashtag.getTagId());
 			user.addHashtag(newUserHashtag);
 			userHashtagRepository.save(newUserHashtag).toString();
 		}

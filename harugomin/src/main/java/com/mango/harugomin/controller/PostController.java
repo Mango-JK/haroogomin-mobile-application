@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -76,10 +75,9 @@ public class PostController {
 		return postService.getMainPosts(userId);
 	}
 
-	// TODO 업로드 & 다운로드 구현
 	@ApiOperation("고민글 사진 업로드")
 	@PostMapping(value = "/posts/image")
-	public String uploadPostImage(@RequestParam MultipartFile files) throws IOException {
+	public String uploadPostImage(@RequestParam MultipartFile files) {
 		try {
 			JsonObject data = new JsonObject();
 			String TARGET_DIR = "/home/ubuntu/hago/files/";
@@ -97,7 +95,6 @@ public class PostController {
 				SimpleDateFormat timeFormat = new SimpleDateFormat("yyMMddHHmmss");
 				imagePath += timeFormat.format(new Date()) + "." + fileNameExtension;
 				targetFile = new File(TARGET_DIR + imagePath);
-				log.info("Image uploaded : {}", targetFile);
 				files.transferTo(targetFile);
 			}
 

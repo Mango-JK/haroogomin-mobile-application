@@ -29,14 +29,12 @@ public class UserController {
 	@ApiOperation("회원가입")
 	@PostMapping("/users/signup")
 	public String signup(UserSignUpRequestDto requestDto) {
-		log.info(":: /users/signup API :: ");
 		return userService.signup(requestDto);
 	}
 
 	@ApiOperation("로그인")
 	@PostMapping("/users/login")
 	public String login(@RequestParam("id") String id, @RequestParam("password") String password) {
-		log.info(":: /users/login ::");
 		return userService.login(id, password);
 	}
 

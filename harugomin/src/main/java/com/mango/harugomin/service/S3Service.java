@@ -6,7 +6,6 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +16,7 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 @NoArgsConstructor
 @Service
@@ -46,8 +46,10 @@ public class S3Service {
 
 	public String upload(String currentFilePath ,MultipartFile file) throws IOException {
 		// 고유한 key 값을 갖기 위해 현재 시간을 postfix로 붙여준다.
+		Random rand = new Random();
+		int randomInt = rand.nextInt();
 		SimpleDateFormat date = new SimpleDateFormat("yyyymmddHHmmss");
-		String fileName = file.getOriginalFilename() + "-" + date.format(new Date());
+		String fileName = randomInt + "-" + date.format(new Date());
 
 		// key가 존재하면 기존 파일은 삭제
 		if("".equals(currentFilePath) == false && currentFilePath != null) {
@@ -58,12 +60,8 @@ public class S3Service {
 			}
 		}
 
-		ObjectMetadata md = new ObjectMetadata();
-		md.setContentType("text/html");
-		md.setContentEncoding("UTF-8");
-
 		// 파일 업로드
-		s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), md)
+		s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
 			.withCannedAcl(CannedAccessControlList.PublicRead));
 
 		return fileName;
