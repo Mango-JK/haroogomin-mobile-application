@@ -31,6 +31,9 @@ public class NaverApiService {
     private final UserService userService;
     private final JwtService jwtService;
 
+    /**
+	 * AccessToken은 프론트에서 발급받은 후 전달
+	 * */
     public ResponseEntity<String> getAccessToken(String code, String state) {
         String clientId = "k9f8GUK0cmsRiCPbJeoc";
         String naverClientSecret = "pgFF2izLEz";

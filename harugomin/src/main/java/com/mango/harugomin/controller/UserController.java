@@ -1,34 +1,20 @@
 package com.mango.harugomin.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.google.gson.JsonObject;
-import com.mango.harugomin.domain.entity.*;
 import com.mango.harugomin.dto.UserResponseDto;
 import com.mango.harugomin.dto.UserSignUpRequestDto;
-import com.mango.harugomin.dto.UserTokenResponseDto;
 import com.mango.harugomin.dto.UserUpdateRequestDto;
-import com.mango.harugomin.jwt.JwtService;
-import com.mango.harugomin.service.*;
+import com.mango.harugomin.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FilenameUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Optional;
+import java.util.List;
 
 @CrossOrigin(origins = "*")
 @Slf4j
@@ -38,224 +24,92 @@ import java.util.Optional;
 @RestController
 public class UserController {
 
-    private final UserService userService;
-    private final JwtService jwtService;
-    private final HistoryService historyService;
-    private final PostService postService;
-    private final CommentService commentService;
-    private final LikerService likerService;
-    private final UserHashtagService userHashtagService;
-    private final TokenService tokenService;
+	private final UserService userService;
 
-    private final NaverApiService naverApiService;
+	@ApiOperation("회원가입")
+	@PostMapping("/users/signup")
+	public String signup(UserSignUpRequestDto requestDto) {
+		return userService.signup(requestDto);
+	}
 
-    @ApiOperation("회원가입")
-    @PostMapping("/users/signup")
-    public String signUp(UserSignUpRequestDto requestDto) {
-        log.info(":: /users/signup API ::");
-        User newUser = User.builder()
-                .userLoginId(requestDto.getUserLoginId())
-                .password(requestDto.getPassword())
-                .nickname(requestDto.getNickname())
-                .profileImage(requestDto.getProfileImage())
-                .ageRange(requestDto.getAgeRange())
-                .build();
+	@ApiOperation("로그인")
+	@PostMapping("/users/login")
+	public String login(@RequestParam("id") String id, @RequestParam("password") String password) {
+		return userService.login(id, password);
+	}
 
-        Long userId = userService.save(newUser).getUserId();
-        userService.updateUserHashtag(userId, requestDto.getUserhashtags());
+	@ApiOperation("유저 ID 중복검사")
+	@GetMapping(value = "/users/check/id")
+	public ResponseEntity<String> duplicationCheckById(@RequestParam("id") String id) {
+		return userService.duplicationCheckById(id);
+	}
 
-        try {
-            User user = userService.findById(userId).get();
-            String jwt = jwtService.create("user", user, "user");
-            tokenService.save(userId, jwt);
-            JsonObject jsonJwt = new JsonObject();
-            jsonJwt.addProperty("jwt", jwt);
-            return jsonJwt.toString();
-        } catch (Exception e) {
-            log.error("JWT Create Token Error : " + e);
-            return "FAIL";
-        }
-    }
+	@ApiOperation("유저 닉네임 중복검사")
+	@GetMapping(value = "/users/check/nickname")
+	public ResponseEntity<String> duplicationCheckByNickname(@RequestParam("nickname") String nickname) {
+		return userService.duplicationCheckByNickname(nickname);
+	}
 
-    @ApiOperation("로그인")
-    @PostMapping("/users/login")
-    public String login(@RequestParam("id") String id, @RequestParam("password") String password){
-        log.info(":: /users/login ::");
-        Optional<User> user = userService.findByUserLoginId(id);
-        if(!user.isEmpty()){
-            User loginUser = user.get();
-            if(!password.equals(loginUser.getPassword())){
-                return "비밀번호가 일치하지 않습니다.";
-            }
-        } else {
-            return "ID가 존재하지 않습니다.";
-        }
-        Long userId = user.get().getUserId();
-        String jwt = tokenService.findById(userId).get().getJwt();
-        JsonObject jsonJwt = new JsonObject();
-        jsonJwt.addProperty("jwt", jwt);
-        return jsonJwt.toString();
-    }
+	@ApiOperation("토큰 검증")
+	@GetMapping("/users/check")
+	public ResponseEntity checkToken(@RequestHeader HttpHeaders headers) {
+		return userService.checkToken(headers.get("jwt").get(0));
+	}
 
-    @ApiOperation("네이버 로그인")
-    @PostMapping("/users/login/naver")
-    public String naverLogin(HttpServletRequest request) {
-        String accessToken = request.getHeader("accessToken");
-        JsonNode json = naverApiService.getNaverUserInfo(accessToken);
+	// TODO 로그인 시 S3 주소 설정 필요
+//	@ApiOperation("네이버 로그인")
+//	@PostMapping("/users/login/naver")
+//	public String naverLogin(HttpServletRequest request) {
+//		return userService.naverLogin(request);
+//	}
 
-        String result = null;
-        JsonObject data = new JsonObject();
-        try {
-            result = naverApiService.redirectToken(json);
-        } catch (Exception e) {
-            data.addProperty("status", String.valueOf(HttpStatus.BAD_REQUEST));
-            return data.toString();
-        }
-        data.addProperty("jwt", result);
-        data.addProperty("status", String.valueOf(HttpStatus.OK));
-        return data.toString();
-    }
+	// TODO SNS 토큰 검증
+//	@ApiOperation("SNS 토큰 검증")
+//	@PostMapping("/users/check/sns")
+//	public ResponseEntity checkSNSToken(HttpServletRequest request) {
+//		User user = null;
+//		if (jwtService.isUsable(request.getHeader("jwt"))) {
+//			Object obj = jwtService.get("user");
+//			user = userService.findById(Long.parseLong(obj.toString())).get();
+//			UserTokenResponseDto result = new UserTokenResponseDto(user);
+//			return new ResponseEntity<>(result, HttpStatus.OK);
+//		}
+//		return ResponseEntity.badRequest().body("유효하지 않은 토큰입니다.");
+//	}
 
-    @ApiOperation("토큰 검증")
-    @GetMapping("/users/check")
-    public ResponseEntity checkToken(@RequestHeader HttpHeaders headers) {
-        User user = null;
-        if (jwtService.isUsable(headers.get("jwt").get(0))) {
-            Object obj = jwtService.get("user");
-            user = userService.findById(Long.parseLong(obj.toString())).get();
-        } else {
-            return new ResponseEntity("유효하지 않은 토큰입니다.", HttpStatus.NOT_FOUND);
-        }
+	@ApiOperation("유저 프로필 사진 업로드")
+	@PutMapping(value = "/users/profileImage/{id}")
+	public String updateUserProfile(@PathVariable(value = "id") Long userId, @RequestParam MultipartFile files) throws IOException {
+		return userService.updateUserProfile(userId, files);
+	}
 
-        UserTokenResponseDto result = new UserTokenResponseDto(user);
-        return new ResponseEntity(result, HttpStatus.OK);
-    }
+	@ApiOperation("유저 프로필 업데이트 [사진, 닉네임, 연령대, 해시태그]")
+	@PutMapping(value = "/users")
+	public ResponseEntity<UserResponseDto> updateUserProfile(@RequestBody UserUpdateRequestDto requestDto) {
+		return userService.updateUserInfo(requestDto);
+	}
 
-    @ApiOperation("SNS 토큰 검증")
-    @PostMapping("/users/check/sns")
-    public ResponseEntity checkSNSToken(HttpServletRequest request) {
-        User user = null;
-        if (jwtService.isUsable(request.getHeader("jwt"))) {
-            Object obj = jwtService.get("user");
-            user = userService.findById(Long.parseLong(obj.toString())).get();
-        }
+	@ApiOperation("유저 해시태그 업데이트")
+	@PutMapping(value = "/users/hashtag/{id}")
+	public ResponseEntity<UserResponseDto> updateUserHashtag(@PathVariable(value = "id") Long userId, @RequestParam List<String> hashtags) {
+		return userService.updateUserHashtagInfo(userId, hashtags);
+	}
 
-        UserTokenResponseDto result = new UserTokenResponseDto(user);
+	@ApiOperation("유저 삭제")
+	@DeleteMapping(value = "/users/{userId}")
+	public ResponseEntity<Long> deleteUser(@PathVariable("userId") Long userId) {
+		return userService.deleteUser(userId);
+	}
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
+	@ApiOperation("현재 게시중인 고민글")
+	@GetMapping(value = "/users/posts/{userId}")
+	public ResponseEntity userAnnouncingPosts(@PathVariable("userId") Long userId, @RequestParam int pageNum) {
+		return userService.userAnnouncingPosts(userId, pageNum);
+	}
 
-    @ApiOperation("유저 프로필 사진 업데이트")
-    @PutMapping(value = "/users/profileImage/{id}")
-    public String updateUserProfile(@PathVariable(value = "id") Long userId, @RequestParam MultipartFile files) throws IOException {
-        JsonObject data = new JsonObject();
-        User user = userService.findById(userId).get();
-        String TARGET_DIR = "/home/ubuntu/hago/files/";
-        String imagePath = FilenameUtils.getBaseName(files.getOriginalFilename());
-
-        if(files.isEmpty()) {
-            data.addProperty("imgPath", "");
-            data.addProperty("status", String.valueOf(HttpStatus.OK));
-            return data.toString();
-        } else {
-            String fileName = files.getOriginalFilename();
-            String fileNameExtension = FilenameUtils.getExtension(fileName).toLowerCase();
-            File targetFile;
-
-            SimpleDateFormat timeFormat = new SimpleDateFormat("yyMMddHHmmss");
-            imagePath += timeFormat.format(new Date()) + "." + fileNameExtension;
-            targetFile = new File(TARGET_DIR + imagePath);
-            log.info("Image uploaded : {}", imagePath);
-            files.transferTo(targetFile);
-        }
-
-        user.updateUserImage(imagePath);
-        userService.save(user);
-
-        data.addProperty("imgPath", imagePath);
-        data.addProperty("status", String.valueOf(HttpStatus.OK));
-
-        return data.toString();
-    }
-
-    @ApiOperation("유저 프로필 업데이트 [사진, 닉네임, 연령대, 해시태그]")
-    @PutMapping(value = "/users")
-    public ResponseEntity<UserResponseDto> updateUserProfile(@RequestBody UserUpdateRequestDto requestDto) {
-        userService.updateUser(requestDto);
-        User user = userService.findById(requestDto.getUserId()).get();
-        return new ResponseEntity<>(new UserResponseDto(user), HttpStatus.OK);
-    }
-
-    @ApiOperation("유저 해시태그 업데이트")
-    @PutMapping(value = "/users/hashtag/{id}")
-    public ResponseEntity<UserResponseDto> updateUserHashtag(@PathVariable(value = "id") Long userId, @RequestParam String[] hashtags) {
-
-        User user = userService.updateUserHashtag(userId, hashtags);
-
-        return new ResponseEntity<>(new UserResponseDto(user), HttpStatus.OK);
-    }
-
-    @ApiOperation("유저 ID 중복검사")
-    @GetMapping(value = "/users/check/id")
-    public ResponseEntity<String> duplicationCheckId(@RequestParam("id") String id) {
-        JsonObject data = new JsonObject();
-        data.addProperty("flag", userService.duplicationCheckId(id));
-
-        return new ResponseEntity<>(data.toString(), HttpStatus.OK);
-    }
-
-    @ApiOperation("유저 닉네임 중복검사")
-    @GetMapping(value = "/users/check/nickname")
-    public ResponseEntity<String> duplicationCheck(@RequestParam("nickname") String nickname) {
-        JsonObject data = new JsonObject();
-        data.addProperty("flag", userService.duplicationCheck(nickname));
-
-        return new ResponseEntity<>(data.toString(), HttpStatus.OK);
-    }
-
-    @ApiOperation("유저 삭제")
-    @DeleteMapping(value = "/users/{userId}")
-    public ResponseEntity<Long> deleteUser(@PathVariable("userId") Long userId) {
-        try {
-            postService.foreignkeyOpen();
-            historyService.deleteUserHistories(userId);
-            commentService.deleteByUserId(userId);
-            likerService.deleteAllByUsers(userId);
-            userHashtagService.deleteAllByUsers(userId);
-            postService.deleteUserPosts(userId);
-            userService.deleteById(userId);
-            tokenService.remove(userId);
-            postService.foreignkeyClose();
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @ApiOperation("현재 게시중인 고민글")
-    @GetMapping(value = "/users/posts/{userId}")
-    public ResponseEntity myCurrentPosting(@PathVariable("userId") Long userId, @RequestParam int pageNum) throws Exception {
-        PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
-        Page<Post> result = null;
-
-        try {
-            result = postService.findAllByUserId(userId, pageRequest);
-        } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity(result.getContent(), HttpStatus.OK);
-    }
-
-    @ApiOperation("내 글 보관함")
-    @GetMapping(value = "/users/history/{userId}")
-    public ResponseEntity myHistoryPost(@PathVariable("userId") Long userId, @RequestParam int pageNum) throws Exception {
-        PageRequest pageRequest = PageRequest.of(pageNum, 15, Sort.by("createdDate").descending());
-        Page<History> result = null;
-        try {
-            result = historyService.myHistoryPost(userId, pageRequest);
-        } catch (Exception e) {
-            return new ResponseEntity(result.getContent(), HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(result.getContent(), HttpStatus.OK);
-    }
+	@ApiOperation("내 글 보관함")
+	@GetMapping(value = "/users/history/{userId}")
+	public ResponseEntity userHistoryPosts(@PathVariable("userId") Long userId, @RequestParam int pageNum) {
+		return userService.userHistoryPosts(userId, pageNum);
+	}
 }

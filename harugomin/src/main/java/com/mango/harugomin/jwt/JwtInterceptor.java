@@ -15,8 +15,7 @@ public class JwtInterceptor implements HandlerInterceptor {
     private final JwtService jwtService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-            throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         final String token = request.getHeader(HEADER_AUTH);
 
         if (token != null && jwtService.isUsable(token)) {

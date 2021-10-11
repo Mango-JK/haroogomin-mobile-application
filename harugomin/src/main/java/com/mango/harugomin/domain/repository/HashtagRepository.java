@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -19,13 +20,10 @@ public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
 
     Hashtag findByTagName(String tagName);
 
+	@Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "update hashtag set posting_count = posting_count + 1 where tag_id = ?1 ", nativeQuery = true)
     void countUp(long tagId);
-
-    @Modifying(clearAutomatically = true)
-    @Query(value = "delete from user_hashtag where user_id = ?1 ", nativeQuery = true)
-    void deleteByUserId(Long userId);
 
     Page<Hashtag> findAll(Pageable pageable);
 }

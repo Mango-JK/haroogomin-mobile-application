@@ -1,6 +1,5 @@
 package com.mango.harugomin.controller;
 
-import com.mango.harugomin.domain.entity.Hashtag;
 import com.mango.harugomin.service.HashtagService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -11,14 +10,13 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @Api(tags = "4. HashTag")
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v2")
 @RestController
 public class HashtagController {
     private final HashtagService hashtagService;
 
     @PostMapping(value = "/hashtag")
     public long addUserHashtag(@RequestParam("tagName") String tagName){
-        Hashtag hashtag = new Hashtag(tagName, 0);
-        return hashtagService.saveHashtag(hashtag).getTagId();
+    	return hashtagService.addUserHashtag(tagName);
     }
 }

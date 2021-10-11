@@ -20,7 +20,7 @@ import java.util.List;
 @EnableSwagger2
 public class SwaggerConfiguration {
     @Bean
-    public Docket apiV1() {
+    public Docket apiV2() {
         List<ResponseMessage> responseMessages = new ArrayList<>();
         responseMessages.add(new ResponseMessageBuilder()
                 .code(200)
@@ -40,12 +40,12 @@ public class SwaggerConfiguration {
                 .build());
 
         return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("V1")
+                .groupName("V2")
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.mango.harugomin.controller"))
                 .paths(PathSelectors.ant("/api/**"))
                 .build()
-                .apiInfo(apiInfo("Harugomin API Documentation", "V1"))
+                .apiInfo(apiInfo("Harugomin API Documentation", "V2"))
                 .globalResponseMessage(RequestMethod.GET, responseMessages);
     }
 

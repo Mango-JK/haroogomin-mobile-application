@@ -15,19 +15,8 @@ public class TokenService {
 
     private final TokenRepository tokenRepository;
 
-    @Transactional
-    public Token save(Long userId, String jwt){
-        Token token = new Token(userId, jwt);
-        return tokenRepository.save(token);
-    }
-
     @Transactional(readOnly = true)
     public Optional<Token> findById(Long userId){
         return tokenRepository.findById(userId);
-    }
-
-    @Transactional
-    public void remove(Long userId){
-        tokenRepository.delete(findById(userId).get());
     }
 }
